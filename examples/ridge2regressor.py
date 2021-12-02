@@ -57,3 +57,24 @@ print(d2.ranges[1])
 print("\n")
 print(d2.ranges[2])
 print("\n")
+
+
+print("Example 3 -----")
+
+d3 = Ridge2Regressor(h = h, date_formatting = "original", 
+type_pi="bootstrap", B=5)
+
+start = time()
+d3.forecast(df)
+print(f"Elapsed: {time()-start} \n")
+
+print(d3.fcast.rx2['mean'])
+print(d3.averages[1])
+print(np.asarray(d3.fcast.rx2['mean']))
+
+print(d3.fcast.rx2['sims'][0])
+res = np.asarray(d3.fcast.rx2['sims'][1])
+print(res)
+print(res.shape)
+print(res[0, 1])
+
