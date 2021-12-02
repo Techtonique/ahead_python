@@ -51,9 +51,10 @@ class DynamicRegressor():
         
         # obtain dates 'forecast' -----
 
-        input_dates = df.index.values 
-        n_input_dates = len(input_dates)        
+        # to be put in utils/ as a function (DRY)
 
+        input_dates = df.index.values 
+        
         frequency = pd.infer_freq(pd.DatetimeIndex(input_dates))
         output_dates = np.delete(pd.date_range(start=input_dates[-1], 
             periods=self.h+1, freq=frequency).values, 0).tolist()  
@@ -63,14 +64,14 @@ class DynamicRegressor():
 
         # obtain time series forecast -----
 
-        input_series = df.values
-        if freq is None: 
-            y = stats.ts(FloatVector([item for sublist in input_series.tolist() for item in sublist]))                        
-        else: 
-            y = stats.ts(FloatVector([item for sublist in input_series.tolist() for item in sublist]), 
-            frequency = freq)
-        self.fcast = ahead.dynrmf(y=y, h=self.h, level=self.level, type_pi=self.type_pi)         
+        input_series = df.to_numpy()
 
+        if freq is None: 
+            y = stats.ts(FloatVector(input_series.flatten()))                        
+        else: 
+            y = stats.ts(FloatVector(input_series.flatten()), frequency = freq)
+            
+        self.fcast = ahead.dynrmf(y=y, h=self.h, level=self.level, type_pi=self.type_pi)         
 
         # result -----
 

@@ -63,8 +63,7 @@ class VAR():
 
         # to be put in utils/ as a function (DRY)
 
-        input_dates = df.index.values 
-        n_input_dates = len(input_dates)        
+        input_dates = df.index.values    
         
         frequency = pd.infer_freq(pd.DatetimeIndex(input_dates))
         output_dates = np.delete(pd.date_range(start=input_dates[-1], 
@@ -78,7 +77,7 @@ class VAR():
 
         # to be put in utils/ as a function (DRY)
 
-        input_series = df.values       
+        input_series = df.to_numpy()      
         input_series_tolist = input_series.tolist()
         xx = [item for sublist in input_series_tolist for item in sublist]  
         m = stats.ts(base.matrix(FloatVector(xx), byrow=True, 

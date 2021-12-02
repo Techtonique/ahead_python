@@ -59,8 +59,7 @@ class EAT():
 
         # to be put in utils/ as a function (DRY)
         
-        input_dates = df.index.values 
-        n_input_dates = len(input_dates)                
+        input_dates = df.index.values                       
 
         frequency = pd.infer_freq(pd.DatetimeIndex(input_dates))
         output_dates = np.delete(pd.date_range(start=input_dates[-1], 
@@ -71,15 +70,15 @@ class EAT():
 
         # obtain time series forecast -----
 
-        input_series = df.values
+        input_series = df.to_numpy()
+
         if freq is None: 
-            y = stats.ts(FloatVector([item for sublist in input_series.tolist() for item in sublist]))
+            y = stats.ts(FloatVector(input_series.flatten()))
         else:     
-            y = stats.ts(FloatVector([item for sublist in input_series.tolist() for item in sublist]), 
-            frequency=freq)
+            y = stats.ts(FloatVector(input_series.flatten()), frequency=freq)
+
         self.fcast = ahead.eatf(y=y, h=self.h, level=self.level, type_pi=self.type_pi,
                                 weights=FloatVector(self.weights))        
-
 
         # result -----
 

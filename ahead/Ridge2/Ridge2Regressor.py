@@ -39,6 +39,7 @@ class Ridge2Regressor():
                  lags=1, nb_hidden=5,
                  nodes_sim="sobol", activation="relu",
                  a=0.01, lambda_1=0.1, lambda_2=0.1, 
+                 type_pi = "gaussian", B = 100, 
                  date_formatting="original", seed=123):
         
         self.h = h
@@ -50,6 +51,8 @@ class Ridge2Regressor():
         self.a = a
         self.lambda_1 = lambda_1
         self.lambda_2 = lambda_2
+        self.type_pi = type_pi
+        self.B = B
         self.date_formatting=date_formatting
         self.seed = seed
         
@@ -67,8 +70,7 @@ class Ridge2Regressor():
 
         # to be put in utils/ as a function (DRY)
 
-        input_dates = df.index.values 
-        n_input_dates = len(input_dates)        
+        input_dates = df.index.values       
        
         frequency = pd.infer_freq(pd.DatetimeIndex(input_dates))
         output_dates = np.delete(pd.date_range(start=input_dates[-1], 
@@ -82,7 +84,7 @@ class Ridge2Regressor():
 
         # to be put in utils/ as a function (DRY)
 
-        input_series = df.values        
+        input_series = df.to_numpy()       
         input_series_tolist = input_series.tolist()
         xx = [item for sublist in input_series_tolist for item in sublist]  
         m = stats.ts(base.matrix(FloatVector(xx), byrow=True, 
@@ -92,7 +94,9 @@ class Ridge2Regressor():
                                lags=self.lags, nb_hidden=self.nb_hidden, 
                                nodes_sim=self.nodes_sim, activ=self.activation, 
                                a = self.a, lambda_1=self.lambda_1, 
-                               lambda_2 = self.lambda_2, seed=self.seed)
+                               lambda_2 = self.lambda_2, 
+                               type_pi = self.type_pi, B = self.B, 
+                               seed=self.seed)
 
         # result -----
         
