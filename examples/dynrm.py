@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from ahead import DynamicRegressor
+from ahead import DynamicRegressor, EAT
 from time import time
 
 
@@ -42,3 +42,21 @@ print("\n")
 print("ranges: \n")
 print(d2.ranges)
 print("\n")
+
+""" print("Example 3 -----")
+
+df2 = pd.read_csv('/Users/t/Documents/sandbox/techtonique-stuff/v0.3.0/nile.csv').set_index('date')
+print(df2.head())
+print(df2.tail())
+
+#d3 = DynamicRegressor(type_pi="gaussian")
+d3 = DynamicRegressor(type_pi="gaussian")
+start = time()
+d3.forecast(df2, freq=1)
+print(f"Elapsed: {time()-start} \n")
+print("averages: \n")
+print(d3.averages)
+print("\n")
+print("ranges: \n")
+print(d3.ranges)
+print("\n") """
