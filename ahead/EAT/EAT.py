@@ -51,7 +51,7 @@ class EAT():
         self.fcast = None
         self.averages = None
         self.ranges = None        
-
+        self.output_dates = [] 
 
     def forecast(self, df, freq=None):            
         
@@ -85,13 +85,11 @@ class EAT():
         # to be put in utils/ as a function (DRY)
 
         if (self.date_formatting == "original"): 
-            fcast_dates = [datetime.strftime(output_dates[i], "%Y-%m-%d") for i in range(self.h)]            
-            self.averages = [[fcast_dates[i], self.fcast.rx2['mean'][i]] for i in range(self.h)]
-            self.ranges = [[fcast_dates[i], self.fcast.rx2['lower'][i], self.fcast.rx2['upper'][i]] for i in range(self.h)]            
-            return self         
-        
+            self.output_dates = [datetime.strftime(output_dates[i], "%Y-%m-%d") for i in range(self.h)]
         if (self.date_formatting == "ms"):  
-            fcast_dates_ms = [int(datetime.strptime(str(output_dates[i]), "%Y-%m-%d").timestamp()*1000) for i in range(self.h)]
-            self.averages = [[fcast_dates_ms[i], self.fcast.rx2['mean'][i]] for i in range(self.h)]
-            self.ranges = [[fcast_dates_ms[i], self.fcast.rx2['lower'][i], self.fcast.rx2['upper'][i]] for i in range(self.h)]        
-            return self         
+            self.output_dates = [int(datetime.strptime(str(output_dates[i]), "%Y-%m-%d").timestamp()*1000) for i in range(self.h)]
+
+        self.averages = [[self.output_dates[i], self.fcast.rx2['mean'][i]] for i in range(self.h)]
+        self.ranges = [[self.output_dates[i], self.fcast.rx2['lower'][i], self.fcast.rx2['upper'][i]] for i in range(self.h)]                    
+        return self         
+        

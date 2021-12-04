@@ -62,7 +62,7 @@ print("\n")
 print("Example 3 -----")
 
 d3 = Ridge2Regressor(h = h, date_formatting = "original", 
-type_pi="bootstrap", B=5)
+type_pi="bootstrap", B=3)
 
 start = time()
 d3.forecast(df)
@@ -78,3 +78,8 @@ print(res)
 print(res.shape)
 print(res[0, 1])
 
+print("\n")
+print(d3.sims)
+
+print("\n")
+print(d3.output_dates)

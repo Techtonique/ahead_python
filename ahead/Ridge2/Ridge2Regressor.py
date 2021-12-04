@@ -57,8 +57,9 @@ class Ridge2Regressor():
         self.seed = seed
         
         self.averages = None
-        self.ranges = None   
-
+        self.ranges = None  
+        self.output_dates = [] 
+        self.sims = None 
 
     def forecast(self, df): 
 
@@ -100,39 +101,29 @@ class Ridge2Regressor():
 
         # result -----
         
-        if self.date_formatting == "original": 
-        # to be put in utils/ as a function (DRY)
-            for j in range(n_series):
-                averages_series_j  = []
-                ranges_series_j  = []
-                for i in range(self.h): 
-                    date_i = datetime.strftime(output_dates[i], "%Y-%m-%d")    
-                    index_i_j = i+j*self.h       
-                    averages_series_j.append([date_i, 
-                        self.fcast.rx2['mean'][index_i_j]])
-                    ranges_series_j.append([date_i, 
-                        self.fcast.rx2['lower'][index_i_j], self.fcast.rx2['upper'][index_i_j]])
-                averages.append(averages_series_j)
-                ranges.append(ranges_series_j) 
-
-
+        if self.date_formatting == "original":         
+            self.output_dates = [datetime.strftime(output_dates[i], "%Y-%m-%d") for i in range(self.h)]        
         if self.date_formatting == "ms": 
-            # to be put in utils/ as a function (DRY)
-            for j in range(n_series):
-                averages_series_j  = []
-                ranges_series_j  = []
-                for i in range(self.h): 
-                    date_i = int(datetime.strptime(str(output_dates[i]), "%Y-%m-%d").timestamp()*1000)
-                    index_i_j = i+j*self.h            
-                    averages_series_j.append([date_i, 
-                        self.fcast.rx2['mean'][index_i_j]])
-                    ranges_series_j.append([date_i, 
-                        self.fcast.rx2['lower'][index_i_j], self.fcast.rx2['upper'][index_i_j]])
-                averages.append(averages_series_j)
-                ranges.append(ranges_series_j) 
+            self.output_dates = [int(datetime.strptime(str(output_dates[i]), "%Y-%m-%d").timestamp()*1000) for i in range(self.h)]
 
-
+        # not DRY            
+        for j in range(n_series):
+            averages_series_j  = []
+            ranges_series_j  = []
+            for i in range(self.h): 
+                date_i = self.output_dates[i]
+                index_i_j = i+j*self.h       
+                averages_series_j.append([date_i, 
+                    self.fcast.rx2['mean'][index_i_j]])
+                ranges_series_j.append([date_i, 
+                    self.fcast.rx2['lower'][index_i_j], self.fcast.rx2['upper'][index_i_j]])
+            averages.append(averages_series_j)
+            ranges.append(ranges_series_j) 
+        
         self.averages = averages
-        self.ranges = ranges                         
+        self.ranges = ranges  
+
+        if self.type_pi == "bootstrap": 
+            self.sims = [np.asarray(self.fcast.rx2['sims'][i]) for i in range(self.B)]
 
         return self
