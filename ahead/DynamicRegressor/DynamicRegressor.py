@@ -50,7 +50,7 @@ class DynamicRegressor():
         self.output_dates = []      
 
 
-    def forecast(self, df, freq=None):            
+    def forecast(self, df):            
         
         self.df = df
 
