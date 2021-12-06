@@ -91,5 +91,6 @@ class EAT():
 
         self.averages = [[self.output_dates[i], self.fcast.rx2['mean'][i]] for i in range(self.h)]
         self.ranges = [[self.output_dates[i], self.fcast.rx2['lower'][i], self.fcast.rx2['upper'][i]] for i in range(self.h)]                    
+        
         return self         
         

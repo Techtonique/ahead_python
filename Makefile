@@ -51,7 +51,7 @@ lint: ## check style with flake8
 	flake8 ahead tests
 
 test: ## run tests quickly with the default Python
-	python -m unittest
+	python -m unittest 
 
 test-all: ## run tests on every Python version with tox
 	tox
@@ -62,24 +62,26 @@ coverage: ## check code coverage quickly with the default Python
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
-docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/ahead.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ ahead
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	$(BROWSER) docs/_build/html/index.html
+docs: ## generate mkdocs
+	 rm -rf docs/sources
+	 make install	 
+	 python3 docs/autogen.py	 
 
 servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+	cd docs&&mkdocs serve
+	cd ..
 
 release: dist ## package and upload a release
 	twine upload dist/*
 
 dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python3 setup.py bdist_wheel
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+build-site: docs
+	cd docs&&mkdocs build
+	cp -rf docs/site/* ../../Pro_Website/Techtonique.github.io/ahead_python
+	cd ..

@@ -67,7 +67,18 @@ class DynamicRegressor():
 
         input_series = df.to_numpy()
 
+        """ https://otexts.com/fpp2/ts-objects.html#frequency-of-a-time-series
+        Data 	frequency
+        Annual 	        1
+        Quarterly 	    4
+        Monthly 	    12
+        Weekly 	        52
+        """
+
         if freq is None: 
+            # infer freq
+            # default 1
+            # if frequency in ('M', 'MS') then 12
             y = stats.ts(FloatVector(input_series.flatten()))                        
         else: 
             y = stats.ts(FloatVector(input_series.flatten()), frequency = freq)
@@ -85,5 +96,6 @@ class DynamicRegressor():
 
         self.averages = [[self.output_dates[i], self.fcast.rx2['mean'][i]] for i in range(self.h)]
         self.ranges = [[self.output_dates[i], self.fcast.rx2['lower'][i], self.fcast.rx2['upper'][i]] for i in range(self.h)]                        
+        
         return self         
                             
