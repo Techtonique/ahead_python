@@ -44,7 +44,7 @@ print(d2.ranges)
 print("\n")
 
 """ print("Example 3 -----")
-
+# compared to > ahead::dynrmf(y=window(Nile, start=1919), h=5, level=95, type_pi="gaussian")
 df2 = pd.read_csv('/Users/t/Documents/sandbox/techtonique-stuff/v0.3.0/nile.csv').set_index('date')
 print(df2.head())
 print(df2.tail())
@@ -52,11 +52,12 @@ print(df2.tail())
 #d3 = DynamicRegressor(type_pi="gaussian")
 d3 = DynamicRegressor(type_pi="gaussian")
 start = time()
-d3.forecast(df2, freq=1)
+d3.forecast(df2)
 print(f"Elapsed: {time()-start} \n")
 print("averages: \n")
 print(d3.averages)
 print("\n")
 print("ranges: \n")
 print(d3.ranges)
-print("\n") """
+print("\n") 
+"""
