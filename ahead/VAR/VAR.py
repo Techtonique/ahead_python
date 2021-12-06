@@ -68,8 +68,8 @@ class VAR():
 
         # obtain time series forecast -----
                     
-        m = mv.compute_y_mts(self.df, frequency)
-        self.fcast = ahead.varf(m, h=self.h, level=self.level, 
+        y = mv.compute_y_mts(self.df, frequency)
+        self.fcast = ahead.varf(y, h=self.h, level=self.level, 
                                lags=self.lags, type_VAR = self.type_VAR)
 
         # result -----

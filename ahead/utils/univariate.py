@@ -27,6 +27,7 @@ def compute_y_ts(df, df_frequency):
                          "BA": 1,
                          "BY": 1,
                          "AS": 1,
+                         "AS-JAN": 1,
                          "YS": 1,
                          "BAS": 1,
                          "BYS": 1,

@@ -76,8 +76,8 @@ class Ridge2Regressor():
 
         # obtain time series forecast -----
         
-        m = mv.compute_y_mts(self.df, frequency)
-        self.fcast = ahead.ridge2f(m, h=self.h, level=self.level, 
+        y = mv.compute_y_mts(self.df, frequency)
+        self.fcast = ahead.ridge2f(y, h=self.h, level=self.level, 
                                lags=self.lags, nb_hidden=self.nb_hidden, 
                                nodes_sim=self.nodes_sim, activ=self.activation, 
                                a = self.a, lambda_1=self.lambda_1, 
