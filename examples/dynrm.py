@@ -43,10 +43,13 @@ print("ranges: \n")
 print(d2.ranges)
 print("\n")
 
-""" print("Example 3 -----")
+print("Example 3 -----")
+# https://stackoverflow.com/questions/42098126/mac-osx-python-ssl-sslerror-ssl-certificate-verify-failed-certificate-verify/42098127#42098127
 # compared to > ahead::dynrmf(y=window(Nile, start=1919), h=5, level=95, type_pi="gaussian")
-url = ('https://raw.githubusercontent.com/Techtonique/ahead_python/main/datasets/nile.csv')
-df2 = pd.read_csv(url)#.set_index('date')
+url = "https://raw.githubusercontent.com/Techtonique/ahead_python/main/datasets/nile.csv"
+# url = "https://raw.githubusercontent.com/Techtonique/ahead_python/main/datasets/AirPassengers.csv"
+df2 = pd.read_csv(url)
+df2 = df2.set_index('date')
 print(df2.head())
 print(df2.tail())
 
@@ -60,4 +63,4 @@ print(d3.averages)
 print("\n")
 print("ranges: \n")
 print(d3.ranges)
-print("\n") """
+print("\n")
