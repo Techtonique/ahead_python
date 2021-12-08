@@ -10,6 +10,8 @@ from datetime import datetime
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import StrVector
 
+from ..utils import univariate as uv
+from ..utils import unimultivariate as umv
 
 required_packages = ['ahead'] # list of required R packages 
 
@@ -53,43 +55,25 @@ class EAT():
         self.ranges = None        
         self.output_dates = [] 
 
-    def forecast(self, df, freq=None):            
+    def forecast(self, df):            
         
+        self.df = df
+
         # obtain dates 'forecast' -----
 
-        # to be put in utils/ as a function (DRY)
-        
-        input_dates = df.index.values                       
-
-        frequency = pd.infer_freq(pd.DatetimeIndex(input_dates))
-        output_dates = np.delete(pd.date_range(start=input_dates[-1], 
-            periods=self.h+1, freq=frequency).values, 0).tolist()  
-        
-        df_output_dates = pd.DataFrame({'date': output_dates})
-        output_dates = pd.to_datetime(df_output_dates['date']).dt.date                                
+        output_dates, frequency = umv.compute_output_dates(self.df, self.h)                                
 
         # obtain time series forecast -----
 
-        input_series = df.to_numpy()
-
-        if freq is None: 
-            y = stats.ts(FloatVector(input_series.flatten()))
-        else:     
-            y = stats.ts(FloatVector(input_series.flatten()), frequency=freq)
+        y = uv.compute_y_ts(df = self.df, df_frequency=frequency)
 
         self.fcast = ahead.eatf(y=y, h=self.h, level=self.level, type_pi=self.type_pi,
                                 weights=FloatVector(self.weights))        
 
         # result -----
 
-        # to be put in utils/ as a function (DRY)
-
-        if (self.date_formatting == "original"): 
-            self.output_dates = [datetime.strftime(output_dates[i], "%Y-%m-%d") for i in range(self.h)]
-        if (self.date_formatting == "ms"):  
-            self.output_dates = [int(datetime.strptime(str(output_dates[i]), "%Y-%m-%d").timestamp()*1000) for i in range(self.h)]
-
-        self.averages = [[self.output_dates[i], self.fcast.rx2['mean'][i]] for i in range(self.h)]
-        self.ranges = [[self.output_dates[i], self.fcast.rx2['lower'][i], self.fcast.rx2['upper'][i]] for i in range(self.h)]                    
+        self.averages, self.ranges, self.output_dates = uv.format_univariate_forecast(date_formatting=self.date_formatting, 
+        output_dates=output_dates, horizon=self.h, fcast=self.fcast)
+        
         return self         
         

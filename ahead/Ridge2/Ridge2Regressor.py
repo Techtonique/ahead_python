@@ -9,6 +9,8 @@ import rpy2.robjects.packages as rpackages
 from datetime import datetime
 from rpy2.robjects.vectors import StrVector
 
+from ..utils import multivariate as mv
+from ..utils import unimultivariate as umv
 
 required_packages = ['ahead'] # list of required R packages 
 
@@ -63,35 +65,19 @@ class Ridge2Regressor():
 
     def forecast(self, df): 
 
+        self.df = df
         n_series = len(df.columns)
         averages = []
         ranges = []
 
         # obtain dates 'forecast' -----
 
-        # to be put in utils/ as a function (DRY)
-
-        input_dates = df.index.values       
-       
-        frequency = pd.infer_freq(pd.DatetimeIndex(input_dates))
-        output_dates = np.delete(pd.date_range(start=input_dates[-1], 
-            periods=self.h+1, freq=frequency).values, 0).tolist()  
-        
-        df_output_dates = pd.DataFrame({'date': output_dates})
-        output_dates = pd.to_datetime(df_output_dates['date']).dt.date                                
-
+        output_dates, frequency = umv.compute_output_dates(self.df, self.h)                                
 
         # obtain time series forecast -----
-
-        # to be put in utils/ as a function (DRY)
-
-        input_series = df.to_numpy()       
-        input_series_tolist = input_series.tolist()
-        xx = [item for sublist in input_series_tolist for item in sublist]  
-        m = stats.ts(base.matrix(FloatVector(xx), byrow=True, 
-                                 nrow=len(input_series_tolist)))      
-
-        self.fcast = ahead.ridge2f(m, h=self.h, level=self.level, 
+        
+        y = mv.compute_y_mts(self.df, frequency)
+        self.fcast = ahead.ridge2f(y, h=self.h, level=self.level, 
                                lags=self.lags, nb_hidden=self.nb_hidden, 
                                nodes_sim=self.nodes_sim, activ=self.activation, 
                                a = self.a, lambda_1=self.lambda_1, 
@@ -101,27 +87,8 @@ class Ridge2Regressor():
 
         # result -----
         
-        if self.date_formatting == "original":         
-            self.output_dates = [datetime.strftime(output_dates[i], "%Y-%m-%d") for i in range(self.h)]        
-        if self.date_formatting == "ms": 
-            self.output_dates = [int(datetime.strptime(str(output_dates[i]), "%Y-%m-%d").timestamp()*1000) for i in range(self.h)]
-
-        # not DRY            
-        for j in range(n_series):
-            averages_series_j  = []
-            ranges_series_j  = []
-            for i in range(self.h): 
-                date_i = self.output_dates[i]
-                index_i_j = i+j*self.h       
-                averages_series_j.append([date_i, 
-                    self.fcast.rx2['mean'][index_i_j]])
-                ranges_series_j.append([date_i, 
-                    self.fcast.rx2['lower'][index_i_j], self.fcast.rx2['upper'][index_i_j]])
-            averages.append(averages_series_j)
-            ranges.append(ranges_series_j) 
-        
-        self.averages = averages
-        self.ranges = ranges  
+        self.averages, self.ranges, self.output_dates = mv.format_multivariate_forecast(n_series=n_series, date_formatting=self.date_formatting, 
+        output_dates=output_dates, horizon=self.h, fcast=self.fcast)
 
         if self.type_pi == "bootstrap": 
             self.sims = [np.asarray(self.fcast.rx2['sims'][i]) for i in range(self.B)]
