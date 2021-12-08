@@ -45,8 +45,8 @@ print("\n")
 
 print("Example 3 -----")
 # compared to > ahead::dynrmf(y=window(Nile, start=1919), h=5, level=95, type_pi="gaussian")
-url = '/Users/t/Documents/sandbox/techtonique-stuff/v0.3.0/AirPassengers.csv'
-df2 = pd.read_csv(url).set_index('date')
+url = 'https://github.com/Techtonique/ahead_python/blob/utils-funcs/datasets/nile.csv'
+df2 = pd.read_csv(url, sep=",").set_index('date')
 print(df2.head())
 print(df2.tail())
 
