@@ -79,6 +79,9 @@ print(res.shape)
 print(res[0, 1])
 
 print("\n")
+print(d3.result_dfs)
+
+print("\n")
 print(d3.sims)
 
 print("\n")
