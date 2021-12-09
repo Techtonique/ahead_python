@@ -13,3 +13,8 @@ def compute_output_dates(df, horizon):
     output_dates = pd.to_datetime(df_output_dates['date']).dt.date 
 
     return output_dates, frequency
+
+def compute_result_df(averages, ranges):
+    pred_mean = pd.Series(dict(averages)).to_frame('mean')
+    pred_ci = pd.DataFrame(ranges, columns=['date', 'lower', 'upper']).set_index('date')
+    return pd.concat([pred_mean, pred_ci], axis=1)
