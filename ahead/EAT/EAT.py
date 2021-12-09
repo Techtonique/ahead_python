@@ -54,18 +54,19 @@ class EAT():
         self.averages = None
         self.ranges = None        
         self.output_dates = [] 
+        self.result_df = None
 
     def forecast(self, df):            
         
-        self.df = df
+        self.input_df = df
 
         # obtain dates 'forecast' -----
 
-        output_dates, frequency = umv.compute_output_dates(self.df, self.h)                                
+        output_dates, frequency = umv.compute_output_dates(self.input_df, self.h)                                
 
         # obtain time series forecast -----
 
-        y = uv.compute_y_ts(df = self.df, df_frequency=frequency)
+        y = uv.compute_y_ts(df = self.input_df, df_frequency=frequency)
 
         self.fcast = ahead.eatf(y=y, h=self.h, level=self.level, type_pi=self.type_pi,
                                 weights=FloatVector(self.weights))        
@@ -74,6 +75,8 @@ class EAT():
 
         self.averages, self.ranges, self.output_dates = uv.format_univariate_forecast(date_formatting=self.date_formatting, 
         output_dates=output_dates, horizon=self.h, fcast=self.fcast)
+
+        self.result_df = umv.compute_result_df(self.averages, self.ranges)
         
         return self         
         

@@ -61,22 +61,23 @@ class Ridge2Regressor():
         self.averages = None
         self.ranges = None  
         self.output_dates = [] 
+        self.result_dfs = None
         self.sims = None 
 
     def forecast(self, df): 
 
-        self.df = df
+        self.input_df = df
         n_series = len(df.columns)
         averages = []
         ranges = []
 
         # obtain dates 'forecast' -----
 
-        output_dates, frequency = umv.compute_output_dates(self.df, self.h)                                
+        output_dates, frequency = umv.compute_output_dates(self.input_df, self.h)                                
 
         # obtain time series forecast -----
         
-        y = mv.compute_y_mts(self.df, frequency)
+        y = mv.compute_y_mts(self.input_df, frequency)
         self.fcast = ahead.ridge2f(y, h=self.h, level=self.level, 
                                lags=self.lags, nb_hidden=self.nb_hidden, 
                                nodes_sim=self.nodes_sim, activ=self.activation, 
@@ -90,7 +91,9 @@ class Ridge2Regressor():
         self.averages, self.ranges, self.output_dates = mv.format_multivariate_forecast(n_series=n_series, date_formatting=self.date_formatting, 
         output_dates=output_dates, horizon=self.h, fcast=self.fcast)
 
+        self.result_dfs = tuple(umv.compute_result_df(self.averages[i], self.ranges[i]) for i in range(n_series))
+
         if self.type_pi == "bootstrap": 
-            self.sims = [np.asarray(self.fcast.rx2['sims'][i]) for i in range(self.B)]
+            self.sims = tuple(np.asarray(self.fcast.rx2['sims'][i]) for i in range(self.B))
 
         return self
