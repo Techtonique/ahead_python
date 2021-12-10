@@ -51,10 +51,10 @@ class VAR():
         self.type_VAR = type_VAR
         self.date_formatting=date_formatting
         
-        self.averages = None
-        self.ranges = None   
-        self.output_dates = []
-        self.result_dfs = None
+        self.averages_ = None
+        self.ranges_ = None   
+        self.output_dates_ = []
+        self.result_df_s_ = None
 
     def forecast(self, df): 
 
@@ -68,14 +68,14 @@ class VAR():
         # obtain time series forecast -----
                     
         y = mv.compute_y_mts(self.input_df, frequency)
-        self.fcast = ahead.varf(y, h=self.h, level=self.level, 
+        self.fcast_ = ahead.varf(y, h=self.h, level=self.level, 
                                lags=self.lags, type_VAR = self.type_VAR)
 
         # result -----
 
-        self.averages, self.ranges, self.output_dates = mv.format_multivariate_forecast(n_series=n_series, date_formatting=self.date_formatting, 
-        output_dates=output_dates, horizon=self.h, fcast=self.fcast)
+        self.averages_, self.ranges_, self.output_dates_ = mv.format_multivariate_forecast(n_series=n_series, date_formatting=self.date_formatting, 
+        output_dates=output_dates, horizon=self.h, fcast=self.fcast_)
 
-        self.result_dfs = tuple(umv.compute_result_df(self.averages[i], self.ranges[i]) for i in range(n_series))
+        self.result_dfs_ = tuple(umv.compute_result_df(self.averages_[i], self.ranges_[i]) for i in range(n_series))
 
         return self

@@ -50,11 +50,11 @@ class EAT():
         self.type_pi = type_pi
         self.date_formatting=date_formatting
 
-        self.fcast = None
-        self.averages = None
-        self.ranges = None        
-        self.output_dates = [] 
-        self.result_df = None
+        self.fcast_ = None
+        self.averages_ = None
+        self.ranges_ = None        
+        self.output_dates_ = [] 
+        self.result_df_ = None
 
     def forecast(self, df):            
         
@@ -68,15 +68,15 @@ class EAT():
 
         y = uv.compute_y_ts(df = self.input_df, df_frequency=frequency)
 
-        self.fcast = ahead.eatf(y=y, h=self.h, level=self.level, type_pi=self.type_pi,
+        self.fcast_ = ahead.eatf(y=y, h=self.h, level=self.level, type_pi=self.type_pi,
                                 weights=FloatVector(self.weights))        
 
         # result -----
 
-        self.averages, self.ranges, self.output_dates = uv.format_univariate_forecast(date_formatting=self.date_formatting, 
-        output_dates=output_dates, horizon=self.h, fcast=self.fcast)
+        self.averages_, self.ranges_, self.output_dates_ = uv.format_univariate_forecast(date_formatting=self.date_formatting, 
+        output_dates=output_dates, horizon=self.h, fcast=self.fcast_)
 
-        self.result_df = umv.compute_result_df(self.averages, self.ranges)
+        self.result_df_ = umv.compute_result_df(self.averages_, self.ranges_)
         
         return self         
         
