@@ -1,0 +1,23 @@
+site_name: Techtonique/ahead
+theme:
+  name: darkly # sandstone # slate # lux # darkly
+  nav_style: dark
+  #name: null
+  #custom_dir: 'custom_theme/'
+
+google_analytics: ['UA-146345113-2', 'https://techtonique.github.io/ahead_python/']    
+
+docs_dir: sources
+repo_url: https://github.com/Techtonique/ahead_python
+edit_uri: ""
+site_description: 'Documentation for ahead (Python version).'
+
+nav:    
+    - Documentation:
+      - DynamicRegressor: documentation/dynamicregressor.md
+      - EAT: documentation/eat.md
+      - Ridge2Regressor: documentation/ridge2regressor.md
+      - VAR: documentation/var.md
+    - Contributing: CONTRIBUTING.md  
+    - License: LICENSE.md  
+    - Techtonique: ../  
