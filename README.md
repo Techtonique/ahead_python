@@ -1,10 +1,11 @@
+ahead 
+===============================
 
-<hr>  
 
 ![PyPI](https://img.shields.io/pypi/v/ahead) [![PyPI - License](https://img.shields.io/pypi/l/ahead)](https://github.com/Techtonique/ahead_python/blob/main/LICENSE) [![Downloads](https://pepy.tech/badge/ahead)](https://pepy.tech/project/ahead) [![Last Commit](https://img.shields.io/github/last-commit/Techtonique/ahead)](https://github.com/Techtonique/ahead_python)
 
 
-Welcome to __ahead__ (Python version). 
+Welcome to __ahead__ (Python version; the R version is [here](https://github.com/Techtonique/ahead)). 
 
 `ahead` is a package for univariate and multivariate **time series forecasting**. The Python version is built on top of [the R package](https://techtonique.github.io/ahead/) with the same name. __ahead__'s source code is [available on GitHub](https://github.com/Techtonique/ahead_python).
 
@@ -85,4 +86,6 @@ print(r1.result_dfs_)
 
 Want to contribute to __ahead__'s development on Github, [read this](CONTRIBUTING.md)!
 
-<script async defer src="https://buttons.github.io/buttons.js"></script>
+## License
+
+[BSD 3-Clause](LICENSE) © Thierry Moudiki, 2021. 
