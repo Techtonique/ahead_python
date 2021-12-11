@@ -2,7 +2,7 @@ ahead
 ===============================
 
 
-![PyPI](https://img.shields.io/pypi/v/ahead) [![PyPI - License](https://img.shields.io/pypi/l/ahead)](https://github.com/Techtonique/ahead_python/blob/main/LICENSE) [![Downloads](https://pepy.tech/badge/ahead)](https://pepy.tech/project/ahead) [![Last Commit](https://img.shields.io/github/last-commit/Techtonique/ahead)](https://github.com/Techtonique/ahead_python) [![Documentation](https://img.shields.io/badge/documentation-is_here-green)](https://techtonique.github.io/ahead_python/)
+![PyPI](https://img.shields.io/pypi/v/ahead) [![PyPI - License](https://img.shields.io/pypi/l/ahead)](https://github.com/Techtonique/ahead_python/blob/main/LICENSE) [![Downloads](https://pepy.tech/badge/ahead)](https://pepy.tech/project/ahead) [![Documentation](https://img.shields.io/badge/documentation-is_here-green)](https://techtonique.github.io/ahead_python/)
 
 
 Welcome to __ahead__ (Python version; the R version is [here](https://github.com/Techtonique/ahead)). 
