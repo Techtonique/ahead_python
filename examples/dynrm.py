@@ -25,6 +25,7 @@ print(df)
 # univariate ts forecasting 
 print("Example 1 -----")
 d1 = DynamicRegressor(h = h, date_formatting = "ms")
+print(d1.__module__)
 
 start = time()
 d1.forecast(df)

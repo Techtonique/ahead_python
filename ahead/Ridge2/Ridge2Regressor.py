@@ -35,7 +35,7 @@ base = importr('base')
 stats = importr('stats')
 ahead = importr('ahead')
 
-class Ridge2Regressor():
+class Ridge2Regressor(object):
 
     def __init__(self, h=5, level=95, 
                  lags=1, nb_hidden=5,

@@ -36,7 +36,7 @@ if check_packages == False: # Not installed? Then install.
 stats = importr('stats')
 ahead = importr('ahead')
 
-class EAT():
+class EAT(object):
 
     def __init__(self, h=5, level=95, 
                  weights=[1/3, 1/3, 1/3], 

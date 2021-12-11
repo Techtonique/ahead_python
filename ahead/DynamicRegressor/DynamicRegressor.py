@@ -34,7 +34,7 @@ if check_packages == False: # Not installed? Then install.
 stats = importr('stats')
 ahead = importr('ahead')
 
-class DynamicRegressor():
+class DynamicRegressor(object):
     """ Dynamic Regression Model adapted from R's `forecast::nnetar`
 
     Parameters:

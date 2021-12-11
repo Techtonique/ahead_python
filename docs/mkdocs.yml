@@ -1,4 +1,4 @@
-site_name: Techtonique/ahead
+site_name: Techtonique/ahead_python
 theme:
   name: darkly # sandstone # slate # lux # darkly
   nav_style: dark
@@ -19,5 +19,5 @@ nav:
       - Ridge2Regressor: documentation/ridge2regressor.md
       - VAR: documentation/var.md
     - Contributing: CONTRIBUTING.md  
-    - License: LICENSE.md  
+    - License: LICENSE.md
     - Techtonique: ../  

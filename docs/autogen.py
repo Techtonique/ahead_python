@@ -5,20 +5,20 @@ import keras_autodoc
 
 PAGES = {    
     'documentation/dynamicregressor.md': [
-        'ahead.DynamicRegressor',
-        'ahead.DynamicRegressor.forecast',
+        'ahead.DynamicRegressor.DynamicRegressor.DynamicRegressor',
+        'ahead.DynamicRegressor.DynamicRegressor.DynamicRegressor.forecast'
     ],
     'documentation/eat.md': [
-        'ahead.EAT',
-        'ahead.EAT.forecast',
+        'ahead.EAT.EAT.EAT',
+        'ahead.EAT.EAT.EAT.forecast'
     ],
     'documentation/ridge2regressor.md': [
-        'ahead.Ridge2Regressor',
-        'ahead.Ridge2Regressor.forecast',
+        'ahead.Ridge2.Ridge2Regressor.Ridge2Regressor',
+        'ahead.Ridge2.Ridge2Regressor.Ridge2Regressor.forecast'
     ],
     'documentation/var.md': [
-        'ahead.VAR',
-        'ahead.VAR.forecast',
+        'ahead.VAR.VAR.VAR',
+        'ahead.VAR.VAR.VAR.forecast',
     ],
 }
 
