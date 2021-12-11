@@ -57,7 +57,7 @@ class DynamicRegressor(object):
     Attributes:
        
         fcast_: an object;
-            raw result from fitting R's `ahead.dynrmf`
+            raw result from fitting R's `ahead::dynrmf` through `rpy2`
         
         averages_: a list;
             mean forecast in a list
@@ -75,6 +75,9 @@ class DynamicRegressor(object):
     Examples:
        
         ```
+            import pandas as pd
+            from ahead import DynamicRegressor
+        
             # Data frame containing the time series 
             dataset = {
             'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
@@ -111,7 +114,7 @@ class DynamicRegressor(object):
         Parameters:
        
             df: a data frame;
-                a data frame containing the time series (see example)                
+                a data frame containing the input time series (see example)
 
         """         
         
