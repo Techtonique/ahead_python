@@ -2,7 +2,7 @@ ahead
 ===============================
 
 
-![PyPI](https://img.shields.io/pypi/v/ahead) [![PyPI - License](https://img.shields.io/pypi/l/ahead)](https://github.com/Techtonique/ahead_python/blob/main/LICENSE) [![Downloads](https://pepy.tech/badge/ahead)](https://pepy.tech/project/ahead) [![Last Commit](https://img.shields.io/github/last-commit/Techtonique/ahead)](https://github.com/Techtonique/ahead_python)
+![PyPI](https://img.shields.io/pypi/v/ahead) [![PyPI - License](https://img.shields.io/pypi/l/ahead)](https://github.com/Techtonique/ahead_python/blob/main/LICENSE) [![Downloads](https://pepy.tech/badge/ahead)](https://pepy.tech/project/ahead) [![Last Commit](https://img.shields.io/github/last-commit/Techtonique/ahead)](https://github.com/Techtonique/ahead_python) [![Documentation](https://img.shields.io/badge/documentation-is_here-green)](https://techtonique.github.io/ahead_python/)
 
 
 Welcome to __ahead__ (Python version; the R version is [here](https://github.com/Techtonique/ahead)). 
@@ -66,21 +66,6 @@ r1 = Ridge2Regressor(h = 5)
 r1.forecast(df)
 print(r1.result_dfs_)
 ```
-
-## Documentation
-
-### For univariate models 
-
-- For [DynamicRegressor](documentation/dynamicregressor.md)
-
-- For [EAT](documentation/eat.md)
-
-### For multivariate models 
-
-- For [Ridge2Regressor](documentation/ridge2regressor.md)
-
-- For [VAR](documentation/var.md)
-
 
 ## Contributing
 
