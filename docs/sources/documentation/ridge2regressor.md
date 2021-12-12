@@ -79,10 +79,10 @@ Attributes:
     fcast_: an object;
         raw result from fitting R's `ahead::ridge2f` through `rpy2`
     
-    averages_: a list of list;
+    averages_: a list of lists;
         mean forecast in a list for each series
 
-    ranges_: a list of list;
+    ranges_: a list of lists;
         lower and upper prediction intervals in a list for each series
 
     output_dates_: a list;
