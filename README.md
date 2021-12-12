@@ -66,6 +66,7 @@ dataset = {
  'series2' : [4, 5.5, 5.6, 6.3, 5.1],
  'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
 df = pd.DataFrame(dataset).set_index('date')
+print(df)
 
 # multivariate time series forecasting 
 r1 = Ridge2Regressor(h = 5)
