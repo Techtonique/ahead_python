@@ -19,5 +19,5 @@ nav:
       - Ridge2Regressor: documentation/ridge2regressor.md
       - VAR: documentation/var.md
     - Contributing: CONTRIBUTING.md  
-    - License: LICENSE.md
+    - License: LICENSE
     - Techtonique: ../  

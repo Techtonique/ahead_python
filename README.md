@@ -36,6 +36,9 @@ pip install git+https://github.com/Techtonique/ahead_python.git
 ### Univariate time series
 
 ```python
+import pandas as pd
+from ahead import DynamicRegressor
+
 # Data frame containing the time series 
 dataset = {
 'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
@@ -53,6 +56,9 @@ print(d1.result_df_)
 ### Multivariate time series
 
 ```python
+import pandas as pd
+from ahead import Ridge2Regressor
+
 # Data frame containing the (3) time series
 dataset = {
  'date' : ['2001-01-01', '2002-01-01', '2003-01-01', '2004-01-01', '2005-01-01'],
