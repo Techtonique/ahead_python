@@ -12,53 +12,60 @@ from rpy2.robjects.vectors import StrVector
 from ..utils import univariate as uv
 from ..utils import unimultivariate as umv
 
-required_packages = ['ahead'] # list of required R packages 
+required_packages = ["ahead"]  # list of required R packages
 
 if all(rpackages.isinstalled(x) for x in required_packages):
-    check_packages = True # True if packages are already installed 
+    check_packages = True  # True if packages are already installed
 else:
-   check_packages = False # False if packages are not installed 
+    check_packages = False  # False if packages are not installed
 
-if check_packages == False: # Not installed? Then install.
+if check_packages == False:  # Not installed? Then install.
 
-    packages_to_install = [x for x in required_packages if not rpackages.isinstalled(x)]
-    
+    packages_to_install = [
+        x for x in required_packages if not rpackages.isinstalled(x)
+    ]
+
     if len(packages_to_install) > 0:
-        base = importr('base')
-        utils = importr('utils')
-        base.options(repos = base.c(techtonique = 'https://techtonique.r-universe.dev', 
-                                    CRAN = 'https://cloud.r-project.org'))
+        base = importr("base")
+        utils = importr("utils")
+        base.options(
+            repos=base.c(
+                techtonique="https://techtonique.r-universe.dev",
+                CRAN="https://cloud.r-project.org",
+            )
+        )
         utils.install_packages(StrVector(packages_to_install))
-        check_packages = True 
+        check_packages = True
 
-stats = importr('stats')
-ahead = importr('ahead')
+stats = importr("stats")
+ahead = importr("ahead")
+
 
 class DynamicRegressor(object):
-    """ Dynamic Regression Model adapted from R's `forecast::nnetar`
+    """Dynamic Regression Model adapted from R's `forecast::nnetar`
 
     Parameters:
-       
+
         h: an integer;
             forecasting horizon
-        
+
         level: an integer;
             Confidence level for prediction intervals
 
         type_pi: a string;
-            Type of prediction interval (currently "gaussian", 
+            Type of prediction interval (currently "gaussian",
             ETS: "E", Arima: "A" or Theta: "T")
 
         date_formatting: a string;
-            Currently: 
+            Currently:
             - "original": yyyy-mm-dd
-            - "ms": milliseconds        
+            - "ms": milliseconds
 
     Attributes:
-       
+
         fcast_: an object;
             raw result from fitting R's `ahead::dynrmf` through `rpy2`
-        
+
         averages_: a list;
             mean forecast in a list
 
@@ -69,16 +76,16 @@ class DynamicRegressor(object):
             a list of output dates (associated to forecast)
 
         result_df_: a data frame;
-            contains 3 columns, mean forecast, lower + upper 
-            prediction intervals, and a date index          
+            contains 3 columns, mean forecast, lower + upper
+            prediction intervals, and a date index
 
     Examples:
-       
+
         ```
             import pandas as pd
             from ahead import DynamicRegressor
-        
-            # Data frame containing the time series 
+
+            # Data frame containing the time series
             dataset = {
             'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
             'value' : [34, 30, 35.6, 33.3, 38.1]}
@@ -86,7 +93,7 @@ class DynamicRegressor(object):
             df = pd.DataFrame(dataset).set_index('date')
             print(df)
 
-            # univariate time series forecasting 
+            # univariate time series forecasting
             d1 = DynamicRegressor(h = 5)
             d1.forecast(df)
             print(d1.result_df_)
@@ -94,48 +101,58 @@ class DynamicRegressor(object):
 
     """
 
-    def __init__(self, h=5, level=95,                  
-                 type_pi="E", date_formatting="original"):
-        
+    def __init__(self, h=5, level=95, type_pi="E", date_formatting="original"):
+
         self.h = h
         self.level = level
         self.type_pi = type_pi
-        self.date_formatting=date_formatting
+        self.date_formatting = date_formatting
 
         self.fcast_ = None
         self.averages_ = None
-        self.ranges_ = None   
-        self.output_dates_ = []      
+        self.ranges_ = None
+        self.output_dates_ = []
         self.result_df_ = None
 
-    def forecast(self, df):   
-        """ Forecasting method from `DynamicRegressor` class
+    def forecast(self, df):
+        """Forecasting method from `DynamicRegressor` class
 
         Parameters:
-       
+
             df: a data frame;
                 a data frame containing the input time series (see example)
 
-        """         
-        
+        """
+
         self.input_df = df
 
-        # obtain dates 'forecast' -----        
+        # obtain dates 'forecast' -----
 
-        output_dates, frequency = umv.compute_output_dates(self.input_df, self.h)                                
+        output_dates, frequency = umv.compute_output_dates(
+            self.input_df, self.h
+        )
 
         # obtain time series forecast -----
 
-        y = uv.compute_y_ts(df = self.input_df, df_frequency=frequency)
+        y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)
 
-        self.fcast_ = ahead.dynrmf(y=y, h=self.h, level=self.level, type_pi=self.type_pi)         
+        self.fcast_ = ahead.dynrmf(
+            y=y, h=self.h, level=self.level, type_pi=self.type_pi
+        )
 
         # result -----
-        
-        self.averages_, self.ranges_, self.output_dates_ = uv.format_univariate_forecast(date_formatting=self.date_formatting, 
-        output_dates=output_dates, horizon=self.h, fcast=self.fcast_)
+
+        (
+            self.averages_,
+            self.ranges_,
+            self.output_dates_,
+        ) = uv.format_univariate_forecast(
+            date_formatting=self.date_formatting,
+            output_dates=output_dates,
+            horizon=self.h,
+            fcast=self.fcast_,
+        )
 
         self.result_df_ = umv.compute_result_df(self.averages_, self.ranges_)
 
-        return self         
-                            
+        return self

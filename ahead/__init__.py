@@ -1,8 +1,8 @@
 """Top-level package for ahead."""
 
 __author__ = """T. Moudiki"""
-__email__ = 'thierry.moudiki@gmail.com'
-__version__ = '0.4.0'
+__email__ = "thierry.moudiki@gmail.com"
+__version__ = "0.4.0"
 
 from .DynamicRegressor import DynamicRegressor
 from .EAT import EAT
