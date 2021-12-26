@@ -1,4 +1,4 @@
-from .unimultivariate import compute_output_dates, compute_result_df
+from .unimultivariate import compute_output_dates, compute_result_df, get_frequency
 from .univariate import compute_y_ts, format_univariate_forecast
 from .multivariate import compute_y_mts, format_multivariate_forecast
 
@@ -9,4 +9,5 @@ __all__ = [
     "compute_y_mts",
     "format_multivariate_forecast",
     "compute_result_df",
+    "get_frequency"
 ]

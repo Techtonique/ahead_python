@@ -8,6 +8,7 @@ from rpy2.robjects.packages import importr
 from rpy2.robjects import FloatVector
 from datetime import datetime
 from rpy2.robjects.vectors import StrVector
+from .unimultivariate import get_frequency
 
 base = importr("base")
 stats = importr("stats")
@@ -17,42 +18,12 @@ def compute_y_mts(df, df_frequency):
 
     input_series = df.to_numpy()
 
-    """ https://otexts.com/fpp2/ts-objects.html#frequency-of-a-time-series
-    Data 	frequency
-    Annual 	        1
-    Quarterly 	    4
-    Monthly 	    12
-    Weekly 	        52
-    """
-    frequency_choices = {
-        "A": 1,
-        "Y": 1,
-        "BA": 1,
-        "BY": 1,
-        "AS": 1,
-        "AS-JAN": 1,
-        "YS": 1,
-        "BAS": 1,
-        "BYS": 1,
-        "Q": 4,
-        "BQ": 4,
-        "QS": 4,
-        "BQS": 4,
-        "M": 12,
-        "BM": 12,
-        "CBM": 12,
-        "MS": 12,
-        "BMS": 12,
-        "CBMS": 12,
-        "W": 52,
-    }
-
     input_series_tolist = input_series.tolist()
     xx = [item for sublist in input_series_tolist for item in sublist]
 
     return stats.ts(
         base.matrix(FloatVector(xx), byrow=True, nrow=len(input_series_tolist)),
-        frequency=frequency_choices[df_frequency],
+        frequency=get_frequency(df_frequency)
     )
 
 
