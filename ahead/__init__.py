@@ -2,7 +2,7 @@
 
 __author__ = """T. Moudiki"""
 __email__ = "thierry.moudiki@gmail.com"
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 from .DynamicRegressor import DynamicRegressor
 from .EAT import EAT
