@@ -105,6 +105,15 @@ class Ridge2Regressor(object):
         output_dates_: a list;
             a list of output dates (associated to forecast)
 
+        mean_: a numpy array
+            contains series mean forecast as a numpy array 
+
+        lower_: a numpy array 
+            contains series lower bound forecast as a numpy array   
+
+        upper_: a numpy array 
+            contains series upper bound forecast as a numpy array   
+
         result_dfs_: a tuple of data frames;
             each element of the tuple contains 3 columns,
             mean forecast, lower + upper prediction intervals,
@@ -170,6 +179,9 @@ class Ridge2Regressor(object):
         self.averages_ = None
         self.ranges_ = None
         self.output_dates_ = []
+        self.mean_ = None
+        self.lower_ = None
+        self.upper_ = None
         self.result_df_s_ = None
         self.sims_ = None
 
@@ -224,6 +236,10 @@ class Ridge2Regressor(object):
             horizon=self.h,
             fcast=self.fcast_,
         )
+
+        self.mean_ = np.asarray(self.fcast_.rx2['mean'])
+        self.lower_= np.asarray(self.fcast_.rx2['lower'])
+        self.upper_= np.asarray(self.fcast_.rx2['upper'])
 
         self.result_dfs_ = tuple(
             umv.compute_result_df(self.averages_[i], self.ranges_[i])

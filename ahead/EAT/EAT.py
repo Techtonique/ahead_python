@@ -79,6 +79,15 @@ class EAT(object):
 
         output_dates_: a list;
             a list of output dates (associated to forecast)
+        
+        mean_: a numpy array
+            contains series mean forecast as a numpy array 
+
+        lower_: a numpy array 
+            contains series lower bound forecast as a numpy array   
+
+        upper_: a numpy array 
+            contains series upper bound forecast as a numpy array   
 
         result_df_: a data frame;
             contains 3 columns, mean forecast, lower + upper
@@ -127,6 +136,9 @@ class EAT(object):
         self.averages_ = None
         self.ranges_ = None
         self.output_dates_ = []
+        self.mean_ = []
+        self.lower_= []
+        self.upper_= []
         self.result_df_ = None
 
     def forecast(self, df):
@@ -171,6 +183,10 @@ class EAT(object):
             horizon=self.h,
             fcast=self.fcast_,
         )
+
+        self.mean_ = np.asarray(self.fcast_.rx2['mean'])
+        self.lower_= np.asarray(self.fcast_.rx2['lower'])
+        self.upper_= np.asarray(self.fcast_.rx2['upper'])
 
         self.result_df_ = umv.compute_result_df(self.averages_, self.ranges_)
 
