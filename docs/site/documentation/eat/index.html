@@ -122,7 +122,7 @@
 
 <h1 id="eat">EAT</h1>
 <p><em>EAT (ETS, auto.arima, Theta) model</em></p>
-<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/EAT/EAT.py#L39">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/EAT/EAT.py#L46">[source]</a></span></p>
 <h3 id="eat_1">EAT</h3>
 <pre><code class="language-python">ahead.EAT.EAT.EAT(
     h=5,
@@ -144,11 +144,11 @@ weights: a list;
     coefficients assigned to each method in the ensemble
 
 type_pi: a string;
-    Type of prediction interval (currently "gaussian", 
+    Type of prediction interval (currently "gaussian",
     ETS: "E", Arima: "A" or Theta: "T")
 
 date_formatting: a string;
-    Currently: 
+    Currently:
     - "original": yyyy-mm-dd
     - "ms": milliseconds
 </code></pre>
@@ -165,8 +165,17 @@ ranges_: a list;
 output_dates_: a list;
     a list of output dates (associated to forecast)
 
+mean_: a numpy array
+    contains series mean forecast as a numpy array
+
+lower_: a numpy array 
+    contains series lower bound forecast as a numpy array
+
+upper_: a numpy array 
+    contains series upper bound forecast as a numpy array
+
 result_df_: a data frame;
-    contains 3 columns, mean forecast, lower + upper 
+    contains 3 columns, mean forecast, lower + upper
     prediction intervals, and a date index
 </code></pre>
 <p>Examples:</p>
@@ -174,7 +183,7 @@ result_df_: a data frame;
     import pandas as pd
     from ahead import EAT
 
-    # Data frame containing the time series 
+    # Data frame containing the time series
     dataset = {
     'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
     'value' : [34, 30, 35.6, 33.3, 38.1]}
@@ -182,14 +191,14 @@ result_df_: a data frame;
     df = pd.DataFrame(dataset).set_index('date')
     print(df)
 
-    # univariate time series forecasting 
+    # univariate time series forecasting
     e1 = EAT(h = 5) # default, equal weights for each model=[1/3, 1/3, 1/3]
     e1.forecast(df)
     print(e1.result_df_)
 ```
 </code></pre>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/EAT/EAT.py#L120">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/EAT/EAT.py#L144">[source]</a></span></p>
 <h3 id="forecast">forecast</h3>
 <pre><code class="language-python">EAT.forecast(df)
 </code></pre>
