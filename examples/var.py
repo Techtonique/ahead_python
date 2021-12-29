@@ -59,3 +59,8 @@ print(d2.ranges_[2])
 print("\n")
 print(d2.result_dfs_)
 print("\n")
+print("\n mean, lower, upper as numpy arrays: \n")
+print(d2.mean_)
+print(d2.lower_)
+print(d2.upper_)
+

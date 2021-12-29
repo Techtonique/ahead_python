@@ -86,3 +86,8 @@ print(d3.sims_)
 
 print("\n output_dates_: \n")
 print(d3.output_dates_)
+
+print("\n mean, lower, upper as numpy arrays: \n")
+print(d3.mean_)
+print(d3.lower_)
+print(d3.upper_)
