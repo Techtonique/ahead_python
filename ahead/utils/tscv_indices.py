@@ -44,10 +44,10 @@ def get_tscv_indices(n = 25, p = 0.8,
 
             while max_index_test <= n:
 
-                train_test_indices.append((
-                    indices[min_index_train:max_index_train],
-                    indices[min_index_test:max_index_test],
-                ))
+                train_test_indices.append({
+                    "train": indices[min_index_train:max_index_train],
+                    "test": indices[min_index_test:max_index_test],                                        
+                })
 
                 min_index_train += 1
                 min_index_test += 1
@@ -58,10 +58,10 @@ def get_tscv_indices(n = 25, p = 0.8,
 
             while max_index_test <= n:
 
-                train_test_indices.append((
-                    indices[min_index_train:max_index_train],
-                    indices[min_index_test:max_index_test],
-                ))
+                train_test_indices.append({                                       
+                    "train": indices[min_index_train:max_index_train],
+                    "test": indices[min_index_test:max_index_test],
+                })
 
                 max_index_train += 1
                 min_index_test += 1
@@ -77,17 +77,20 @@ def get_tscv_indices(n = 25, p = 0.8,
 
             if max_index_test <= int(p*n):
 
-                train_test_indices.append((
-                    indices[min_index_train:max_index_train],
-                    indices[min_index_test:max_index_test],
-                ))
+                train_test_indices.append(
+                    {"train": indices[min_index_train:max_index_train],
+                     "test": indices[min_index_test:max_index_test] 
+                    }                                               
+                )
 
             else:
 
-                hold_out_indices.append((
-                    indices[min_index_train:max_index_train],
-                    indices[min_index_test:max_index_test],
-                ))
+                hold_out_indices.append(
+                    {
+                      "train": indices[min_index_train:max_index_train],
+                      "test":  indices[min_index_test:max_index_test]
+                    }                                        
+                )
 
             min_index_train += 1
             min_index_test += 1
@@ -100,17 +103,21 @@ def get_tscv_indices(n = 25, p = 0.8,
 
             if max_index_test <= int(p*n):
 
-                train_test_indices.append((
-                    indices[min_index_train:max_index_train],
-                    indices[min_index_test:max_index_test],
-                ))
+                train_test_indices.append(
+                    {
+                     "train": indices[min_index_train:max_index_train],
+                     "test": indices[min_index_test:max_index_test]
+                    }                                        
+                )
             
             else: 
 
-                hold_out_indices.append((
-                    indices[min_index_train:max_index_train],
-                    indices[min_index_test:max_index_test],
-                ))
+                hold_out_indices.append(
+                    {
+                     "train": indices[min_index_train:max_index_train],
+                     "test":  indices[min_index_test:max_index_test]
+                    }                                        
+                )
 
             max_index_train += 1
             min_index_test += 1
