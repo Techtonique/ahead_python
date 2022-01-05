@@ -37,7 +37,7 @@ pip install git+https://github.com/Techtonique/ahead_python.git
 
 ```python
 import pandas as pd
-from ahead import DynamicRegressor
+from ahead import DynamicRegressor # might take some time, but ONLY the 1st time it's called
 
 # Data frame containing the time series 
 dataset = {
@@ -57,7 +57,7 @@ print(d1.result_df_)
 
 ```python
 import pandas as pd
-from ahead import Ridge2Regressor
+from ahead import Ridge2Regressor # might take some time, but ONLY the 1st time it's called
 
 # Data frame containing the (3) time series
 dataset = {
