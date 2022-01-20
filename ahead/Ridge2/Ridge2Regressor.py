@@ -83,8 +83,11 @@ class Ridge2Regressor(object):
             Type of prediction interval (currently "gaussian",
             or "bootstrap")
 
-        B: an integer
+        B: an integer;
             Number of bootstrap replications for `type_pi == bootstrap`
+
+        cl: an integer; 
+            The number of clusters for parallel execution (done in R), for `type_pi == bootstrap`
 
         date_formatting: a string;
             Currently:
@@ -162,6 +165,7 @@ class Ridge2Regressor(object):
         dropout=0,
         type_pi="gaussian",
         B=100,
+        cl=1,
         date_formatting="original",
         seed=123,
     ):
@@ -178,6 +182,7 @@ class Ridge2Regressor(object):
         self.dropout = dropout
         self.type_pi = type_pi
         self.B = B
+        self.cl = cl
         self.date_formatting = date_formatting
         self.seed = seed
 
@@ -226,6 +231,7 @@ class Ridge2Regressor(object):
             dropout=self.dropout,
             type_pi=self.type_pi,
             B=self.B,
+            cl=self.cl,
             seed=self.seed,
         )
 

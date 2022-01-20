@@ -64,8 +64,13 @@ print("\n")
 
 e5 = Ridge2Regressor(h = h, date_formatting = "ms")
 e6 = Ridge2Regressor(h = h, date_formatting = "original")
+e9 = Ridge2Regressor(h = h, date_formatting = "original", dropout=0.1)
+e10 = Ridge2Regressor(h = h, date_formatting = "original", dropout=0.1, 
+                      type_pi='bootstrap', B=10, cl=2)
 e5.forecast(df_multi)
 e6.forecast(df_multi)
+e9.forecast(df_multi)
+e10.forecast(df_multi)
 print("Ridge2Regressor ---------- \n")
 print(e5.averages_)
 print("\n")
@@ -75,6 +80,15 @@ print(e6.averages_)
 print("\n")
 print(e6.ranges_)
 print("\n")
+print(e9.averages_)
+print("\n")
+print(e9.ranges_)
+print("\n")
+print(e10.averages_)
+print("\n")
+print(e10.ranges_)
+print("\n")
+
 
 e7 = VAR(h = h, date_formatting = "ms", type_VAR="none")
 e8 = VAR(h = h, date_formatting = "original", type_VAR="none")
@@ -121,6 +135,8 @@ class TestAhead(unittest.TestCase):
         self.assertAlmostEqual(e6.averages_[0][0][1], 33.99538584327151)
         self.assertAlmostEqual(e5.averages_[0][0][0], 1136070000000)
         self.assertAlmostEqual(e6.averages_[0][0][0], '2006-01-01')
+        self.assertAlmostEqual(e9.averages_[0][0][1], 26.80468657999291)
+        self.assertAlmostEqual(e10.averages_[0][0][1], 27.02139325761657)
 
     def test_var(self):            
         self.assertAlmostEqual(e7.averages_[0][0][1], 31.44666737744406)
