@@ -76,6 +76,9 @@ class Ridge2Regressor(object):
         lambda_2: a float;
             Regularization parameter for transformed predictors
 
+        dropout: a float;
+            dropout regularization parameter (dropping nodes in hidden layer)
+
         type_pi: a string;
             Type of prediction interval (currently "gaussian",
             or "bootstrap")
@@ -156,6 +159,7 @@ class Ridge2Regressor(object):
         a=0.01,
         lambda_1=0.1,
         lambda_2=0.1,
+        dropout=0,
         type_pi="gaussian",
         B=100,
         date_formatting="original",
@@ -171,6 +175,7 @@ class Ridge2Regressor(object):
         self.a = a
         self.lambda_1 = lambda_1
         self.lambda_2 = lambda_2
+        self.dropout = dropout
         self.type_pi = type_pi
         self.B = B
         self.date_formatting = date_formatting
@@ -218,6 +223,7 @@ class Ridge2Regressor(object):
             a=self.a,
             lambda_1=self.lambda_1,
             lambda_2=self.lambda_2,
+            dropout=self.dropout,
             type_pi=self.type_pi,
             B=self.B,
             seed=self.seed,
