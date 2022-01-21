@@ -3,7 +3,11 @@ import pathlib
 import shutil
 import keras_autodoc
 
-PAGES = {    
+PAGES = {  
+    'documentation/armagarch.md': [
+        'ahead.ARMAGARCH.ArmaGarch.ArmaGarch',
+        'ahead.ARMAGARCH.ArmaGarch.ArmaGarch.forecast'
+    ],  
     'documentation/dynamicregressor.md': [
         'ahead.DynamicRegressor.DynamicRegressor.DynamicRegressor',
         'ahead.DynamicRegressor.DynamicRegressor.DynamicRegressor.forecast'

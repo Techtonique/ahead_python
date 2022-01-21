@@ -18,8 +18,10 @@ ahead.Ridge2.Ridge2Regressor.Ridge2Regressor(
     a=0.01,
     lambda_1=0.1,
     lambda_2=0.1,
+    dropout=0,
     type_pi="gaussian",
     B=100,
+    cl=1,
     date_formatting="original",
     seed=123,
 )
@@ -59,12 +61,18 @@ Parameters:
     lambda_2: a float;
         Regularization parameter for transformed predictors
 
+    dropout: a float;
+        dropout regularization parameter (dropping nodes in hidden layer)
+
     type_pi: a string;
         Type of prediction interval (currently "gaussian",
         or "bootstrap")
 
-    B: an integer
+    B: an integer;
         Number of bootstrap replications for `type_pi == bootstrap`
+
+    cl: an integer; 
+        The number of clusters for parallel execution (done in R), for `type_pi == bootstrap`
 
     date_formatting: a string;
         Currently:
@@ -129,7 +137,7 @@ Examples:
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Ridge2/Ridge2Regressor.py#L188)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Ridge2/Ridge2Regressor.py#L198)</span>
 
 ### forecast
 

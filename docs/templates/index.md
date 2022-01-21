@@ -11,6 +11,7 @@ Currently, 4 forecasting methods are implemented in the Python package:
 
 - `DynamicRegressor`: **univariate** time series forecasting method adapted from [`forecast::nnetar`](https://otexts.com/fpp2/nnetar.html#neural-network-autoregression). The Python implementation contains only the [automatic version](https://thierrymoudiki.github.io/blog/2021/10/22/r/misc/ahead-ridge).
 - `EAT`: **univariate** time series forecasting method based on combinations of R's `forecast::ets`, `forecast::auto.arima`, and `forecast::thetaf`
+- `ArmaGarch`: **univariate** time series forecasting simulation based on ARMA(1, 1)-GARCH(1,1)
 - `Ridge2Regressor`: **multivariate** time series forecasting method, based on __quasi-randomized networks__ and presented in [this paper](https://www.mdpi.com/2227-9091/6/1/22)
 - `VAR`: **multivariate** time series forecasting method using Vector AutoRegressive model (VAR, mostly here for benchmarking purpose)
 
@@ -80,6 +81,8 @@ print(r1.result_dfs_)
 - For [DynamicRegressor](documentation/dynamicregressor.md)
 
 - For [EAT](documentation/eat.md)
+
+- For [ARMA(1, 1)-GARCH(1,1)](documentation/armagarch.md)
 
 ### For multivariate models 
 
