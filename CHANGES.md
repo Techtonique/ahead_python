@@ -1,7 +1,7 @@
 # version 0.5.0
 
 - add dropout regularization to `Ridge2Regressor`
-- parallel execution for type_pi == bootstrap in `Ridge2Regressor` (done in R /!\, experimental)
+- parallel execution for `type_pi == bootstrap` in `Ridge2Regressor` (done in R /!\, experimental)
 - ARMA(1, 1)-GARCH(1, 1) in Python 
 
 # version 0.4.2
