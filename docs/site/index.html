@@ -47,6 +47,10 @@
                                 <ul class="dropdown-menu">
                                     
 <li>
+    <a href="documentation/armagarch/" class="dropdown-item">ArmaGarch</a>
+</li>
+                                    
+<li>
     <a href="documentation/dynamicregressor/" class="dropdown-item">DynamicRegressor</a>
 </li>
                                     
@@ -130,10 +134,11 @@
 <p><img alt="PyPI" src="https://img.shields.io/pypi/v/ahead" /> <a href="https://github.com/Techtonique/ahead_python/blob/main/LICENSE"><img alt="PyPI - License" src="https://img.shields.io/pypi/l/ahead" /></a> <a href="https://pepy.tech/project/ahead"><img alt="Downloads" src="https://pepy.tech/badge/ahead" /></a> <a href="https://github.com/Techtonique/ahead_python"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/Techtonique/ahead_python" /></a></p>
 <p>Welcome to <strong>ahead</strong>'s (Python version) website. </p>
 <p><code>ahead</code> is a package for univariate and multivariate <strong>time series forecasting</strong>. The Python version is built on top of <a href="https://techtonique.github.io/ahead/">the R package</a> with the same name. <strong>ahead</strong>'s source code is <a href="https://github.com/Techtonique/ahead_python">available on GitHub</a>.</p>
-<p>Currently, 4 forecasting methods are implemented in the Python package:</p>
+<p>Currently, 5 forecasting methods are implemented in the Python package:</p>
 <ul>
 <li><code>DynamicRegressor</code>: <strong>univariate</strong> time series forecasting method adapted from <a href="https://otexts.com/fpp2/nnetar.html#neural-network-autoregression"><code>forecast::nnetar</code></a>. The Python implementation contains only the <a href="https://thierrymoudiki.github.io/blog/2021/10/22/r/misc/ahead-ridge">automatic version</a>.</li>
 <li><code>EAT</code>: <strong>univariate</strong> time series forecasting method based on combinations of R's <code>forecast::ets</code>, <code>forecast::auto.arima</code>, and <code>forecast::thetaf</code></li>
+<li><code>ArmaGarch</code>: <strong>univariate</strong> time series forecasting simulation based on ARMA(1, 1)-GARCH(1,1)</li>
 <li><code>Ridge2Regressor</code>: <strong>multivariate</strong> time series forecasting method, based on <strong>quasi-randomized networks</strong> and presented in <a href="https://www.mdpi.com/2227-9091/6/1/22">this paper</a></li>
 <li><code>VAR</code>: <strong>multivariate</strong> time series forecasting method using Vector AutoRegressive model (VAR, mostly here for benchmarking purpose)</li>
 </ul>
@@ -192,6 +197,9 @@ print(r1.result_dfs_)
 </li>
 <li>
 <p>For <a href="documentation/eat/">EAT</a></p>
+</li>
+<li>
+<p>For <a href="documentation/armagarch/">ARMA(1, 1)-GARCH(1,1)</a></p>
 </li>
 </ul>
 <h3 id="for-multivariate-models">For multivariate models</h3>
@@ -286,5 +294,5 @@ print(r1.result_dfs_)
 
 <!--
 MkDocs version : 1.2.3
-Build Date UTC : 2021-12-29 11:45:25.399664+00:00
+Build Date UTC : 2022-01-22 12:07:17.262685+00:00
 -->
