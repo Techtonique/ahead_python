@@ -1,34 +1,20 @@
-# Ridge2Regressor
+# BasicForecaster
 
-_Random Vector functional link network model with 2 regularization parameters_
+_Basic forecasting functions for multivariate time series (mean, median, random walk)_
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Ridge2/Ridge2Regressor.py#L45)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Basic/BasicForecaster.py#L45)</span>
 
-### Ridge2Regressor
+### BasicForecaster
 
 
 ```python
-ahead.Ridge2.Ridge2Regressor.Ridge2Regressor(
-    h=5,
-    level=95,
-    lags=1,
-    nb_hidden=5,
-    nodes_sim="sobol",
-    activation="relu",
-    a=0.01,
-    lambda_1=0.1,
-    lambda_2=0.1,
-    dropout=0,
-    type_pi="gaussian",
-    B=100,
-    cl=1,
-    date_formatting="original",
-    seed=123,
+ahead.Basic.BasicForecaster.BasicForecaster(
+    h=5, level=95, method="mean", type_pi="gaussian", B=100, date_formatting="original", seed=123
 )
 ```
 
 
-Random Vector functional link network model with 2 regularization parameters
+Basic forecasting functions for multivariate time series (mean, median, random walk)
 
 Parameters:
 
@@ -38,31 +24,8 @@ Parameters:
     level: an integer;
         Confidence level for prediction intervals
 
-    lags: an integer;
-        Number of lags
-
-    nb_hidden: an integer;
-        Number of nodes in hidden layer
-
-    nodes_sim: an integer;
-        Type of simulation for nodes in the hidden layer
-        ("sobol", "halton", "unif")
-
-    activation: a string;
-        Activation function ("relu", "sigmoid", "tanh",
-        "leakyrelu", "elu", "linear")
-
-    a: a float;
-        hyperparameter for activation function "leakyrelu", "elu"
-
-    lambda_1: a float;
-        Regularization parameter for original predictors
-
-    lambda_2: a float;
-        Regularization parameter for transformed predictors
-
-    dropout: a float;
-        dropout regularization parameter (dropping nodes in hidden layer)
+    method: a string;
+        Forecasting method, either "mean", "median", or random walk ("rw")    
 
     type_pi: a string;
         Type of prediction interval (currently "gaussian",
@@ -70,9 +33,6 @@ Parameters:
 
     B: an integer;
         Number of bootstrap replications for `type_pi == bootstrap`
-
-    cl: an integer; 
-        The number of clusters for parallel execution (done in R), for `type_pi == bootstrap`
 
     date_formatting: a string;
         Currently:
@@ -117,7 +77,7 @@ Examples:
 
 ```python
 import pandas as pd
-from ahead import Ridge2Regressor
+from ahead import BasicForecaster
 
 # Data frame containing the time series
 dataset = {
@@ -129,7 +89,7 @@ df = pd.DataFrame(dataset).set_index('date')
 print(df)
 
 # multivariate time series forecasting
-r1 = Ridge2Regressor(h = 5)
+r1 = BasicForecaster(h = 5)
 r1.forecast(df)
 print(r1.result_dfs_)
 ```
@@ -137,17 +97,17 @@ print(r1.result_dfs_)
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Ridge2/Ridge2Regressor.py#L198)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Basic/BasicForecaster.py#L156)</span>
 
 ### forecast
 
 
 ```python
-Ridge2Regressor.forecast(df)
+BasicForecaster.forecast(df)
 ```
 
 
-Forecasting method from `Ridge2Regressor` class
+Forecasting method from `BasicForecaster` class
 
 Parameters:
 

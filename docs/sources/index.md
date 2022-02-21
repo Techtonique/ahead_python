@@ -7,11 +7,12 @@ Welcome to __ahead__'s (Python version) website.
 
 `ahead` is a package for univariate and multivariate **time series forecasting**. The Python version is built on top of [the R package](https://techtonique.github.io/ahead/) with the same name. __ahead__'s source code is [available on GitHub](https://github.com/Techtonique/ahead_python).
 
-Currently, 5 forecasting methods are implemented in the Python package:
+Currently, 6 forecasting methods are implemented in the Python package:
 
 - `DynamicRegressor`: **univariate** time series forecasting method adapted from [`forecast::nnetar`](https://otexts.com/fpp2/nnetar.html#neural-network-autoregression). The Python implementation contains only the [automatic version](https://thierrymoudiki.github.io/blog/2021/10/22/r/misc/ahead-ridge).
 - `EAT`: **univariate** time series forecasting method based on combinations of R's `forecast::ets`, `forecast::auto.arima`, and `forecast::thetaf`
 - `ArmaGarch`: **univariate** time series forecasting simulation based on ARMA(1, 1)-GARCH(1,1)
+- `BasicForecaster`: **multivariate** time series forecasting methods; mean, median and random walk
 - `Ridge2Regressor`: **multivariate** time series forecasting method, based on __quasi-randomized networks__ and presented in [this paper](https://www.mdpi.com/2227-9091/6/1/22)
 - `VAR`: **multivariate** time series forecasting method using Vector AutoRegressive model (VAR, mostly here for benchmarking purpose)
 

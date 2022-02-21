@@ -130,24 +130,24 @@ class Ridge2Regressor(object):
 
     Examples:
 
-        ```
-            import pandas as pd
-            from ahead import Ridge2Regressor
+    ```python
+    import pandas as pd
+    from ahead import Ridge2Regressor
 
-            # Data frame containing the time series
-            dataset = {
-            'date' : ['2001-01-01', '2002-01-01', '2003-01-01', '2004-01-01', '2005-01-01'],
-            'series1' : [34, 30, 35.6, 33.3, 38.1],
-            'series2' : [4, 5.5, 5.6, 6.3, 5.1],
-            'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
-            df = pd.DataFrame(dataset).set_index('date')
-            print(df)
+    # Data frame containing the time series
+    dataset = {
+    'date' : ['2001-01-01', '2002-01-01', '2003-01-01', '2004-01-01', '2005-01-01'],
+    'series1' : [34, 30, 35.6, 33.3, 38.1],
+    'series2' : [4, 5.5, 5.6, 6.3, 5.1],
+    'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
+    df = pd.DataFrame(dataset).set_index('date')
+    print(df)
 
-            # multivariate time series forecasting
-            r1 = Ridge2Regressor(h = 5)
-            r1.forecast(df)
-            print(r1.result_dfs_)
-        ```
+    # multivariate time series forecasting
+    r1 = Ridge2Regressor(h = 5)
+    r1.forecast(df)
+    print(r1.result_dfs_)
+    ```
 
     """
 

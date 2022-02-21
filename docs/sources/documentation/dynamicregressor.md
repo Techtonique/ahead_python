@@ -62,23 +62,23 @@ Attributes:
 
 Examples:
 
-    ```
-        import pandas as pd
-        from ahead import DynamicRegressor
+```python
+import pandas as pd
+from ahead import DynamicRegressor
 
-        # Data frame containing the time series
-        dataset = {
-        'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
-        'value' : [34, 30, 35.6, 33.3, 38.1]}
+# Data frame containing the time series
+dataset = {
+'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
+'value' : [34, 30, 35.6, 33.3, 38.1]}
 
-        df = pd.DataFrame(dataset).set_index('date')
-        print(df)
+df = pd.DataFrame(dataset).set_index('date')
+print(df)
 
-        # univariate time series forecasting
-        d1 = DynamicRegressor(h = 5)
-        d1.forecast(df)
-        print(d1.result_df_)
-    ```
+# univariate time series forecasting
+d1 = DynamicRegressor(h = 5)
+d1.forecast(df)
+print(d1.result_df_)
+```
 
 
 ----

@@ -15,6 +15,7 @@ site_description: 'Documentation for ahead (Python version).'
 nav:    
     - Documentation:
       - ArmaGarch: documentation/armagarch.md
+      - BasicForecaster: documentation/basicforecaster.md
       - DynamicRegressor: documentation/dynamicregressor.md
       - EAT: documentation/eat.md
       - Ridge2Regressor: documentation/ridge2regressor.md

@@ -6,7 +6,7 @@
 
 import unittest
 import pandas as pd
-from ahead import EAT, DynamicRegressor, Ridge2Regressor, VAR
+from ahead import BasicForecaster, EAT, DynamicRegressor, Ridge2Regressor, VAR
 
 
 # Univariate dataset 
@@ -105,6 +105,19 @@ print(e8.ranges_)
 print("\n")
 
 
+e11 = BasicForecaster(h = h, date_formatting = "ms")
+e12 = BasicForecaster(h = h, date_formatting = "original",
+                      type_pi='bootstrap', B=10)
+e11.forecast(df_multi)
+e12.forecast(df_multi)
+
+e13 = BasicForecaster(h = h, method="median", date_formatting = "ms")
+e14 = BasicForecaster(h = h, method="median", date_formatting = "original",
+                      type_pi='bootstrap', B=10)
+e13.forecast(df_multi)
+e14.forecast(df_multi)
+
+
 class TestAhead(unittest.TestCase):
     """Tests for `ahead` package."""
 
@@ -130,6 +143,12 @@ class TestAhead(unittest.TestCase):
         self.assertEqual(e3.averages_[0][0], 1590962400000)        
         self.assertEqual(e4.averages_[0][0], '2020-06-01')        
     
+    def test_basic(self):
+        self.assertAlmostEqual(e11.averages_[0][0][1], 34.2)
+        self.assertAlmostEqual(e12.averages_[0][0][1], 34.2)             
+        self.assertAlmostEqual(e13.averages_[0][0][1], 34.0)
+        self.assertAlmostEqual(e14.averages_[0][0][1], 34.0)             
+
     def test_ridge2(self):
         self.assertAlmostEqual(e5.averages_[0][0][1], 33.99538584327151)
         self.assertAlmostEqual(e6.averages_[0][0][1], 33.99538584327151)

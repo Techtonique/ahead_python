@@ -106,3 +106,6 @@ ENV/
 
 # R artifacts
 R-package/.Rproj.*
+
+# Apple stuff
+.DS_Store

@@ -42,8 +42,8 @@ stats = importr("stats")
 ahead = importr("ahead")
 
 
-class VAR(object):
-    """Vector AutoRegressive model
+class BasicForecaster(object):
+    """Basic forecasting functions for multivariate time series (mean, median, random walk)
 
     Parameters:
 
@@ -53,22 +53,28 @@ class VAR(object):
         level: an integer;
             Confidence level for prediction intervals
 
-        lags: an integer;
-            the lag order
+        method: a string;
+            Forecasting method, either "mean", "median", or random walk ("rw")    
 
-        type_VAR: a string;
-            Type of deterministic regressors to include
-            ("const", "trend", "both", "none")
+        type_pi: a string;
+            Type of prediction interval (currently "gaussian",
+            or "bootstrap")
+
+        B: an integer;
+            Number of bootstrap replications for `type_pi == bootstrap`
 
         date_formatting: a string;
             Currently:
             - "original": yyyy-mm-dd
             - "ms": milliseconds
 
+        seed: an integer;
+            reproducibility seed for type_pi == 'bootstrap'
+
     Attributes:
 
         fcast_: an object;
-            raw result from fitting R's `ahead::varf` through `rpy2`
+            raw result from fitting R's `ahead::ridge2f` through `rpy2`
 
         averages_: a list of lists;
             mean forecast in a list for each series
@@ -80,7 +86,7 @@ class VAR(object):
             a list of output dates (associated to forecast)
 
         mean_: a numpy array
-            contains series mean forecast as a numpy array
+            contains series mean forecast as a numpy array 
 
         lower_: a numpy array 
             contains series lower bound forecast as a numpy array   
@@ -93,11 +99,14 @@ class VAR(object):
             mean forecast, lower + upper prediction intervals,
             and a date index
 
+        sims_: currently a tuple of numpy arrays
+            for `type_pi == bootstrap`, simulations for each series
+
     Examples:
 
     ```python
     import pandas as pd
-    from ahead import VAR
+    from ahead import BasicForecaster
 
     # Data frame containing the time series
     dataset = {
@@ -109,29 +118,31 @@ class VAR(object):
     print(df)
 
     # multivariate time series forecasting
-    v1 = VAR(h = 5, date_formatting = "original", type_VAR="none")
-    v1.forecast(df)
-    print(v1.result_dfs_)
+    r1 = BasicForecaster(h = 5)
+    r1.forecast(df)
+    print(r1.result_dfs_)
     ```
 
     """
 
     def __init__(
-        self, h=5, level=95, lags=1, type_VAR="none", date_formatting="original"
-    ):  # type_VAR = "const", "trend", "both", "none"
-
-        assert type_VAR in (
-            "const",
-            "trend",
-            "both",
-            "none",
-        ), "must have: type_VAR in ('const', 'trend', 'both', 'none')"
+        self,
+        h=5,
+        level=95,
+        method="mean",
+        type_pi="gaussian",
+        B=100,        
+        date_formatting="original",
+        seed=123,
+    ):
 
         self.h = h
         self.level = level
-        self.lags = lags
-        self.type_VAR = type_VAR
+        self.method = method
+        self.type_pi = type_pi
+        self.B = B
         self.date_formatting = date_formatting
+        self.seed = seed
 
         self.averages_ = None
         self.ranges_ = None
@@ -140,9 +151,10 @@ class VAR(object):
         self.lower_ = None
         self.upper_ = None
         self.result_df_s_ = None
+        self.sims_ = None
 
     def forecast(self, df):
-        """Forecasting method from `VAR` class
+        """Forecasting method from `BasicForecaster` class
 
         Parameters:
 
@@ -163,12 +175,14 @@ class VAR(object):
         # obtain time series forecast -----
 
         y = mv.compute_y_mts(self.input_df, frequency)
-        self.fcast_ = ahead.varf(
+        self.fcast_ = ahead.basicf(
             y,
             h=self.h,
             level=self.level,
-            lags=self.lags,
-            type_VAR=self.type_VAR,
+            method=self.method,
+            type_pi=self.type_pi,
+            B=self.B,
+            seed=self.seed,
         )
 
         # result -----
@@ -193,5 +207,10 @@ class VAR(object):
             umv.compute_result_df(self.averages_[i], self.ranges_[i])
             for i in range(n_series)
         )
+
+        if self.type_pi == "bootstrap":
+            self.sims_ = tuple(
+                np.asarray(self.fcast_.rx2["sims"][i]) for i in range(self.B)
+            )
 
         return self

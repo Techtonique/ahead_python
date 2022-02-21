@@ -95,23 +95,23 @@ class EAT(object):
 
     Examples:
 
-        ```
-            import pandas as pd
-            from ahead import EAT
+    ```python
+    import pandas as pd
+    from ahead import EAT
 
-            # Data frame containing the time series
-            dataset = {
-            'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
-            'value' : [34, 30, 35.6, 33.3, 38.1]}
+    # Data frame containing the time series
+    dataset = {
+    'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
+    'value' : [34, 30, 35.6, 33.3, 38.1]}
 
-            df = pd.DataFrame(dataset).set_index('date')
-            print(df)
+    df = pd.DataFrame(dataset).set_index('date')
+    print(df)
 
-            # univariate time series forecasting
-            e1 = EAT(h = 5) # default, equal weights for each model=[1/3, 1/3, 1/3]
-            e1.forecast(df)
-            print(e1.result_df_)
-        ```
+    # univariate time series forecasting
+    e1 = EAT(h = 5) # default, equal weights for each model=[1/3, 1/3, 1/3]
+    e1.forecast(df)
+    print(e1.result_df_)
+    ```
 
     """
 

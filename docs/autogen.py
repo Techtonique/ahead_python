@@ -8,6 +8,10 @@ PAGES = {
         'ahead.ARMAGARCH.ArmaGarch.ArmaGarch',
         'ahead.ARMAGARCH.ArmaGarch.ArmaGarch.forecast'
     ],  
+    'documentation/basicforecaster.md': [
+        'ahead.Basic.BasicForecaster.BasicForecaster',
+        'ahead.Basic.BasicForecaster.BasicForecaster.forecast'
+    ], 
     'documentation/dynamicregressor.md': [
         'ahead.DynamicRegressor.DynamicRegressor.DynamicRegressor',
         'ahead.DynamicRegressor.DynamicRegressor.DynamicRegressor.forecast'
