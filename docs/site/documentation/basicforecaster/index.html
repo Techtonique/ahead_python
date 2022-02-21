@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>DynamicRegressor - Techtonique/ahead_python</title>
+        <title>BasicForecaster - Techtonique/ahead_python</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
@@ -51,11 +51,11 @@
 </li>
                                     
 <li>
-    <a href="../basicforecaster/" class="dropdown-item">BasicForecaster</a>
+    <a href="./" class="dropdown-item active">BasicForecaster</a>
 </li>
                                     
 <li>
-    <a href="./" class="dropdown-item active">DynamicRegressor</a>
+    <a href="../dynamicregressor/" class="dropdown-item">DynamicRegressor</a>
 </li>
                                     
 <li>
@@ -89,12 +89,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../basicforecaster/" class="nav-link">
+                                <a rel="prev" href="../armagarch/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../eat/" class="nav-link">
+                                <a rel="next" href="../dynamicregressor/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -119,7 +119,7 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#dynamicregressor" class="nav-link">DynamicRegressor</a>
+            <li class="nav-item" data-level="1"><a href="#basicforecaster" class="nav-link">BasicForecaster</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -128,15 +128,15 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="dynamicregressor">DynamicRegressor</h1>
-<p><em>Dynamic Regression model adapted from R's forecast::nnetar</em></p>
-<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/DynamicRegressor/DynamicRegressor.py#L44">[source]</a></span></p>
-<h3 id="dynamicregressor_1">DynamicRegressor</h3>
-<pre><code class="language-python">ahead.DynamicRegressor.DynamicRegressor.DynamicRegressor(
-    h=5, level=95, type_pi=&quot;E&quot;, date_formatting=&quot;original&quot;
+<h1 id="basicforecaster">BasicForecaster</h1>
+<p><em>Basic forecasting functions for multivariate time series (mean, median, random walk)</em></p>
+<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/Basic/BasicForecaster.py#L45">[source]</a></span></p>
+<h3 id="basicforecaster_1">BasicForecaster</h3>
+<pre><code class="language-python">ahead.Basic.BasicForecaster.BasicForecaster(
+    h=5, level=95, method=&quot;mean&quot;, type_pi=&quot;gaussian&quot;, B=100, date_formatting=&quot;original&quot;, seed=123
 )
 </code></pre>
-<p>Dynamic Regression Model adapted from R's <code>forecast::nnetar</code></p>
+<p>Basic forecasting functions for multivariate time series (mean, median, random walk)</p>
 <p>Parameters:</p>
 <pre><code>h: an integer;
     forecasting horizon
@@ -144,24 +144,33 @@
 level: an integer;
     Confidence level for prediction intervals
 
+method: a string;
+    Forecasting method, either "mean", "median", or random walk ("rw")
+
 type_pi: a string;
     Type of prediction interval (currently "gaussian",
-    ETS: "E", Arima: "A" or Theta: "T")
+    or "bootstrap")
+
+B: an integer;
+    Number of bootstrap replications for `type_pi == bootstrap`
 
 date_formatting: a string;
     Currently:
     - "original": yyyy-mm-dd
     - "ms": milliseconds
+
+seed: an integer;
+    reproducibility seed for type_pi == 'bootstrap'
 </code></pre>
 <p>Attributes:</p>
 <pre><code>fcast_: an object;
-    raw result from fitting R's `ahead::dynrmf` through `rpy2`
+    raw result from fitting R's `ahead::ridge2f` through `rpy2`
 
-averages_: a list;
-    mean forecast in a list
+averages_: a list of lists;
+    mean forecast in a list for each series
 
-ranges_: a list;
-    lower and upper prediction intervals in a list
+ranges_: a list of lists;
+    lower and upper prediction intervals in a list for each series
 
 output_dates_: a list;
     a list of output dates (associated to forecast)
@@ -175,33 +184,38 @@ lower_: a numpy array
 upper_: a numpy array 
     contains series upper bound forecast as a numpy array
 
-result_df_: a data frame;
-    contains 3 columns, mean forecast, lower + upper
-    prediction intervals, and a date index
+result_dfs_: a tuple of data frames;
+    each element of the tuple contains 3 columns,
+    mean forecast, lower + upper prediction intervals,
+    and a date index
+
+sims_: currently a tuple of numpy arrays
+    for `type_pi == bootstrap`, simulations for each series
 </code></pre>
 <p>Examples:</p>
 <pre><code class="language-python">import pandas as pd
-from ahead import DynamicRegressor
+from ahead import BasicForecaster
 
 # Data frame containing the time series
 dataset = {
-'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
-'value' : [34, 30, 35.6, 33.3, 38.1]}
-
+'date' : ['2001-01-01', '2002-01-01', '2003-01-01', '2004-01-01', '2005-01-01'],
+'series1' : [34, 30, 35.6, 33.3, 38.1],
+'series2' : [4, 5.5, 5.6, 6.3, 5.1],
+'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
 df = pd.DataFrame(dataset).set_index('date')
 print(df)
 
-# univariate time series forecasting
-d1 = DynamicRegressor(h = 5)
-d1.forecast(df)
-print(d1.result_df_)
+# multivariate time series forecasting
+r1 = BasicForecaster(h = 5)
+r1.forecast(df)
+print(r1.result_dfs_)
 </code></pre>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/DynamicRegressor/DynamicRegressor.py#L129">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/Techtonique/ahead/ahead/Basic/BasicForecaster.py#L156">[source]</a></span></p>
 <h3 id="forecast">forecast</h3>
-<pre><code class="language-python">DynamicRegressor.forecast(df)
+<pre><code class="language-python">BasicForecaster.forecast(df)
 </code></pre>
-<p>Forecasting method from <code>DynamicRegressor</code> class</p>
+<p>Forecasting method from <code>BasicForecaster</code> class</p>
 <p>Parameters:</p>
 <pre><code>df: a data frame;
     a data frame containing the input time series (see example)
