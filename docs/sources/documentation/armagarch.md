@@ -2,7 +2,7 @@
 
 _ARMA(1, 1)-GARCH(1, 1) model_
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/ARMAGARCH/ArmaGarch.py#L46)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/ARMAGARCH/ArmaGarch.py#L46)</span>
 
 ### ArmaGarch
 
@@ -74,7 +74,7 @@ Attributes:
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/ARMAGARCH/ArmaGarch.py#L135)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/ARMAGARCH/ArmaGarch.py#L135)</span>
 
 ### forecast
 

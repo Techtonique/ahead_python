@@ -38,7 +38,7 @@ def generate(dest_dir):
 
     doc_generator = keras_autodoc.DocumentationGenerator(
         PAGES,
-        'https://github.com/Techtonique/ahead',
+        'https://github.com/Techtonique/ahead_python/blob/main',
         template_dir,
         #ahead_dir / 'examples'
     )

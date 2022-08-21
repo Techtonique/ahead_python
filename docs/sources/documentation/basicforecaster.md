@@ -2,7 +2,7 @@
 
 _Basic forecasting functions for multivariate time series (mean, median, random walk)_
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Basic/BasicForecaster.py#L45)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/Basic/BasicForecaster.py#L45)</span>
 
 ### BasicForecaster
 
@@ -97,7 +97,7 @@ print(r1.result_dfs_)
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Basic/BasicForecaster.py#L156)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/Basic/BasicForecaster.py#L156)</span>
 
 ### forecast
 

@@ -2,7 +2,7 @@
 
 _EAT (ETS, auto.arima, Theta) model_
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/EAT/EAT.py#L46)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/EAT/EAT.py#L46)</span>
 
 ### EAT
 
@@ -90,7 +90,7 @@ print(e1.result_df_)
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/EAT/EAT.py#L144)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/EAT/EAT.py#L144)</span>
 
 ### forecast
 

@@ -2,7 +2,7 @@
 
 _Dynamic Regression model adapted from R's forecast::nnetar_
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/DynamicRegressor/DynamicRegressor.py#L44)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/DynamicRegressor/DynamicRegressor.py#L44)</span>
 
 ### DynamicRegressor
 
@@ -83,7 +83,7 @@ print(d1.result_df_)
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/DynamicRegressor/DynamicRegressor.py#L129)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/DynamicRegressor/DynamicRegressor.py#L129)</span>
 
 ### forecast
 

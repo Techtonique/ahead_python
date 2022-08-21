@@ -2,7 +2,7 @@
 
 _Random Vector functional link network model with 2 regularization parameters_
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Ridge2/Ridge2Regressor.py#L45)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/Ridge2/Ridge2Regressor.py#L45)</span>
 
 ### Ridge2Regressor
 
@@ -137,7 +137,7 @@ print(r1.result_dfs_)
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/Ridge2/Ridge2Regressor.py#L198)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/Ridge2/Ridge2Regressor.py#L198)</span>
 
 ### forecast
 

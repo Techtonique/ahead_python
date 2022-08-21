@@ -2,7 +2,7 @@
 
 _Vector AutoRegressive model_
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/VAR/VAR.py#L45)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/VAR/VAR.py#L45)</span>
 
 ### VAR
 
@@ -86,7 +86,7 @@ print(v1.result_dfs_)
 
 ----
 
-<span style="float:right;">[[source]](https://github.com/Techtonique/ahead/ahead/VAR/VAR.py#L144)</span>
+<span style="float:right;">[[source]](https://github.com/Techtonique/ahead_python/blob/main/ahead/VAR/VAR.py#L144)</span>
 
 ### forecast
 
