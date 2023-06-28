@@ -3,11 +3,6 @@ import pandas as pd
 from ahead import DynamicRegressor, EAT
 from time import time
 
-import warnings
-import itertools
-import matplotlib.pyplot as plt
-plt.style.use('fivethirtyeight')
-
 
 # Forecasting horizon
 h = 5
