@@ -1,3 +1,9 @@
+# version 0.6.1
+
+- Reduce number of required packages depencies
+- Fix rpy2 requirement (version 3.4.5)
+- Requires Python version >= 3.9
+
 # version 0.5.0
 
 - add dropout regularization to `Ridge2Regressor`

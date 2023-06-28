@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 here = path.abspath(path.dirname(__file__))
 
@@ -40,8 +40,9 @@ setup(
     keywords="",
     packages=find_packages(exclude=["docs", "tests*"]),
     include_package_data=True,
-    author="Thierry Moudiki",
+    author="T. Moudiki",
     install_requires=install_requires,
     dependency_links=dependency_links,
     author_email="thierry.moudiki@gmail.com",
+    python_requires=">=3.9"
 )
