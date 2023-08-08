@@ -32,6 +32,11 @@ packages_to_install = [
 
 base = importr("base")
 utils = importr("utils")
+
+print(f" required_packages: {required_packages} \n")
+print(f" packages_to_install: {packages_to_install} \n")
+print(f" len(packages_to_install): {len(packages_to_install)} \n")
+
 if len(packages_to_install) > 0:            
     utils.install_packages(StrVector(packages_to_install), 
                            repos = "https://techtonique.r-universe.dev")  

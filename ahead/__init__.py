@@ -2,7 +2,7 @@
 
 __author__ = """T. Moudiki"""
 __email__ = "thierry.moudiki@gmail.com"
-__version__ = "0.6.1"
+__version__ = "0.6.2"
 
 from .ARMAGARCH import ArmaGarch
 from .Basic import BasicForecaster
