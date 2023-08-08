@@ -1,64 +1,10 @@
-from subprocess import Popen, PIPE # from https://stackoverflow.com/questions/25329955/check-if-r-is-installed-from-python
 import numpy as np
+from .. import config
 
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
 
-proc = Popen(["which", "R"], stdout=PIPE, stderr=PIPE)
-R_IS_INSTALLED = proc.wait() == 0
-
-try: 
-    import rpy2.robjects.packages as rpackages
-    from rpy2.robjects.packages import importr    
-    from rpy2.robjects.vectors import StrVector
-    from rpy2 import rinterface, robjects
-    from rpy2.rinterface_lib import callbacks
-    from rpy2.rinterface_lib.embedded import RRuntimeError
-except ImportError as e: 
-    rpy2_error_message = str(e)
-    RPY2_IS_INSTALLED = False
-else: 
-    RPY2_IS_INSTALLED = True
-
-USAGE_MESSAGE = """
-This Python class, BasicForecaster, is based on R package 'ahead' (https://techtonique.github.io/ahead/). 
-You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/project/rpy2/).
-
-Then, install R package 'ahead' (if necessary): 
->> R -e 'options(repos = c(techtonique = 'https://techtonique.r-universe.dev',
-    CRAN = 'https://cloud.r-project.org'))'
->> R -e 'install.packages("ahead")'    
-"""
-
-required_packages = ["ahead"]  # list of required R packages
-
-if all(rpackages.isinstalled(x) for x in required_packages):
-    CHECK_PACKAGES = True  # True if packages are already installed
-else:
-    CHECK_PACKAGES = False  # False if packages are not installed
-
-if CHECK_PACKAGES == False:  # Not installed? Then install.
-
-    packages_to_install = [
-        x for x in required_packages if not rpackages.isinstalled(x)
-    ]
-
-    base = importr("base")
-    utils = importr("utils")
-    if len(packages_to_install) > 0:        
-        base.options(
-            repos=base.c(
-                techtonique="https://techtonique.r-universe.dev",
-                CRAN="https://cloud.r-project.org",
-            )
-        )
-        utils.install_packages(StrVector(packages_to_install))                
-
-ahead = importr("ahead")
-CHECK_PACKAGES = True
-
-
-class BasicForecaster(object):
+class BasicForecaster():
     """Basic forecasting functions for multivariate time series (mean, median, random walk)
 
     Parameters:
@@ -76,6 +22,9 @@ class BasicForecaster(object):
             Type of prediction interval (currently "gaussian",
             or "bootstrap")
 
+        block_length: an integer
+            length of block for multivariate circular block bootstrap (`type_pi == blockbootstrap`)            
+            
         B: an integer;
             Number of bootstrap replications for `type_pi == bootstrap`
 
@@ -147,33 +96,37 @@ class BasicForecaster(object):
         level=95,
         method="mean",
         type_pi="gaussian",
+        block_length=5,
         B=100,        
         date_formatting="original",
         seed=123,
     ):
 
-        if not R_IS_INSTALLED:
-            raise ImportError("R is not installed! \n" + USAGE_MESSAGE)
+        if not config.R_IS_INSTALLED:
+            raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
         
-        if not RPY2_IS_INSTALLED:
-            raise ImportError(rpy2_error_message + USAGE_MESSAGE)
+        if not config.RPY2_IS_INSTALLED:
+            raise ImportError(config.RPY2_ERROR_MESSAGE + config.USAGE_MESSAGE)                
 
         self.h = h
         self.level = level
         self.method = method
         self.type_pi = type_pi
+        self.block_length = block_length
         self.B = B
         self.date_formatting = date_formatting
+        self.input_df = None 
         self.seed = seed
 
+        self.fcast_ = None
         self.averages_ = None
         self.ranges_ = None
         self.output_dates_ = []
         self.mean_ = None
         self.lower_ = None
         self.upper_ = None
-        self.result_df_s_ = None
-        self.sims_ = None
+        self.result_dfs_ = None
+        self.sims_ = None        
 
     def forecast(self, df):
         """Forecasting method from `BasicForecaster` class
@@ -186,7 +139,7 @@ class BasicForecaster(object):
         """
 
         self.input_df = df
-        n_series = len(df.columns)
+        n_series = len(df.columns)        
 
         # obtain dates 'forecast' -----
 
@@ -197,12 +150,17 @@ class BasicForecaster(object):
         # obtain time series forecast -----
 
         y = mv.compute_y_mts(self.input_df, frequency)
-        self.fcast_ = ahead.basicf(
+
+        #if self.type_pi is "blockbootstrap":
+        #    assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
+
+        self.fcast_ = config.AHEAD.basicf(
             y,
             h=self.h,
             level=self.level,
             method=self.method,
             type_pi=self.type_pi,
+            block_length=self.block_length,
             B=self.B,
             seed=self.seed,
         )
@@ -230,7 +188,7 @@ class BasicForecaster(object):
             for i in range(n_series)
         )
 
-        if self.type_pi == "bootstrap":
+        if self.type_pi == "bootstrap" or self.type_pi == "blockbootstrap":
             self.sims_ = tuple(
                 np.asarray(self.fcast_.rx2["sims"][i]) for i in range(self.B)
             )

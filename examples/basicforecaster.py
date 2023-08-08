@@ -3,10 +3,8 @@ import pandas as pd
 from ahead import BasicForecaster
 from time import time
 
-
 # Forecasting horizon
 h = 5
-
 
 # Data frame containing the time series 
 dataset = {

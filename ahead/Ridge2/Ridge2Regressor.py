@@ -1,48 +1,10 @@
-import os
 import numpy as np
-import pandas as pd
-
-from rpy2.robjects.packages import importr
-from rpy2.robjects import FloatVector, numpy2ri
-import rpy2.robjects as robjects
-import rpy2.robjects.packages as rpackages
-from datetime import datetime
-from rpy2.robjects.vectors import StrVector
+from .. import config
 
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
 
-required_packages = ["ahead"]  # list of required R packages
-
-if all(rpackages.isinstalled(x) for x in required_packages):
-    check_packages = True  # True if packages are already installed
-else:
-    check_packages = False  # False if packages are not installed
-
-if check_packages == False:  # Not installed? Then install.
-
-    packages_to_install = [
-        x for x in required_packages if not rpackages.isinstalled(x)
-    ]
-
-    if len(packages_to_install) > 0:
-        base = importr("base")
-        utils = importr("utils")
-        base.options(
-            repos=base.c(
-                techtonique="https://techtonique.r-universe.dev",
-                CRAN="https://cloud.r-project.org",
-            )
-        )
-        utils.install_packages(StrVector(packages_to_install))
-        check_packages = True
-
-base = importr("base")
-stats = importr("stats")
-ahead = importr("ahead")
-
-
-class Ridge2Regressor(object):
+class Ridge2Regressor():
     """Random Vector functional link network model with 2 regularization parameters
 
     Parameters:
@@ -81,10 +43,13 @@ class Ridge2Regressor(object):
 
         type_pi: a string;
             Type of prediction interval (currently "gaussian",
-            or "bootstrap")
+            or "bootstrap" or "blockbootstrap")
+        
+        block_length: an integer
+            length of block for multivariate circular block bootstrap (`type_pi == blockbootstrap`)
 
         B: an integer;
-            Number of bootstrap replications for `type_pi == bootstrap`
+            Number of bootstrap replications for `type_pi == bootstrap` or `type_pi == blockbootstrap` 
 
         cl: an integer; 
             The number of clusters for parallel execution (done in R), for `type_pi == bootstrap`
@@ -164,6 +129,7 @@ class Ridge2Regressor(object):
         lambda_2=0.1,
         dropout=0,
         type_pi="gaussian",
+        block_length = 5,
         B=100,
         cl=1,
         date_formatting="original",
@@ -181,18 +147,21 @@ class Ridge2Regressor(object):
         self.lambda_2 = lambda_2
         self.dropout = dropout
         self.type_pi = type_pi
+        self.block_length = block_length
         self.B = B
         self.cl = cl
         self.date_formatting = date_formatting
         self.seed = seed
+        self.input_df = None
 
+        self.fcast_ = None
         self.averages_ = None
         self.ranges_ = None
         self.output_dates_ = []
         self.mean_ = None
         self.lower_ = None
         self.upper_ = None
-        self.result_df_s_ = None
+        self.result_dfs_ = None
         self.sims_ = None
 
     def forecast(self, df):
@@ -217,7 +186,11 @@ class Ridge2Regressor(object):
         # obtain time series forecast -----
 
         y = mv.compute_y_mts(self.input_df, frequency)
-        self.fcast_ = ahead.ridge2f(
+
+        if self.type_pi is "blockbootstrap":
+            assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
+
+        self.fcast_ = config.AHEAD.ridge2f(
             y,
             h=self.h,
             level=self.level,
@@ -230,6 +203,7 @@ class Ridge2Regressor(object):
             lambda_2=self.lambda_2,
             dropout=self.dropout,
             type_pi=self.type_pi,
+            block_length=self.block_length,
             B=self.B,
             cl=self.cl,
             seed=self.seed,
@@ -258,7 +232,7 @@ class Ridge2Regressor(object):
             for i in range(n_series)
         )
 
-        if self.type_pi == "bootstrap":
+        if self.type_pi == "bootstrap" or self.type_pi == "blockbootstrap":
             self.sims_ = tuple(
                 np.asarray(self.fcast_.rx2["sims"][i]) for i in range(self.B)
             )

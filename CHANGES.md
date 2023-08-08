@@ -1,8 +1,9 @@
-# version 0.7.0
+# version 0.6.2
 
 - Install R or rpy2 if necessary (?)
 - Add Block Bootstrap to `ridge2f`
 - Add external regressors to `ridge2f`
+- Refactor code for `rpy2` and R imports
 
 # version 0.6.1
 
