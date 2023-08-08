@@ -38,8 +38,13 @@ print(f" packages_to_install: {packages_to_install} \n")
 print(f" len(packages_to_install): {len(packages_to_install)} \n")
 
 if len(packages_to_install) > 0:            
-    utils.install_packages(StrVector(packages_to_install), 
-                           repos = "https://techtonique.r-universe.dev")  
+    base.options(
+            repos=base.c(
+                techtonique="https://techtonique.r-universe.dev",
+                CRAN="https://cloud.r-project.org",
+            )
+        )
+    utils.install_packages(StrVector(packages_to_install)) # dependencies of dependencies nightmare...
 
 # check R version
 #print(f"R version: {utils.packageVersion('ahead')}") 
