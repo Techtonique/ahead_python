@@ -121,7 +121,7 @@ class ArmaGarch(object):
 
         y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)
 
-        self.fcast_ = config.AHEAD.armagarchf(
+        self.fcast_ = config.AHEAD_PACKAGE.armagarchf(
             y=y,
             h=self.h,
             level=self.level,

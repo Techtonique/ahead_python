@@ -154,7 +154,7 @@ class BasicForecaster():
         #if self.type_pi is "blockbootstrap":
         #    assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
 
-        self.fcast_ = config.AHEAD.basicf(
+        self.fcast_ = config.AHEAD_PACKAGE.basicf(
             y,
             h=self.h,
             level=self.level,

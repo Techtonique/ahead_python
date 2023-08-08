@@ -133,7 +133,7 @@ class EAT():
 
         y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)                
 
-        self.fcast_ = config.AHEAD.eatf(
+        self.fcast_ = config.AHEAD_PACKAGE.eatf(
             y=y,
             h=self.h,
             level=self.level,

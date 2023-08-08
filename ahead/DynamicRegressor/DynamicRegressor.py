@@ -118,7 +118,7 @@ class DynamicRegressor():
 
         y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)
 
-        self.fcast_ = config.AHEAD.dynrmf(
+        self.fcast_ = config.AHEAD_PACKAGE.dynrmf(
             y=y, h=self.h, level=self.level, type_pi=self.type_pi
         )
 

@@ -190,7 +190,7 @@ class Ridge2Regressor():
         if self.type_pi is "blockbootstrap":
             assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
 
-        self.fcast_ = config.AHEAD.ridge2f(
+        self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
             y,
             h=self.h,
             level=self.level,

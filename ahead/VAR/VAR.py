@@ -127,7 +127,7 @@ class VAR(object):
         # obtain time series forecast -----
 
         y = mv.compute_y_mts(self.input_df, frequency)
-        self.fcast_ = config.AHEAD.varf(
+        self.fcast_ = config.AHEAD_PACKAGE.varf(
             y,
             h=self.h,
             level=self.level,
