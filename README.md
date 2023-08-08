@@ -8,7 +8,7 @@ ahead
 
 Welcome to __ahead__ (Python version; the R version is [here](https://github.com/Techtonique/ahead)). 
 
-`ahead` is a package for univariate and multivariate **time series forecasting**. The Python version is built on top of [the R package](https://techtonique.github.io/ahead/) with the same name. __ahead__'s source code is [available on GitHub](https://github.com/Techtonique/ahead_python).
+`ahead` is a package for univariate and multivariate **time series forecasting**, with uncertainty quantification. The Python version is built on top of [the R package](https://techtonique.github.io/ahead/) with the same name. __ahead__'s source code is [available on GitHub](https://github.com/Techtonique/ahead_python).
 
 Currently, 6 forecasting methods are implemented in the Python package:
 
