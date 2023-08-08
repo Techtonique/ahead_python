@@ -1,3 +1,9 @@
+# version 0.7.0
+
+- Install R or rpy2 if necessary (?)
+- Add Block Bootstrap to `ridge2f`
+- Add external regressors to `ridge2f`
+
 # version 0.6.1
 
 - Reduce number of required packages depencies

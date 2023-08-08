@@ -16,7 +16,6 @@ dataset = {
  'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
 df = pd.DataFrame(dataset).set_index('date')
 
-
 # univariate ts forecasting 
 print("Example 1 -----")
 d1 = BasicForecaster(h = h, date_formatting = "ms")

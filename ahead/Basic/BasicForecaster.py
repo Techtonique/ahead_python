@@ -21,7 +21,7 @@ else:
     RPY2_IS_INSTALLED = True
 
 USAGE_MESSAGE = """
-This Python Class is based on R package 'ahead' (https://techtonique.github.io/ahead/). 
+This Python class, BasicForecaster, is based on R package 'ahead' (https://techtonique.github.io/ahead/). 
 You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/project/rpy2/).
 
 Then, install R package 'ahead' (if necessary): 
@@ -33,31 +33,29 @@ Then, install R package 'ahead' (if necessary):
 required_packages = ["ahead"]  # list of required R packages
 
 if all(rpackages.isinstalled(x) for x in required_packages):
-    check_packages = True  # True if packages are already installed
+    CHECK_PACKAGES = True  # True if packages are already installed
 else:
-    check_packages = False  # False if packages are not installed
+    CHECK_PACKAGES = False  # False if packages are not installed
 
-if check_packages == False:  # Not installed? Then install.
+if CHECK_PACKAGES == False:  # Not installed? Then install.
 
     packages_to_install = [
         x for x in required_packages if not rpackages.isinstalled(x)
     ]
 
-    if len(packages_to_install) > 0:
-        base = importr("base")
-        utils = importr("utils")
+    base = importr("base")
+    utils = importr("utils")
+    if len(packages_to_install) > 0:        
         base.options(
             repos=base.c(
                 techtonique="https://techtonique.r-universe.dev",
                 CRAN="https://cloud.r-project.org",
             )
         )
-        utils.install_packages(StrVector(packages_to_install))
-        check_packages = True
+        utils.install_packages(StrVector(packages_to_install))                
 
-base = importr("base")
-stats = importr("stats")
 ahead = importr("ahead")
+CHECK_PACKAGES = True
 
 
 class BasicForecaster(object):

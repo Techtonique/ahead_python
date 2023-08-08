@@ -1,44 +1,61 @@
-import os
+from subprocess import Popen, PIPE # from https://stackoverflow.com/questions/25329955/check-if-r-is-installed-from-python
 import numpy as np
-import pandas as pd
 
-import rpy2.robjects as robjects
-import rpy2.robjects.packages as rpackages
-from rpy2.robjects.packages import importr
-from rpy2.robjects import FloatVector
-from datetime import datetime
-from rpy2.robjects.vectors import StrVector
-
-from ..utils import univariate as uv
+from ..utils import univariate as uv 
 from ..utils import unimultivariate as umv
+
+proc = Popen(["which", "R"], stdout=PIPE, stderr=PIPE)
+R_IS_INSTALLED = proc.wait() == 0
+
+try: 
+    import rpy2.robjects.packages as rpackages
+    from rpy2.robjects.packages import importr    
+    from rpy2.robjects.vectors import StrVector
+    from rpy2 import rinterface, robjects
+    from rpy2.rinterface_lib import callbacks
+    from rpy2.rinterface_lib.embedded import RRuntimeError
+except ImportError as e: 
+    rpy2_error_message = str(e)
+    RPY2_IS_INSTALLED = False
+else: 
+    RPY2_IS_INSTALLED = True
+
+USAGE_MESSAGE = """
+This Python class, BasicForecaster, is based on R package 'ahead' (https://techtonique.github.io/ahead/). 
+You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/project/rpy2/).
+
+Then, install R package 'ahead' (if necessary): 
+>> R -e 'options(repos = c(techtonique = 'https://techtonique.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'))'
+>> R -e 'install.packages("ahead")'    
+"""
 
 required_packages = ["ahead"]  # list of required R packages
 
 if all(rpackages.isinstalled(x) for x in required_packages):
-    check_packages = True  # True if packages are already installed
+    CHECK_PACKAGES = True  # True if packages are already installed
 else:
-    check_packages = False  # False if packages are not installed
+    CHECK_PACKAGES = False  # False if packages are not installed
 
-if check_packages == False:  # Not installed? Then install.
+if CHECK_PACKAGES == False:  # Not installed? Then install.
 
     packages_to_install = [
         x for x in required_packages if not rpackages.isinstalled(x)
     ]
 
-    if len(packages_to_install) > 0:
-        base = importr("base")
-        utils = importr("utils")
+    base = importr("base")
+    utils = importr("utils")
+    if len(packages_to_install) > 0:        
         base.options(
             repos=base.c(
                 techtonique="https://techtonique.r-universe.dev",
                 CRAN="https://cloud.r-project.org",
             )
         )
-        utils.install_packages(StrVector(packages_to_install))
-        check_packages = True
+        utils.install_packages(StrVector(packages_to_install))                
 
-stats = importr("stats")
 ahead = importr("ahead")
+CHECK_PACKAGES = True
 
 
 class DynamicRegressor(object):
@@ -111,6 +128,12 @@ class DynamicRegressor(object):
     """
 
     def __init__(self, h=5, level=95, type_pi="E", date_formatting="original"):
+
+        if not R_IS_INSTALLED:
+            raise ImportError("R is not installed! \n" + USAGE_MESSAGE)
+        
+        if not RPY2_IS_INSTALLED:
+            raise ImportError(rpy2_error_message + USAGE_MESSAGE)
 
         self.h = h
         self.level = level
