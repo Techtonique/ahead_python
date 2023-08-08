@@ -1,3 +1,4 @@
+import warnings 
 from subprocess import Popen, PIPE 
 
 proc = Popen(["which", "R"], stdout=PIPE, stderr=PIPE)
@@ -8,6 +9,7 @@ try:
     from rpy2.robjects.packages import importr    
     from rpy2.robjects.vectors import FloatVector, StrVector
     from rpy2 import rinterface, robjects
+    from rpy2.rinterface import RRuntimeWarning
     from rpy2.rinterface_lib import callbacks
     from rpy2.rinterface_lib.embedded import RRuntimeError
 except ImportError as e: 
@@ -23,6 +25,8 @@ You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/pr
 Then, install R package 'ahead' (if necessary): 
 >> R -e 'install.packages("ahead", repos = https://techtonique.r-universe.dev)'    
 """
+
+warnings.filterwarnings("ignore", category=RRuntimeWarning)
 
 required_packages = ["ahead"]  # list of required R packages
 
