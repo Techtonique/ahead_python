@@ -22,9 +22,7 @@ This Python class, BasicForecaster, is based on R package 'ahead' (https://techt
 You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/project/rpy2/).
 
 Then, install R package 'ahead' (if necessary): 
->> R -e 'options(repos = c(techtonique = 'https://techtonique.r-universe.dev',
-    CRAN = 'https://cloud.r-project.org'))'
->> R -e 'install.packages("ahead")'    
+>> R -e 'install.packages("ahead", repos = https://techtonique.r-universe.dev)'    
 """
 
 required_packages = ["ahead"]  # list of required R packages
