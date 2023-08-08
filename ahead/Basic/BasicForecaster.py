@@ -1,16 +1,34 @@
-import os
+from subprocess import Popen, PIPE # from https://stackoverflow.com/questions/25329955/check-if-r-is-installed-from-python
 import numpy as np
-import pandas as pd
-
-from rpy2.robjects.packages import importr
-from rpy2.robjects import FloatVector, numpy2ri
-import rpy2.robjects as robjects
-import rpy2.robjects.packages as rpackages
-from datetime import datetime
-from rpy2.robjects.vectors import StrVector
 
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
+
+proc = Popen(["which", "R"], stdout=PIPE, stderr=PIPE)
+R_IS_INSTALLED = proc.wait() == 0
+
+try: 
+    import rpy2.robjects.packages as rpackages
+    from rpy2.robjects.packages import importr    
+    from rpy2.robjects.vectors import StrVector
+    from rpy2 import rinterface, robjects
+    from rpy2.rinterface_lib import callbacks
+    from rpy2.rinterface_lib.embedded import RRuntimeError
+except ImportError as e: 
+    rpy2_error_message = str(e)
+    RPY2_IS_INSTALLED = False
+else: 
+    RPY2_IS_INSTALLED = True
+
+USAGE_MESSAGE = """
+This Python Class is based on R package 'ahead' (https://techtonique.github.io/ahead/). 
+You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/project/rpy2/).
+
+Then, install R package 'ahead' (if necessary): 
+>> R -e 'options(repos = c(techtonique = 'https://techtonique.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'))'
+>> R -e 'install.packages("ahead")'    
+"""
 
 required_packages = ["ahead"]  # list of required R packages
 
@@ -88,7 +106,7 @@ class BasicForecaster(object):
         mean_: a numpy array
             contains series mean forecast as a numpy array 
 
-        lower_: a numpy array 
+        lower_: a numpy array
             contains series lower bound forecast as a numpy array   
 
         upper_: a numpy array 
@@ -135,6 +153,12 @@ class BasicForecaster(object):
         date_formatting="original",
         seed=123,
     ):
+
+        if not R_IS_INSTALLED:
+            raise ImportError("R is not installed! \n" + USAGE_MESSAGE)
+        
+        if not RPY2_IS_INSTALLED:
+            raise ImportError(rpy2_error_message + USAGE_MESSAGE)
 
         self.h = h
         self.level = level
