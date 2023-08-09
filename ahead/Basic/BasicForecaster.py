@@ -151,8 +151,9 @@ class BasicForecaster():
 
         y = mv.compute_y_mts(self.input_df, frequency)
 
-        #if self.type_pi is "blockbootstrap":
-        #    assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
+        if self.type_pi is "blockbootstrap":
+            print(f"self.block_length: {self.block_length}")
+            assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
 
         self.fcast_ = config.AHEAD_PACKAGE.basicf(
             y,
