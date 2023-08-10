@@ -5,6 +5,7 @@
 - Add external regressors to `ridge2f`
 - Refactor code for `rpy2` and R imports
 - Include `loessf` forecaster (TODO)
+- Add clustering with _K-Means_ and hierarchical clustering in `ridge2f` and `loessf` (TODO)
 
 # version 0.6.1
 
