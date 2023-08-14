@@ -1,6 +1,6 @@
 import numpy as np
+from difflib import SequenceMatcher
 from .. import config
-
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
 
@@ -164,13 +164,16 @@ class Ridge2Regressor():
         self.result_dfs_ = None
         self.sims_ = None
 
-    def forecast(self, df):
+    def forecast(self, df, xreg = None):
         """Forecasting method from `Ridge2Regressor` class
 
         Parameters:
 
             df: a data frame;
                 a data frame containing the input time series (see example)
+            
+            xreg: a numpy array or a data frame;
+                external regressors
 
         """
 
@@ -190,7 +193,9 @@ class Ridge2Regressor():
         if self.type_pi is "blockbootstrap":
             assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
 
-        self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
+        # no direct correspondance between None and NULL
+        if xreg is None: 
+            self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
             y,
             h=self.h,
             level=self.level,
@@ -208,6 +213,33 @@ class Ridge2Regressor():
             cl=self.cl,
             seed=self.seed,
         )
+        else:
+
+            try: 
+                xreg_ = xreg.values
+            except: 
+                xreg_ = config.DEEP_COPY(xreg)
+
+            self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
+            y,
+            xreg = xreg_,
+            h=self.h,
+            level=self.level,
+            lags=self.lags,
+            nb_hidden=self.nb_hidden,
+            nodes_sim=self.nodes_sim,
+            activ=self.activation,
+            a=self.a,
+            lambda_1=self.lambda_1,
+            lambda_2=self.lambda_2,
+            dropout=self.dropout,
+            type_pi=self.type_pi,
+            block_length=self.block_length,
+            B=self.B,
+            cl=self.cl,
+            seed=self.seed,
+        ) 
+
 
         # result -----
 

@@ -1,11 +1,11 @@
+import pickle 
 from subprocess import Popen, PIPE 
 
 proc = Popen(["which", "R"], stdout=PIPE, stderr=PIPE)
 R_IS_INSTALLED = proc.wait() == 0
 
 try: 
-
-    import rpy2.robjects.packages as rpackages    
+    import rpy2.robjects.packages as rpackages   
     from rpy2.robjects.packages import importr    
     from rpy2.robjects.vectors import FloatVector, StrVector
     from rpy2 import rinterface, robjects
@@ -57,3 +57,4 @@ if len(packages_to_install) > 0:
 FLOATVECTOR = FloatVector
 AHEAD_PACKAGE = importr("ahead")
 CHECK_PACKAGES = True
+DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
