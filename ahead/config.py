@@ -44,6 +44,7 @@ packages_to_install = [
 
 base = importr("base")
 utils = importr("utils")
+graphics = importr("graphics")
 
 #print(f" required_packages: {required_packages} \n")
 #print(f" packages_to_install: {packages_to_install} \n")
@@ -66,5 +67,6 @@ AHEAD_PACKAGE = importr("ahead")
 CHECK_PACKAGES = True
 DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
 NONE_CONVERTER = none_converter
-
+PLOT = AHEAD_PACKAGE.plot
+GRAPHICS = graphics
 

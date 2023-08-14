@@ -10,6 +10,7 @@ from .DynamicRegressor import DynamicRegressor
 from .EAT import EAT
 from .Ridge2 import Ridge2Regressor
 from .VAR import VAR
+from .plot import plot
 
 
-__all__ = ["ArmaGarch", "BasicForecaster", "DynamicRegressor", "EAT", "Ridge2Regressor", "VAR"]
+__all__ = ["ArmaGarch", "BasicForecaster", "DynamicRegressor", "EAT", "Ridge2Regressor", "VAR", "plot"]
