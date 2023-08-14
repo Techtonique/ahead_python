@@ -91,3 +91,64 @@ print("\n mean, lower, upper as numpy arrays: \n")
 print(d3.mean_)
 print(d3.lower_)
 print(d3.upper_)
+print("\n")
+
+print("Example 4 -----")
+
+d4 = Ridge2Regressor(h = h, date_formatting = "original", 
+type_pi="bootstrap", B=5)
+
+xreg  = np.asarray(range(df.shape[0]))
+
+start = time()
+d4.forecast(df, xreg = xreg)
+print(f"Elapsed: {time()-start} \n")
+
+print(d4.fcast_.rx2['mean'])
+print(d4.averages_[1])
+print(np.asarray(d4.fcast_.rx2['mean']))
+
+print(d4.fcast_.rx2['sims'][0])
+res = np.asarray(d4.fcast_.rx2['sims'][1])
+print(res)
+print(res.shape)
+print(res[0, 1])
+
+print("\n result_dfs_: \n")
+print(d4.result_dfs_)
+
+print("\n sims_: \n")
+print(d4.sims_)
+
+print("\n output_dates_: \n")
+print(d4.output_dates_)
+
+print("\n mean, lower, upper as numpy arrays: \n")
+print(d4.mean_)
+print(d4.lower_)
+print(d4.upper_)
+print("\n")
+
+print("Example 5 -----")
+
+d5 = Ridge2Regressor(h = h, date_formatting = "original", 
+type_pi="blockbootstrap", B=5)
+
+xreg  = np.column_stack((range(df.shape[0]), 
+                        [0.2, 0.5, 0.4, 0.3, 0.1]))
+
+start = time()
+d5.forecast(df, xreg = xreg)
+print(f"Elapsed: {time()-start} \n")
+
+print("\n mean ---------- \n")
+print(d5.fcast_.rx2['mean'])
+print(d5.mean_)
+
+print("\n lower ---------- \n")
+print(d5.fcast_.rx2['lower'])
+print(d5.lower_)
+
+print("\n upper ---------- \n")
+print(d5.fcast_.rx2['upper'])
+print(d5.upper_)

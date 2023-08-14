@@ -1,5 +1,6 @@
 import numpy as np
-from difflib import SequenceMatcher
+import rpy2.robjects.conversion as cv
+from rpy2.robjects import default_converter, FloatVector, numpy2ri, r
 from .. import config
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
@@ -50,7 +51,16 @@ class Ridge2Regressor():
 
         B: an integer;
             Number of bootstrap replications for `type_pi == bootstrap` or `type_pi == blockbootstrap` 
+        
+        type_aggregation: a string;
+            Type of aggregation, ONLY for bootstrapping; either "mean" or "median"
 
+        centers: an integer;
+            Number of clusters for \code{type_clustering}
+
+        type_clustering: a string;
+            "kmeans" (K-Means clustering) or "hclust" (Hierarchical clustering) 
+            
         cl: an integer; 
             The number of clusters for parallel execution (done in R), for `type_pi == bootstrap`
 
@@ -118,22 +128,25 @@ class Ridge2Regressor():
 
     def __init__(
         self,
-        h=5,
-        level=95,
-        lags=1,
-        nb_hidden=5,
-        nodes_sim="sobol",
-        activation="relu",
-        a=0.01,
-        lambda_1=0.1,
-        lambda_2=0.1,
-        dropout=0,
-        type_pi="gaussian",
-        block_length = 5,
-        B=100,
-        cl=1,
-        date_formatting="original",
-        seed=123,
+        h = 5,
+        level = 95,
+        lags = 1,
+        nb_hidden = 5,
+        nodes_sim = "sobol",
+        activation = "relu",
+        a = 0.01,
+        lambda_1 = 0.1,
+        lambda_2 = 0.1,
+        dropout = 0,
+        type_pi = "gaussian",
+        block_length = 3, # can be NULL, but in R
+        B = 100,
+        type_aggregation = "mean",
+        centers = 2,
+        type_clustering = "kmeans",
+        cl = 1,
+        date_formatting ="original",
+        seed =123,
     ):
 
         self.h = h
@@ -149,6 +162,9 @@ class Ridge2Regressor():
         self.type_pi = type_pi
         self.block_length = block_length
         self.B = B
+        self.type_aggregation = type_aggregation
+        self.centers = centers # can be NULL, but in R
+        self.type_clustering = type_clustering
         self.cl = cl
         self.date_formatting = date_formatting
         self.seed = seed
@@ -163,6 +179,7 @@ class Ridge2Regressor():
         self.upper_ = None
         self.result_dfs_ = None
         self.sims_ = None
+        self.xreg_ = None
 
     def forecast(self, df, xreg = None):
         """Forecasting method from `Ridge2Regressor` class
@@ -190,39 +207,49 @@ class Ridge2Regressor():
 
         y = mv.compute_y_mts(self.input_df, frequency)
 
-        if self.type_pi is "blockbootstrap":
-            assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
-
-        # no direct correspondance between None and NULL
         if xreg is None: 
-            self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
-            y,
-            h=self.h,
-            level=self.level,
-            lags=self.lags,
-            nb_hidden=self.nb_hidden,
-            nodes_sim=self.nodes_sim,
-            activ=self.activation,
-            a=self.a,
-            lambda_1=self.lambda_1,
-            lambda_2=self.lambda_2,
-            dropout=self.dropout,
-            type_pi=self.type_pi,
-            block_length=self.block_length,
-            B=self.B,
-            cl=self.cl,
-            seed=self.seed,
-        )
-        else:
 
-            try: 
-                xreg_ = xreg.values
+            with cv.localconverter(default_converter + config.NONE_CONVERTER):
+                self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
+                y,
+                xreg = xreg,
+                h=self.h,
+                level=self.level,
+                lags=self.lags,
+                nb_hidden=self.nb_hidden,
+                nodes_sim=self.nodes_sim,
+                activ=self.activation,
+                a=self.a,
+                lambda_1=self.lambda_1,
+                lambda_2=self.lambda_2,
+                dropout=self.dropout,
+                type_pi=self.type_pi,
+                block_length=self.block_length, # can be NULL, but in R
+                B=self.B,
+                type_aggregation = self.type_aggregation,
+                centers = self.centers,  # can be NULL, but in R
+                type_clustering = self.type_clustering,
+                cl=self.cl,
+                seed=self.seed,
+            ) 
+        
+        else: # xreg is not None:  
+       
+            try:
+                self.xreg_ = xreg.values  
             except: 
-                xreg_ = config.DEEP_COPY(xreg)
+                self.xreg_ = config.DEEP_COPY(xreg) 
+
+            is_matrix_xreg = (len(self.xreg_.shape) > 1)
+
+            numpy2ri.activate()
 
             self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
             y,
-            xreg = xreg_,
+            xreg = r.matrix(FloatVector(self.xreg_.flatten()), 
+                            byrow=True, nrow=self.xreg_.shape[0], 
+                            ncol=self.xreg_.shape[1]) if is_matrix_xreg else r.matrix(FloatVector(self.xreg_.flatten()), 
+                            byrow=True, nrow=self.xreg_.shape[0], ncol=1),  
             h=self.h,
             level=self.level,
             lags=self.lags,
@@ -234,12 +261,14 @@ class Ridge2Regressor():
             lambda_2=self.lambda_2,
             dropout=self.dropout,
             type_pi=self.type_pi,
-            block_length=self.block_length,
+            block_length=self.block_length, # can be NULL, but in R
             B=self.B,
+            type_aggregation = self.type_aggregation,
+            centers = self.centers,  # can be NULL, but in R
+            type_clustering = self.type_clustering,
             cl=self.cl,
             seed=self.seed,
         ) 
-
 
         # result -----
 

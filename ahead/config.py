@@ -9,10 +9,11 @@ try:
     from rpy2.robjects.packages import importr    
     from rpy2.robjects.vectors import FloatVector, StrVector
     from rpy2 import rinterface, robjects
-    from rpy2.robjects import r
+    from rpy2.robjects import r, default_converter
     from rpy2.rinterface import RRuntimeWarning
     from rpy2.rinterface_lib import callbacks
     from rpy2.rinterface_lib.embedded import RRuntimeError
+    import rpy2.robjects.conversion as cv
 except ImportError as e: 
     RPY2_ERROR_MESSAGE = str(e)
     RPY2_IS_INSTALLED = False
@@ -28,6 +29,12 @@ Then, install R package 'ahead' (if necessary):
 """
 
 r['options'](warn=-1)
+
+def _none2null(none_obj):
+    return r("NULL")
+
+none_converter = cv.Converter("None converter")
+none_converter.py2rpy.register(type(None), _none2null)
 
 required_packages = ["ahead"]  # list of required R packages
 
@@ -58,3 +65,6 @@ FLOATVECTOR = FloatVector
 AHEAD_PACKAGE = importr("ahead")
 CHECK_PACKAGES = True
 DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
+NONE_CONVERTER = none_converter
+
+

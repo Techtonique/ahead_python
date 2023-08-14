@@ -31,6 +31,8 @@ def format_multivariate_forecast(
     n_series, date_formatting, output_dates, horizon, fcast
 ):
 
+    print(f"\n fcast in mv.py: \n {fcast} \n")
+
     if date_formatting == "original":
         output_dates_ = [
             datetime.strftime(output_dates[i], "%Y-%m-%d")
@@ -49,20 +51,28 @@ def format_multivariate_forecast(
     averages = []
     ranges = []
 
+    print(f"fcast.rx2['mean']: {fcast.rx2['mean']}")
+
     for j in range(n_series):
+        print(f"\n j: {j} ---------- \n")
         averages_series_j = []
         ranges_series_j = []
         for i in range(horizon):
-            date_i = output_dates_[i]
-            index_i_j = i + j * horizon
-            averages_series_j.append([date_i, fcast.rx2["mean"][index_i_j]])
-            ranges_series_j.append(
-                [
-                    date_i,
-                    fcast.rx2["lower"][index_i_j],
-                    fcast.rx2["upper"][index_i_j],
-                ]
-            )
+            print(f"\n i: {i} \n")
+            try: 
+                date_i = output_dates_[i]
+                index_i_j = i + j * horizon
+                print(f"\n index_i_j: {index_i_j} \n")
+                averages_series_j.append([date_i, fcast.rx2["mean"][index_i_j]])
+                ranges_series_j.append(
+                    [
+                        date_i,
+                        fcast.rx2["lower"][index_i_j],
+                        fcast.rx2["upper"][index_i_j],
+                    ]
+                )
+            except:
+                continue
         averages.append(averages_series_j)
         ranges.append(ranges_series_j)
 
