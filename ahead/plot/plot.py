@@ -2,6 +2,6 @@ from .. import config
 
 def plot(obj, **kwargs):
     try:
-        config.GRAPHICS.plot(obj.fcast_)
+        config.PLOT_AHEAD(obj.fcast_, **kwargs)
     except: 
-        config.PLOT(obj.fcast_, **kwargs)
+        config.PLOT_BASE(obj.fcast_, **kwargs)

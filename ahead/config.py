@@ -67,6 +67,6 @@ AHEAD_PACKAGE = importr("ahead")
 CHECK_PACKAGES = True
 DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
 NONE_CONVERTER = none_converter
-PLOT = AHEAD_PACKAGE.plot_mtsforecast
-GRAPHICS = graphics
+PLOT_AHEAD = AHEAD_PACKAGE.plot_mtsforecast
+PLOT_BASE = r["plot"]
 
