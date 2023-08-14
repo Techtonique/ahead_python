@@ -4,4 +4,4 @@ def plot(obj, **kwargs):
     try:
         config.GRAPHICS.plot(obj)
     except: 
-        config.PLOT(obj)
+        config.PLOT(obj, **kwargs)
