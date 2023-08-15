@@ -1,6 +1,6 @@
 import numpy as np
 import rpy2.robjects.conversion as cv
-from rpy2.robjects import default_converter, FloatVector, numpy2ri, r
+from rpy2.robjects import default_converter, FloatVector, ListVector, numpy2ri, r
 from .. import config
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
@@ -139,7 +139,7 @@ class Ridge2Regressor():
         lambda_2 = 0.1,
         dropout = 0,
         type_pi = "gaussian",
-        block_length = 3, # can be NULL, but in R
+        block_length = 3, # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
         B = 100,
         type_aggregation = "mean",
         centers = 2,
@@ -163,7 +163,7 @@ class Ridge2Regressor():
         self.block_length = block_length
         self.B = B
         self.type_aggregation = type_aggregation
-        self.centers = centers # can be NULL, but in R
+        self.centers = centers # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
         self.type_clustering = type_clustering
         self.cl = cl
         self.date_formatting = date_formatting
@@ -224,10 +224,10 @@ class Ridge2Regressor():
                 lambda_2=self.lambda_2,
                 dropout=self.dropout,
                 type_pi=self.type_pi,
-                block_length=self.block_length, # can be NULL, but in R
+                block_length=self.block_length, # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
                 B=self.B,
                 type_aggregation = self.type_aggregation,
-                centers = self.centers,  # can be NULL, but in R
+                centers = self.centers,  # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
                 type_clustering = self.type_clustering,
                 cl=self.cl,
                 seed=self.seed,
@@ -242,14 +242,16 @@ class Ridge2Regressor():
 
             is_matrix_xreg = (len(self.xreg_.shape) > 1)
 
-            numpy2ri.activate()
+            numpy2ri.activate()            
+
+            xreg_ = r.matrix(FloatVector(self.xreg_.flatten()), 
+                        byrow = True, nrow = self.xreg_.shape[0], 
+                        ncol = self.xreg_.shape[1]) if is_matrix_xreg else r.matrix(FloatVector(self.xreg_.flatten()), 
+                        byrow=True, nrow=self.xreg_.shape[0], ncol=1)
 
             self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
             y,
-            xreg = r.matrix(FloatVector(self.xreg_.flatten()), 
-                            byrow=True, nrow=self.xreg_.shape[0], 
-                            ncol=self.xreg_.shape[1]) if is_matrix_xreg else r.matrix(FloatVector(self.xreg_.flatten()), 
-                            byrow=True, nrow=self.xreg_.shape[0], ncol=1),  
+            xreg = xreg_,  
             h=self.h,
             level=self.level,
             lags=self.lags,
@@ -268,9 +270,7 @@ class Ridge2Regressor():
             type_clustering = self.type_clustering,
             cl=self.cl,
             seed=self.seed,
-        ) 
-            
-        print(f"self.fcast_.rx2['x']: {self.fcast_.rx2['x']}")
+        )                     
 
         # result -----
 

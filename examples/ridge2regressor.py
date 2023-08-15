@@ -102,8 +102,15 @@ print("Example 4 -----")
 d4 = Ridge2Regressor(h = h, date_formatting = "original", 
 type_pi="bootstrap", B=3, seed=1)
 
-xreg  = np.asarray(range(1, df.shape[0] + 1), 
-                   dtype='float64')
+# Data frame containing the time series 
+dataset = {
+ 'date' : ['2001-01-01', '2001-02-01', '2001-03-01', '2001-04-01', '2001-05-01'],
+ 'series1' : [34, 30, 35.6, 33.3, 38.1],    
+ 'series2' : [4, 5.5, 5.6, 6.3, 5.1],
+ 'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
+df = pd.DataFrame(dataset).set_index('date')
+
+xreg = np.asarray(range(1, df.shape[0] + 1), dtype='float64')
 
 print(f"\n xreg: {xreg} \n")
 
@@ -134,38 +141,53 @@ print(d4.mean_)
 print(d4.lower_)
 print(d4.upper_)
 print("\n")
-plot(d4, selected_series="y1")
+plot(d4, selected_series="series1")
 print("\n")
 
-print("Example 5 -----")
+# print("Example 5 -----")
 
-d5 = Ridge2Regressor(h = h, date_formatting = "original", 
-type_pi="blockbootstrap", B=5)
+# d5 = Ridge2Regressor(h = h, date_formatting = "original", 
+# type_pi="bootstrap", B=3, seed=1)
 
-xreg  = np.column_stack((range(df.shape[0]), 
-                        [0.2, 0.5, 0.4, 0.3, 0.1]))
+# # Data frame containing the time series 
+# dataset = {
+#  'date' : ['2001-01-01', '2001-02-01', '2001-03-01', '2001-04-01', '2001-05-01'],
+#  'series1' : [34, 30, 35.6, 33.3, 38.1],    
+#  'series2' : [4, 5.5, 5.6, 6.3, 5.1],
+#  'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
+# df = pd.DataFrame(dataset).set_index('date')
 
-start = time()
-d5.forecast(df, xreg = xreg)
-print(f"Elapsed: {time()-start} \n")
+# xreg = np.asarray(range(1, df.shape[0] + 1), dtype='float64')
 
-print("\n mean ---------- \n")
-print(d5.fcast_.rx2['mean']) # R output
-print(d5.mean_) # Python output
+# print(f"\n xreg: {xreg} \n")
 
-print("\n lower ---------- \n")
-print(d5.fcast_.rx2['lower']) # R output
-print(d5.lower_) # Python output
+# start = time()
+# d5.forecast(df, xreg = xreg)
+# print(f"Elapsed: {time()-start} \n")
 
-print("\n upper ---------- \n")
-print(d5.fcast_.rx2['upper']) # R output
-print(d5.upper_) # Python output
+# print(d5.fcast_.rx2['mean'])
+# print(d5.averages_[1])
+# print(np.asarray(d5.fcast_.rx2['mean']))
 
-print("\n d5.averages_ ---------- \n")
-print(d5.averages_)
+# print(d5.fcast_.rx2['sims'][0])
+# res = np.asarray(d5.fcast_.rx2['sims'][1])
+# print(res)
+# print(res.shape)
 
-print("\n d5.ranges_ ---------- \n")
-print(d5.ranges_)
+# print("\n result_dfs_: \n")
+# print(d5.result_dfs_)
 
-print("\n")
-plot(d5, selected_series="y1")
+# print("\n sims_: \n")
+# print(d5.sims_)
+
+# print("\n output_dates_: \n")
+# print(d5.output_dates_)
+
+# print("\n mean, lower, upper as numpy arrays: \n")
+# print(d5.mean_)
+# print(d5.lower_)
+# print(d5.upper_)
+# print("\n")
+# plot(d5, selected_series="series1")
+# print("\n")
+

@@ -5,7 +5,7 @@ import pandas as pd
 import rpy2.robjects as robjects
 import rpy2.robjects.packages as rpackages
 from rpy2.robjects.packages import importr
-from rpy2.robjects import FloatVector
+from rpy2.robjects import FloatVector, r
 from datetime import datetime
 from rpy2.robjects.vectors import StrVector
 from .unimultivariate import get_frequency
@@ -21,10 +21,14 @@ def compute_y_mts(df, df_frequency):
     input_series_tolist = input_series.tolist()
     xx = [item for sublist in input_series_tolist for item in sublist]
 
-    return stats.ts(
-        base.matrix(FloatVector(xx), byrow=True, nrow=len(input_series_tolist)),
-        frequency=get_frequency(df_frequency)
-    )
+    ts = r.matrix(FloatVector(xx), 
+                  byrow = True, 
+                  nrow = len(input_series_tolist), 
+                  ncol = df.shape[1])        
+    
+    ts.colnames = StrVector(df.columns.tolist())
+
+    return stats.ts(ts, frequency=get_frequency(df_frequency))
 
 
 def format_multivariate_forecast(
