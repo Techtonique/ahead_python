@@ -261,14 +261,16 @@ class Ridge2Regressor():
             lambda_2=self.lambda_2,
             dropout=self.dropout,
             type_pi=self.type_pi,
-            block_length=self.block_length, # can be NULL, but in R
+            block_length=self.block_length, # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
             B=self.B,
             type_aggregation = self.type_aggregation,
-            centers = self.centers,  # can be NULL, but in R
+            centers = self.centers,  # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
             type_clustering = self.type_clustering,
             cl=self.cl,
             seed=self.seed,
         ) 
+            
+        print(f"self.fcast_.rx2['x']: {self.fcast_.rx2['x']}")
 
         # result -----
 

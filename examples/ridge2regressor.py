@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 from ahead import Ridge2Regressor
+from ahead  import plot
 from time import time
-
 
 # Forecasting horizon
 h = 5
@@ -38,6 +38,7 @@ print(d1.ranges_[1])
 print("\n")
 print(d1.ranges_[2])
 print("\n")
+plot(d1, selected_series="series1")
 
 print("Example 2 -----")
 d2 = Ridge2Regressor(h = h, date_formatting = "original")
@@ -57,7 +58,8 @@ print(d2.ranges_[1])
 print("\n")
 print(d2.ranges_[2])
 print("\n")
-
+plot(d2, selected_series="series1")
+print("\n")
 
 print("Example 3 -----")
 
@@ -92,13 +94,18 @@ print(d3.mean_)
 print(d3.lower_)
 print(d3.upper_)
 print("\n")
+plot(d3, selected_series="series1")
+print("\n")
 
 print("Example 4 -----")
 
 d4 = Ridge2Regressor(h = h, date_formatting = "original", 
-type_pi="bootstrap", B=5)
+type_pi="bootstrap", B=3, seed=1)
 
-xreg  = np.asarray(range(df.shape[0]))
+xreg  = np.asarray(range(1, df.shape[0] + 1), 
+                   dtype='float64')
+
+print(f"\n xreg: {xreg} \n")
 
 start = time()
 d4.forecast(df, xreg = xreg)
@@ -112,7 +119,6 @@ print(d4.fcast_.rx2['sims'][0])
 res = np.asarray(d4.fcast_.rx2['sims'][1])
 print(res)
 print(res.shape)
-print(res[0, 1])
 
 print("\n result_dfs_: \n")
 print(d4.result_dfs_)
@@ -128,6 +134,8 @@ print(d4.mean_)
 print(d4.lower_)
 print(d4.upper_)
 print("\n")
+plot(d4, selected_series="y1")
+print("\n")
 
 print("Example 5 -----")
 
@@ -142,13 +150,22 @@ d5.forecast(df, xreg = xreg)
 print(f"Elapsed: {time()-start} \n")
 
 print("\n mean ---------- \n")
-print(d5.fcast_.rx2['mean'])
-print(d5.mean_)
+print(d5.fcast_.rx2['mean']) # R output
+print(d5.mean_) # Python output
 
 print("\n lower ---------- \n")
-print(d5.fcast_.rx2['lower'])
-print(d5.lower_)
+print(d5.fcast_.rx2['lower']) # R output
+print(d5.lower_) # Python output
 
 print("\n upper ---------- \n")
-print(d5.fcast_.rx2['upper'])
-print(d5.upper_)
+print(d5.fcast_.rx2['upper']) # R output
+print(d5.upper_) # Python output
+
+print("\n d5.averages_ ---------- \n")
+print(d5.averages_)
+
+print("\n d5.ranges_ ---------- \n")
+print(d5.ranges_)
+
+print("\n")
+plot(d5, selected_series="y1")
