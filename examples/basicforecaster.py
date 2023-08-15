@@ -3,10 +3,8 @@ import pandas as pd
 from ahead import BasicForecaster
 from time import time
 
-
 # Forecasting horizon
 h = 5
-
 
 # Data frame containing the time series 
 dataset = {
@@ -15,7 +13,6 @@ dataset = {
  'series2' : [4, 5.5, 5.6, 6.3, 5.1],
  'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
 df = pd.DataFrame(dataset).set_index('date')
-
 
 # univariate ts forecasting 
 print("Example 1 -----")
@@ -91,3 +88,37 @@ print("\n mean, lower, upper as numpy arrays: \n")
 print(d3.mean_)
 print(d3.lower_)
 print(d3.upper_)
+
+
+print("Example 4 -----")
+
+d4 = BasicForecaster(h = h, date_formatting = "original", 
+type_pi="blockbootstrap", B=5, block_length=3)
+
+start = time()
+d4.forecast(df)
+print(f"Elapsed: {time()-start} \n")
+
+print(d4.fcast_.rx2['mean'])
+print(d4.averages_[1])
+print(np.asarray(d4.fcast_.rx2['mean']))
+
+print(d4.fcast_.rx2['sims'][0])
+res = np.asarray(d4.fcast_.rx2['sims'][1])
+print(res)
+print(res.shape)
+print(res[0, 1])
+
+print("\n result_dfs_: \n")
+print(d4.result_dfs_)
+
+print("\n sims_: \n")
+print(d4.sims_)
+
+print("\n output_dates_: \n")
+print(d4.output_dates_)
+
+print("\n mean, lower, upper as numpy arrays: \n")
+print(d4.mean_)
+print(d4.lower_)
+print(d4.upper_)

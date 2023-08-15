@@ -1,47 +1,10 @@
-import os
 import numpy as np
-import pandas as pd
+from .. import config
 
-import rpy2.robjects as robjects
-import rpy2.robjects.packages as rpackages
-from rpy2.robjects.packages import importr
-from rpy2.robjects import FloatVector
-from datetime import datetime
-from rpy2.robjects.vectors import StrVector
-
-from ..utils import univariate as uv
+from ..utils import univariate as uv 
 from ..utils import unimultivariate as umv
 
-required_packages = ["ahead"]  # list of required R packages
-
-if all(rpackages.isinstalled(x) for x in required_packages):
-    check_packages = True  # True if packages are already installed
-else:
-    check_packages = False  # False if packages are not installed
-
-if check_packages == False:  # Not installed? Then install.
-
-    packages_to_install = [
-        x for x in required_packages if not rpackages.isinstalled(x)
-    ]
-
-    if len(packages_to_install) > 0:
-        base = importr("base")
-        utils = importr("utils")
-        base.options(
-            repos=base.c(
-                techtonique="https://techtonique.r-universe.dev",
-                CRAN="https://cloud.r-project.org",
-            )
-        )
-        utils.install_packages(StrVector(packages_to_install))
-        check_packages = True
-
-stats = importr("stats")
-ahead = importr("ahead")
-
-
-class DynamicRegressor(object):
+class DynamicRegressor():
     """Dynamic Regression Model adapted from R's `forecast::nnetar`
 
     Parameters:
@@ -112,10 +75,17 @@ class DynamicRegressor(object):
 
     def __init__(self, h=5, level=95, type_pi="E", date_formatting="original"):
 
+        if not config.R_IS_INSTALLED:
+            raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
+        
+        if not config.RPY2_IS_INSTALLED:
+            raise ImportError(config.RPY2_ERROR_MESSAGE + config.USAGE_MESSAGE)
+
         self.h = h
         self.level = level
         self.type_pi = type_pi
         self.date_formatting = date_formatting
+        self.input_df = None 
 
         self.fcast_ = None
         self.averages_ = None
@@ -136,7 +106,7 @@ class DynamicRegressor(object):
 
         """
 
-        self.input_df = df
+        self.input_df = df        
 
         # obtain dates 'forecast' -----
 
@@ -148,7 +118,7 @@ class DynamicRegressor(object):
 
         y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)
 
-        self.fcast_ = ahead.dynrmf(
+        self.fcast_ = config.AHEAD_PACKAGE.dynrmf(
             y=y, h=self.h, level=self.level, type_pi=self.type_pi
         )
 

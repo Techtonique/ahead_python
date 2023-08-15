@@ -5,7 +5,7 @@ import pandas as pd
 import rpy2.robjects as robjects
 import rpy2.robjects.packages as rpackages
 from rpy2.robjects.packages import importr
-from rpy2.robjects import FloatVector
+from rpy2.robjects import FloatVector, r
 from datetime import datetime
 from rpy2.robjects.vectors import StrVector
 from .unimultivariate import get_frequency
@@ -21,16 +21,19 @@ def compute_y_mts(df, df_frequency):
     input_series_tolist = input_series.tolist()
     xx = [item for sublist in input_series_tolist for item in sublist]
 
-    return stats.ts(
-        base.matrix(FloatVector(xx), byrow=True, nrow=len(input_series_tolist)),
-        frequency=get_frequency(df_frequency)
-    )
+    ts = r.matrix(FloatVector(xx), 
+                  byrow = True, 
+                  nrow = len(input_series_tolist), 
+                  ncol = df.shape[1])        
+    
+    #ts.colnames = StrVector(df.columns.tolist())
+
+    return stats.ts(ts, frequency=get_frequency(df_frequency))
 
 
 def format_multivariate_forecast(
     n_series, date_formatting, output_dates, horizon, fcast
-):
-
+):    
     if date_formatting == "original":
         output_dates_ = [
             datetime.strftime(output_dates[i], "%Y-%m-%d")
@@ -45,24 +48,27 @@ def format_multivariate_forecast(
             )
             for i in range(horizon)
         ]
+    
+    mean_array = np.asarray(fcast.rx2["mean"], dtype='float64')
+    lower_array = np.asarray(fcast.rx2["lower"], dtype='float64')
+    upper_array = np.asarray(fcast.rx2["upper"], dtype='float64')
 
     averages = []
     ranges = []
 
-    for j in range(n_series):
+    for j in range(n_series):        
         averages_series_j = []
         ranges_series_j = []
-        for i in range(horizon):
+        for i in range(horizon):            
             date_i = output_dates_[i]
-            index_i_j = i + j * horizon
-            averages_series_j.append([date_i, fcast.rx2["mean"][index_i_j]])
+            averages_series_j.append([date_i, mean_array[i, j]])
             ranges_series_j.append(
                 [
                     date_i,
-                    fcast.rx2["lower"][index_i_j],
-                    fcast.rx2["upper"][index_i_j],
+                    lower_array[i, j],
+                    upper_array[i, j],
                 ]
-            )
+            )                    
         averages.append(averages_series_j)
         ranges.append(ranges_series_j)
 

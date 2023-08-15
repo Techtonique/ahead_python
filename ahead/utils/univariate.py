@@ -17,10 +17,14 @@ def compute_y_ts(df, df_frequency):
 
     input_series = df.to_numpy()
 
-    return stats.ts(
+    ts = stats.ts(
         FloatVector(input_series.flatten()),
         frequency=get_frequency(df_frequency),
     )
+
+    ts.colnames = StrVector(df.columns.tolist())
+
+    return ts
 
 
 def format_univariate_forecast(date_formatting, output_dates, horizon, fcast):

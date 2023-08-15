@@ -3,5 +3,3 @@ scipy
 pandas
 scikit-learn
 rpy2==3.4.5
-fuzzywuzzy
-python-Levenshtein

@@ -1,3 +1,11 @@
+# version 0.6.2
+
+- Add Block Bootstrap to `ridge2f` and `basicf`
+- Add external regressors to `ridge2f`
+- Add clustering with _K-Means_ and hierarchical clustering to `ridge2f`
+- Install R or rpy2 if necessary (? weird)
+- Refactor code for `rpy2` and R imports
+
 # version 0.6.1
 
 - Reduce number of required packages depencies
