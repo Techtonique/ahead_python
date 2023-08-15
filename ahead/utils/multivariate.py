@@ -26,7 +26,7 @@ def compute_y_mts(df, df_frequency):
                   nrow = len(input_series_tolist), 
                   ncol = df.shape[1])        
     
-    ts.colnames = StrVector(df.columns.tolist())
+    #ts.colnames = StrVector(df.columns.tolist())
 
     return stats.ts(ts, frequency=get_frequency(df_frequency))
 
