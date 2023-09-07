@@ -1,3 +1,9 @@
+# version 0.8.1
+
+- Align with R version (see [https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-070](https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-070) and [https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-080](https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-080)) as much as possible
+- moving block bootstrap in `ridge2f`, `basicf`, in addition to circular block bootstrap from 0.6.2
+- adjust R-Vine copulas on residuals for `ridge2f` simulation (with empirical and Gaussian marginals)
+
 # version 0.6.2
 
 - Add Block Bootstrap to `ridge2f` and `basicf`

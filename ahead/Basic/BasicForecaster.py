@@ -20,13 +20,15 @@ class BasicForecaster():
 
         type_pi: a string;
             Type of prediction interval (currently "gaussian",
-            or "bootstrap")
+            "bootstrap" (independent), "blockbootstrap" (circular), 
+            "movingblockbootstrap")
 
         block_length: an integer
-            length of block for multivariate circular block bootstrap (`type_pi == blockbootstrap`)            
+            length of block for multivariate block bootstrap (`type_pi == blockbootstrap`
+            or `type_pi == movingblockbootstrap`)            
             
         B: an integer;
-            Number of bootstrap replications for `type_pi == bootstrap`
+            Number of replications
 
         date_formatting: a string;
             Currently:
@@ -34,7 +36,7 @@ class BasicForecaster():
             - "ms": milliseconds
 
         seed: an integer;
-            reproducibility seed for type_pi == 'bootstrap'
+            reproducibility seed 
 
     Attributes:
 
@@ -151,8 +153,8 @@ class BasicForecaster():
 
         y = mv.compute_y_mts(self.input_df, frequency)
 
-        if self.type_pi is "blockbootstrap":            
-            assert self.block_length is not None, "For `type_pi == 'blockbootstrap'`, `block_length` must be not None"
+        if self.type_pi in ("blockbootstrap", "movingblockbootstrap"):            
+            assert self.block_length is not None, "For `type_pi in ('blockbootstrap', 'movingblockbootstrap')`, `block_length` must be not None"
 
         self.fcast_ = config.AHEAD_PACKAGE.basicf(
             y,
@@ -188,7 +190,8 @@ class BasicForecaster():
             for i in range(n_series)
         )
 
-        if self.type_pi == "bootstrap" or self.type_pi == "blockbootstrap":
+        if self.type_pi in ("bootstrap", "blockbootstrap", 
+                            "movingblockbootstrap"):
             self.sims_ = tuple(
                 np.asarray(self.fcast_.rx2["sims"][i]) for i in range(self.B)
             )

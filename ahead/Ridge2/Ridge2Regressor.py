@@ -155,6 +155,12 @@ class Ridge2Regressor():
         date_formatting ="original",
         seed =123,
     ):
+        
+        if not config.R_IS_INSTALLED:
+            raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
+        
+        if not config.RPY2_IS_INSTALLED:
+            raise ImportError(config.RPY2_ERROR_MESSAGE + config.USAGE_MESSAGE)                
 
         self.h = h
         self.level = level
