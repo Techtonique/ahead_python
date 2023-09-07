@@ -44,13 +44,19 @@ class Ridge2Regressor():
 
         type_pi: a string;
             Type of prediction interval (currently "gaussian",
-            or "bootstrap" or "blockbootstrap")
+            "bootstrap", (circular) "blockbootstrap", "movingblockbootstrap", or "rvinecopula")
         
         block_length: an integer
-            length of block for multivariate circular block bootstrap (`type_pi == blockbootstrap`)
+            length of block for multivariate block bootstrap (`type_pi == blockbootstrap` or 
+            `type_pi == movingblockbootstrap`)
+        
+        margins: a string;
+            distribution of residuals' marginals for `type_pi == rvinecopula`: "empirical" (default), 
+            "gaussian"
 
         B: an integer;
-            Number of bootstrap replications for `type_pi == bootstrap` or `type_pi == blockbootstrap` 
+            Number of bootstrap replications for `type_pi == bootstrap`, "blockbootstrap", 
+            "movingblockbootstrap", or "rvinecopula"
         
         type_aggregation: a string;
             Type of aggregation, ONLY for bootstrapping; either "mean" or "median"
@@ -140,6 +146,7 @@ class Ridge2Regressor():
         dropout = 0,
         type_pi = "gaussian",
         block_length = 3, # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
+        margins = "empirical",
         B = 100,
         type_aggregation = "mean",
         centers = 2,
@@ -148,6 +155,12 @@ class Ridge2Regressor():
         date_formatting ="original",
         seed =123,
     ):
+        
+        if not config.R_IS_INSTALLED:
+            raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
+        
+        if not config.RPY2_IS_INSTALLED:
+            raise ImportError(config.RPY2_ERROR_MESSAGE + config.USAGE_MESSAGE)                
 
         self.h = h
         self.level = level
@@ -161,6 +174,7 @@ class Ridge2Regressor():
         self.dropout = dropout
         self.type_pi = type_pi
         self.block_length = block_length
+        self.margins = margins
         self.B = B
         self.type_aggregation = type_aggregation
         self.centers = centers # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
@@ -209,29 +223,28 @@ class Ridge2Regressor():
 
         if xreg is None: 
 
-            with cv.localconverter(default_converter + config.NONE_CONVERTER):
-                self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
-                y,
-                xreg = xreg,
-                h=self.h,
-                level=self.level,
-                lags=self.lags,
-                nb_hidden=self.nb_hidden,
-                nodes_sim=self.nodes_sim,
-                activ=self.activation,
-                a=self.a,
-                lambda_1=self.lambda_1,
-                lambda_2=self.lambda_2,
-                dropout=self.dropout,
-                type_pi=self.type_pi,
-                block_length=self.block_length, # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
-                B=self.B,
-                type_aggregation = self.type_aggregation,
-                centers = self.centers,  # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
-                type_clustering = self.type_clustering,
-                cl=self.cl,
-                seed=self.seed,
-            ) 
+            self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
+            y,
+            h=self.h,
+            level=self.level,
+            lags=self.lags,
+            nb_hidden=self.nb_hidden,
+            nodes_sim=self.nodes_sim,
+            activ=self.activation,
+            a=self.a,
+            lambda_1=self.lambda_1,
+            lambda_2=self.lambda_2,
+            dropout=self.dropout,
+            type_pi=self.type_pi,
+            margins=self.margins,
+            block_length=self.block_length, # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
+            B=self.B,
+            type_aggregation = self.type_aggregation,
+            centers = self.centers,  # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
+            type_clustering = self.type_clustering,
+            cl=self.cl,
+            seed=self.seed,
+        )         
         
         else: # xreg is not None:  
        
@@ -263,6 +276,7 @@ class Ridge2Regressor():
             lambda_2=self.lambda_2,
             dropout=self.dropout,
             type_pi=self.type_pi,
+            margins=self.margins,
             block_length=self.block_length, # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
             B=self.B,
             type_aggregation = self.type_aggregation,
@@ -295,7 +309,8 @@ class Ridge2Regressor():
             for i in range(n_series)
         )
 
-        if self.type_pi == "bootstrap" or self.type_pi == "blockbootstrap":
+        if self.type_pi in ("bootstrap", "blockbootstrap", 
+                            "movingblockbootstrap", "rvinecopula"):
             self.sims_ = tuple(
                 np.asarray(self.fcast_.rx2["sims"][i]) for i in range(self.B)
             )

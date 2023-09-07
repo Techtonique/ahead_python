@@ -122,3 +122,37 @@ print("\n mean, lower, upper as numpy arrays: \n")
 print(d4.mean_)
 print(d4.lower_)
 print(d4.upper_)
+
+print("\n")
+print("Example 5 -----")
+
+dataset = {
+ 'date' : ['2001-01-01', '2002-01-01', '2003-01-01', 
+           '2004-01-01', '2005-01-01', '2006-01-01', 
+           '2007-01-01'],
+ 'series1' : [34, 30, 35.6, 33.3, 38.1, 34.4, 33.9],    
+ 'series2' : [4, 5.5, 5.6, 6.3, 5.1, 4.9, 4.7],
+ 'series3' : [100, 100.5, 100.6, 100.2, 100.1, 99.9, 101.0]}
+df = pd.DataFrame(dataset).set_index('date')
+
+
+d5 = BasicForecaster(h = 5, date_formatting = "original", 
+type_pi="movingblockbootstrap", B=20, block_length=3)
+
+start = time()
+d5.forecast(df)
+print(f"Elapsed: {time()-start} \n")
+
+print("\n output_dates_: \n")
+print(d5.output_dates_)
+
+print("\n mean, lower, upper as numpy arrays: \n")
+print(d5.mean_)
+print(d5.lower_)
+print(d5.upper_)
+
+print("\n result_dfs_: \n")
+print(d5.result_dfs_)
+
+print("\n sims_: \n")
+print(d5.sims_)

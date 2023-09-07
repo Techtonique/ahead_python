@@ -10,6 +10,7 @@ from datetime import datetime
 from rpy2.robjects.vectors import StrVector
 from .unimultivariate import get_frequency
 
+base = importr("base")
 stats = importr("stats")
 
 
@@ -20,9 +21,8 @@ def compute_y_ts(df, df_frequency):
     ts = stats.ts(
         FloatVector(input_series.flatten()),
         frequency=get_frequency(df_frequency),
+        names = StrVector(df.columns.tolist())
     )
-
-    ts.colnames = StrVector(df.columns.tolist())
 
     return ts
 
