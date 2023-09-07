@@ -20,9 +20,7 @@ def compute_y_ts(df, df_frequency):
 
     ts = stats.ts(
         FloatVector(input_series.flatten()),
-        frequency=get_frequency(df_frequency),
-        names = StrVector(df.columns.tolist())
-    )
+        frequency=get_frequency(df_frequency))
 
     return ts
 
