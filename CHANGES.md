@@ -1,3 +1,7 @@
+# version 0.8.2
+
+- plot ridge2
+
 # version 0.8.1
 
 - Align with R version (see [https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-070](https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-070) and [https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-080](https://github.com/Techtonique/ahead/blob/main/NEWS.md#version-080)) as much as possible
