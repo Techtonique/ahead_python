@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import rpy2.robjects.conversion as cv
 from rpy2.robjects import default_converter, FloatVector, ListVector, numpy2ri, r
@@ -316,3 +317,33 @@ class Ridge2Regressor():
             )
 
         return self
+    
+
+    def plot(self, series):
+        """Plot time series forecast 
+
+        Parameters:
+
+            series: {integer} or {string}
+                series index or name 
+        """
+        assert all([self.mean_ is not None, self.lower_ is not None, 
+                    self.upper_ is not None, self.output_dates_ is not None])
+        series_idx = series 
+        if isinstance(series_idx, str):
+            series_idx = self.input_df.columns.get_loc(series)
+        y_all = list(self.input_df.iloc[:, series_idx])+list(self.mean_.iloc[:, series_idx])
+        n_points_all = len(y_all)
+        n_points_train = self.input_df.shape[0]
+        x_all = [i for i in range(n_points_all)]
+        x_test = [i for i in range(n_points_train, n_points_all)]
+        # x_all = list(self.input_df.index) + list(self.output_dates_)
+        fig, ax = plt.subplots()
+        ax.plot(x_all, y_all, '-')
+        # ax.fill_between(self.output_dates_, self.lower_[:, series_idx], 
+        #                 self.upper_[:, series_idx], 
+        #                 alpha=0.2)
+        ax.fill_between(x_test, self.lower_.iloc[:, series_idx], 
+                        self.upper_.iloc[:, series_idx], 
+                        alpha=0.2)
+        plt.show()        
