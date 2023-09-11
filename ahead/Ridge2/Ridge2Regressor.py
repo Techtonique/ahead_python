@@ -332,7 +332,7 @@ class Ridge2Regressor():
         series_idx = series 
         if isinstance(series_idx, str):
             series_idx = self.input_df.columns.get_loc(series)
-        y_all = list(self.input_df.iloc[:, series_idx])+list(self.mean_.iloc[:, series_idx])
+        y_all = list(self.input_df.iloc[:, series_idx])+list(self.mean_[:, series_idx])
         n_points_all = len(y_all)
         n_points_train = self.input_df.shape[0]
         x_all = [i for i in range(n_points_all)]
@@ -343,7 +343,7 @@ class Ridge2Regressor():
         # ax.fill_between(self.output_dates_, self.lower_[:, series_idx], 
         #                 self.upper_[:, series_idx], 
         #                 alpha=0.2)
-        ax.fill_between(x_test, self.lower_.iloc[:, series_idx], 
-                        self.upper_.iloc[:, series_idx], 
+        ax.fill_between(x_test, self.lower_[:, series_idx], 
+                        self.upper_[:, series_idx], 
                         alpha=0.2)
         plt.show()        
