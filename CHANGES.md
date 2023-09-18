@@ -1,3 +1,9 @@
+# version 0.9.0
+
+- Align with R version
+- Progress bars for bootstrapping (independent, circular block, moving block)
+- See also [https://github.com/Techtonique/ahead/blob/main/NEWS.md](https://github.com/Techtonique/ahead/blob/main/NEWS.md) 
+
 # version 0.8.2
 
 - plot ridge2
