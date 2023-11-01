@@ -347,3 +347,46 @@ class Ridge2Regressor():
                         self.upper_[:, series_idx], 
                         alpha=0.2)
         plt.show()        
+
+    def plot2(self, series):
+        """Plot time series forecast 
+
+        Parameters:
+
+            series: {integer} or {string}
+                series index or name 
+        """
+
+        type_graph = "dates" # not clean, stabilize this in future releases
+
+        assert all([self.mean_ is not None, self.lower_ is not None, 
+                    self.upper_ is not None, self.output_dates_ is not None]),\
+                    "model forecasting must be obtained first (with predict)"
+
+        if isinstance(series, str):
+            assert series in self.series_names, f"series {series} doesn't exist in the input dataset"
+            series_idx = self.df_.columns.get_loc(series)
+        else:
+            assert isinstance(series, int) and (0 <= series < self.n_series),\
+                  f"check series index (< {self.n_series})"
+            series_idx = series
+
+        y_all = list(self.df_.iloc[:, series_idx])+list(self.mean_.iloc[:, series_idx])
+        y_test = list(self.mean_.iloc[:, series_idx])
+        n_points_all = len(y_all)
+        n_points_train = self.df_.shape[0]
+
+        if type_graph is "numeric":
+            x_all = [i for i in range(n_points_all)]
+            x_test = [i for i in range(n_points_train, n_points_all)]              
+        else: # use dates       
+            x_all = np.concatenate((self.input_dates.values, self.output_dates_.values), axis=None)
+            x_test = self.output_dates_.values        
+
+        fig, ax = plt.subplots()
+        ax.plot(x_all, y_all, '-')
+        ax.plot(x_test, y_test, '-')
+        ax.fill_between(x_test, self.lower_.iloc[:, series_idx], 
+                        self.upper_.iloc[:, series_idx], 
+                        alpha=0.2)
+        plt.show()
