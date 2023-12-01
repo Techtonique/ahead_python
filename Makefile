@@ -85,3 +85,6 @@ build-site: docs ## put docs website in a directory
 	cd docs&&mkdocs build
 	cp -rf docs/site/* ../../Pro_Website/Techtonique.github.io/ahead_python
 	cd ..
+
+run-examples: ## run all examples with one command
+	find examples -maxdepth 2 -name "*.py" -exec  python3 {} \;
