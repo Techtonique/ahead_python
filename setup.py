@@ -1,3 +1,12 @@
+from installr import check_r_installed, install_r
+
+# Check if R is installed; if not, install it
+if not check_r_installed():
+    print("Installing R...")
+    install_r()
+else:
+    print("No R installation needed.")
+
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
