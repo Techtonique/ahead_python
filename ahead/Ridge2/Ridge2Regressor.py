@@ -220,6 +220,7 @@ class Ridge2Regressor(Base):
 
         self.input_df = df
         n_series = len(df.columns)
+        self.n_series = n_series
 
         # obtain dates 'forecast' -----
 

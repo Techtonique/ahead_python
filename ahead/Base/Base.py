@@ -55,7 +55,7 @@ class Base(object):
                 self.upper_ is not None,
                 self.output_dates_ is not None,
             ]
-        ), "model forecasting must be obtained first (with predict)"
+        ), "model forecasting must be obtained first (with `forecast` method)"
 
         if isinstance(series, str):
             assert (
