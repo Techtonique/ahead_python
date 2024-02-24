@@ -107,6 +107,7 @@ class DynamicRegressor(Base):
 
         self.input_df = df
         self.n_series = 1
+        self.series_names = df.columns
 
         # obtain dates 'forecast' -----
 

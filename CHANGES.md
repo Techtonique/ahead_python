@@ -1,3 +1,9 @@
+# version 0.10.0
+
+- Naming series in input data frame
+- Plot method for all the objects 
+- More about the code: begin refactoring and DRYing --> Base class 
+
 # version 0.9.0
 
 - Align with R version

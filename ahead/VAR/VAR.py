@@ -121,9 +121,10 @@ class VAR(Base):
 
         """
 
-        self.input_df = df
-        n_series = len(df.columns)
+        self.input_df = df                
         self.n_series = n_series
+        self.series_names = df.columns
+        n_series = len(self.series_names)
 
         # obtain dates 'forecast' -----
 
