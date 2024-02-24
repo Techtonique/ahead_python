@@ -1,10 +1,12 @@
 import numpy as np
+
+from ..Base import Base
+from ..utils import univariate as uv
+from ..utils import unimultivariate as umv
 from .. import config
 
-from ..utils import univariate as uv 
-from ..utils import unimultivariate as umv
 
-class DynamicRegressor():
+class DynamicRegressor(Base):
     """Dynamic Regression Model adapted from R's `forecast::nnetar`
 
     Parameters:
@@ -39,13 +41,13 @@ class DynamicRegressor():
             a list of output dates (associated to forecast)
 
         mean_: a numpy array
-            contains series mean forecast as a numpy array 
+            contains series mean forecast as a numpy array
 
-        lower_: a numpy array 
-            contains series lower bound forecast as a numpy array   
+        lower_: a numpy array
+            contains series lower bound forecast as a numpy array
 
-        upper_: a numpy array 
-            contains series upper bound forecast as a numpy array   
+        upper_: a numpy array
+            contains series upper bound forecast as a numpy array
 
         result_df_: a data frame;
             contains 3 columns, mean forecast, lower + upper
@@ -75,25 +77,22 @@ class DynamicRegressor():
 
     def __init__(self, h=5, level=95, type_pi="E", date_formatting="original"):
 
-        if not config.R_IS_INSTALLED:
-            raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
-        
-        if not config.RPY2_IS_INSTALLED:
-            raise ImportError(config.RPY2_ERROR_MESSAGE + config.USAGE_MESSAGE)
+        super().__init__(
+            h=h,
+            level=level,
+        )
 
-        self.h = h
-        self.level = level
         self.type_pi = type_pi
         self.date_formatting = date_formatting
-        self.input_df = None 
+        self.input_df = None
 
         self.fcast_ = None
         self.averages_ = None
         self.ranges_ = None
         self.output_dates_ = []
         self.mean_ = []
-        self.lower_= []
-        self.upper_= []
+        self.lower_ = []
+        self.upper_ = []
         self.result_df_ = None
 
     def forecast(self, df):
@@ -106,7 +105,7 @@ class DynamicRegressor():
 
         """
 
-        self.input_df = df        
+        self.input_df = df
 
         # obtain dates 'forecast' -----
 
@@ -135,9 +134,9 @@ class DynamicRegressor():
             fcast=self.fcast_,
         )
 
-        self.mean_ = np.asarray(self.fcast_.rx2['mean'])
-        self.lower_= np.asarray(self.fcast_.rx2['lower'])
-        self.upper_= np.asarray(self.fcast_.rx2['upper'])
+        self.mean_ = np.asarray(self.fcast_.rx2["mean"])
+        self.lower_ = np.asarray(self.fcast_.rx2["lower"])
+        self.upper_ = np.asarray(self.fcast_.rx2["upper"])
 
         self.result_df_ = umv.compute_result_df(self.averages_, self.ranges_)
 

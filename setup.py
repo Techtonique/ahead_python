@@ -1,11 +1,14 @@
+import subprocess
+
+subprocess.run(["pip", "install", "rpy2"])
+
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = "0.9.0"
+__version__ = "0.10.0"
 
 here = path.abspath(path.dirname(__file__))
-
 
 # get the dependencies and installs
 
@@ -26,11 +29,8 @@ dependency_links = [
 setup(
     name="ahead",
     version=__version__,
-    description="Time series forecasting",
-    long_description="A package for time series forecasting",
-    #url="https://github.com/thierrymoudiki/GPopt",
-    #download_url="https://github.com/thierrymoudiki/GPopt/tarball/"
-    #+ __version__,
+    description="Time series forecasting with Machine Learning and uncertainty quantification",
+    long_description="A package for time series forecasting with Machine Learning and uncertainty quantification",
     license="BSD3 Clause Clear",
     classifiers=[
         "Development Status :: 3 - Alpha",

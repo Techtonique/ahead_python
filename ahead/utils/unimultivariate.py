@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from difflib import SequenceMatcher
 
+
 def compute_output_dates(df, horizon):
 
     input_dates = df.index.values
@@ -19,6 +20,7 @@ def compute_output_dates(df, horizon):
 
     return output_dates, frequency
 
+
 def compute_result_df(averages, ranges):
     pred_mean = pd.Series(dict(averages)).to_frame("mean")
     pred_ci = pd.DataFrame(
@@ -26,13 +28,20 @@ def compute_result_df(averages, ranges):
     ).set_index("date")
     return pd.concat([pred_mean, pred_ci], axis=1)
 
+
 def get_closest_str(input_str, list_choices):
-    scores = np.asarray([SequenceMatcher(None, a = input_str, b = elt).ratio() for elt in list_choices])  
+    scores = np.asarray(
+        [
+            SequenceMatcher(None, a=input_str, b=elt).ratio()
+            for elt in list_choices
+        ]
+    )
     return list_choices[np.where(scores == np.max(scores))[0][0]]
+
 
 def get_frequency(input_str):
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases
-    """ https://otexts.com/fpp2/ts-objects.html#frequency-of-a-time-series
+    """https://otexts.com/fpp2/ts-objects.html#frequency-of-a-time-series
     Data 	frequency
     Annual 	        1
     Quarterly 	    4
@@ -64,14 +73,16 @@ def get_frequency(input_str):
         "D": 365,
     }
 
-    try: 
-        
+    try:
+
         return frequency_choices[input_str]
 
-    except: 
+    except:
 
-        list_frequency_choices = list(frequency_choices.keys())  
+        list_frequency_choices = list(frequency_choices.keys())
 
-        closest_str = get_closest_str(input_str=input_str, list_choices=list_frequency_choices)
+        closest_str = get_closest_str(
+            input_str=input_str, list_choices=list_frequency_choices
+        )
 
         return frequency_choices[closest_str]
