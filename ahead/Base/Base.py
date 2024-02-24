@@ -81,7 +81,7 @@ class Base(object):
 
         if type_axis == "dates":  # use dates
             x_all = np.concatenate(
-                (self.index.values, self.output_dates_), axis=None
+                (self.input_df.index.values, self.output_dates_), axis=None
             )
             x_test = self.output_dates_
 
