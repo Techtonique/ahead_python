@@ -88,13 +88,13 @@ class Base(object):
         if type_plot == "pi":
             fig, ax = plt.subplots()
             ax.plot(x_all, y_all, "-")
-            ax.plot(x_test, y_test, "-", color="blue")
+            ax.plot(x_test, y_test, "-", color="orange")
             ax.fill_between(
                 x_test,
                 self.result_dfs_[series_idx]["lower"].values,
                 self.result_dfs_[series_idx]["upper"].values,
                 alpha=0.2,
-                color="blue",
+                color="orange",
             )
             plt.title(
                 f"prediction intervals for {series}",
