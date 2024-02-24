@@ -17,8 +17,8 @@ class Base(object):
         self.n_series = None
         self.input_dates = None
         self.B = None
-
-        self.df_ = None
+        self.input_df = None
+        
         self.mean_ = None
         self.lower_ = None
         self.upper_ = None
@@ -61,19 +61,19 @@ class Base(object):
             assert (
                 series in self.series_names
             ), f"series {series} doesn't exist in the input dataset"
-            series_idx = self.df_.columns.get_loc(series)
+            series_idx = self.input_df.columns.get_loc(series)
         else:
             assert isinstance(series, int) and (
                 0 <= series < self.n_series
             ), f"check series index (< {self.n_series})"
             series_idx = series
 
-        y_all = list(self.df_.iloc[:, series_idx]) + list(
+        y_all = list(self.input_df.iloc[:, series_idx]) + list(
             self.result_dfs_[series_idx]["mean"].values
         )        
         y_test = list(self.result_dfs_[series_idx]["mean"].values)
         n_points_all = len(y_all)
-        n_points_train = self.df_.shape[0]
+        n_points_train = self.input_df.shape[0]
 
         if type_axis == "numeric":
             x_all = [i for i in range(n_points_all)]
