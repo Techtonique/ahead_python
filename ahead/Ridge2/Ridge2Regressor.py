@@ -370,19 +370,19 @@ class Ridge2Regressor(Base):
             assert (
                 series in self.series_names
             ), f"series {series} doesn't exist in the input dataset"
-            series_idx = self.df_.columns.get_loc(series)
+            series_idx = self.inputs_df.columns.get_loc(series)
         else:
             assert isinstance(series, int) and (
                 0 <= series < self.n_series
             ), f"check series index (< {self.n_series})"
             series_idx = series
 
-        y_all = list(self.df_.iloc[:, series_idx]) + list(
+        y_all = list(self.inputs_df.iloc[:, series_idx]) + list(
             self.mean_.iloc[:, series_idx]
         )
         y_test = list(self.mean_.iloc[:, series_idx])
         n_points_all = len(y_all)
-        n_points_train = self.df_.shape[0]
+        n_points_train = self.inputs_df.shape[0]
 
         if type_axis == "numeric":
             x_all = [i for i in range(n_points_all)]
