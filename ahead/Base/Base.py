@@ -82,9 +82,9 @@ class Base(object):
 
         if type_axis == "dates":  # use dates
             x_all = np.concatenate(
-                (self.input_dates.values, self.output_dates_.values), axis=None
+                (self.input_dates.values, self.output_dates_), axis=None
             )
-            x_test = self.output_dates_.values
+            x_test = self.output_dates_
 
         if type_plot == "pi":
             fig, ax = plt.subplots()
