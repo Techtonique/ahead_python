@@ -15,7 +15,6 @@ class Base(object):
         self.seed = seed
         self.series_names = None
         self.n_series = None
-        self.input_dates = None
         self.B = None
         self.input_df = None
 
@@ -82,7 +81,7 @@ class Base(object):
 
         if type_axis == "dates":  # use dates
             x_all = np.concatenate(
-                (self.input_dates.values, self.output_dates_), axis=None
+                (self.index.values, self.output_dates_), axis=None
             )
             x_test = self.output_dates_
 
