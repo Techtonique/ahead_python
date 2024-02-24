@@ -139,10 +139,10 @@ class BasicForecaster(Base):
 
         """
 
-        self.input_df = df
-        n_series = len(df.columns)
-        self.n_series = n_series
+        self.input_df = df                
         self.series_names = df.columns
+        n_series = len(self.series_names)
+        self.n_series = n_series
 
         # obtain dates 'forecast' -----
 
