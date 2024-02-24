@@ -69,9 +69,9 @@ class Base(object):
             series_idx = series
 
         y_all = list(self.df_.iloc[:, series_idx]) + list(
-            self.mean_.iloc[:, series_idx]
-        )
-        y_test = list(self.mean_.iloc[:, series_idx])
+            self.result_dfs_[series_idx]["mean"].values
+        )        
+        y_test = list(self.result_dfs_[series_idx]["mean"].values)
         n_points_all = len(y_all)
         n_points_train = self.df_.shape[0]
 
@@ -91,8 +91,8 @@ class Base(object):
             ax.plot(x_test, y_test, "-", color="blue")
             ax.fill_between(
                 x_test,
-                self.lower_.iloc[:, series_idx],
-                self.upper_.iloc[:, series_idx],
+                self.result_dfs_[series_idx]["lower"].values,
+                self.result_dfs_[series_idx]["upper"].values,
                 alpha=0.2,
                 color="blue",
             )
