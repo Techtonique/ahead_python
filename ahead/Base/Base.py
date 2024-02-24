@@ -18,11 +18,12 @@ class Base(object):
         self.input_dates = None
         self.B = None
         self.input_df = None
-        
+
         self.mean_ = None
         self.lower_ = None
         self.upper_ = None
         self.output_dates_ = None
+        self.result_dfs_ = None 
 
         R_IS_INSTALLED = False
 
@@ -124,7 +125,7 @@ class Base(object):
             plt.plot(x_test, y_test, "-", color="blue")
             # Add titles
             plt.title(
-                f"{self.replications} simulations of {series}",
+                f"{self.B} simulations of {series}",
                 loc="left",
                 fontsize=12,
                 fontweight=0,
