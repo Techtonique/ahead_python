@@ -1,0 +1,37 @@
+name: Publish Python 🐍 distribution 📦 to PyPI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master  # Replace with your branch name
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # Replace with your Python version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel setuptools twine
+
+      - name: Build distribution
+        run: python setup.py sdist bdist_wheel
+
+      - name: Run examples 
+        run: pip install .&&find examples -maxdepth 2 -name "*.py" -exec  python3 {} \;
+
+      - name: Publish to PyPI                
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_GLOBAL }}
+          repository-url: https://upload.pypi.org/legacy/

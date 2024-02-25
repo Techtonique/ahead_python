@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
-import os, webbrowser, sys
+import os, webbrowser, sys, mkdocs
 
 from urllib.request import pathname2url
 
@@ -31,9 +31,9 @@ clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and 
 clean-build: ## remove build artifacts
 	rm -fr build/
 	rm -fr dist/
-	rm -fr .eggs/
+	rm -fr .eggs/	
 	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -rf {} +
+	find . -name '*.egg' -exec rm -fr {} +
 
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
@@ -41,20 +41,11 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 
-clean-test: ## remove test and coverage artifacts
-	rm -fr .tox/
-	rm -f .coverage
-	rm -fr htmlcov/
-	rm -fr .pytest_cache
+clean-test: ## remove test and coverage artifacts	
+	rm -fr htmlcov
 
 lint: ## check style with flake8
 	flake8 ahead tests
-
-test: ## run tests quickly with the default Python
-	python -m unittest 
-
-test-all: ## run tests on every Python version with tox
-	tox
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source ahead setup.py test
@@ -62,20 +53,25 @@ coverage: ## check code coverage quickly with the default Python
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
-docs: ## generate mkdocs
-	 rm -rf docs/sources
-	 make install	 
-	 python3 docs/autogen.py	 
+docs: ## generate docs		
+	pip install black pdoc 
+	black ahead/* --line-length=80	
+	pdoc -t docs ahead/* --output-dir ahead-docs
+	find . -name '__pycache__' -exec rm -fr {} +
 
-servedocs: docs ## compile the docs watching for changes
-	cd docs&&mkdocs serve
-	cd ..
+servedocs: ## compile the docs watching for change	 	
+	pip install black pdoc 
+	black ahead/* --line-length=80	
+	pdoc -t docs ahead/* 
+	find . -name '__pycache__' -exec rm -fr {} +
 
 release: dist ## package and upload a release
-	twine upload dist/*
+	pip install twine --ignore-installed
+	python3 -m twine upload --repository pypi dist/* --verbose
 
 dist: clean ## builds source and wheel package
-	python3 setup.py bdist_wheel
+	python3 setup.py sdist
+	python3 setup.py bdist_wheel	
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages

@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from ahead import Ridge2Regressor
-from ahead  import plot
 from time import time
 
 # Forecasting horizon

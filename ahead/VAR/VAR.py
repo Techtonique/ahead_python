@@ -1,10 +1,13 @@
 import numpy as np
 from .. import config
 
+from ..Base import Base
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
+from .. import config
 
-class VAR(object):
+
+class VAR(Base):
     """Vector AutoRegressive model
 
     Parameters:
@@ -44,11 +47,11 @@ class VAR(object):
         mean_: a numpy array
             contains series mean forecast as a numpy array
 
-        lower_: a numpy array 
-            contains series lower bound forecast as a numpy array   
+        lower_: a numpy array
+            contains series lower bound forecast as a numpy array
 
-        upper_: a numpy array 
-            contains series upper bound forecast as a numpy array   
+        upper_: a numpy array
+            contains series upper bound forecast as a numpy array
 
         result_dfs_: a tuple of data frames;
             each element of the tuple contains 3 columns,
@@ -89,8 +92,11 @@ class VAR(object):
             "none",
         ), "must have: type_VAR in ('const', 'trend', 'both', 'none')"
 
-        self.h = h
-        self.level = level
+        super().__init__(
+            h=h,
+            level=level,
+        )
+
         self.lags = lags
         self.type_VAR = type_VAR
         self.date_formatting = date_formatting
@@ -115,8 +121,10 @@ class VAR(object):
 
         """
 
-        self.input_df = df
-        n_series = len(df.columns)
+        self.input_df = df                        
+        self.series_names = df.columns
+        n_series = len(self.series_names)
+        self.n_series = n_series
 
         # obtain dates 'forecast' -----
 
@@ -149,9 +157,9 @@ class VAR(object):
             fcast=self.fcast_,
         )
 
-        self.mean_ = np.asarray(self.fcast_.rx2['mean'])
-        self.lower_= np.asarray(self.fcast_.rx2['lower'])
-        self.upper_= np.asarray(self.fcast_.rx2['upper'])
+        self.mean_ = np.asarray(self.fcast_.rx2["mean"])
+        self.lower_ = np.asarray(self.fcast_.rx2["lower"])
+        self.upper_ = np.asarray(self.fcast_.rx2["upper"])
 
         self.result_dfs_ = tuple(
             umv.compute_result_df(self.averages_[i], self.ranges_[i])

@@ -1,10 +1,12 @@
 import numpy as np
-from .. import config
 
+from ..Base import Base
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
+from .. import config
 
-class BasicForecaster():
+
+class BasicForecaster(Base):
     """Basic forecasting functions for multivariate time series (mean, median, random walk)
 
     Parameters:
@@ -16,17 +18,17 @@ class BasicForecaster():
             Confidence level for prediction intervals
 
         method: a string;
-            Forecasting method, either "mean", "median", or random walk ("rw")    
+            Forecasting method, either "mean", "median", or random walk ("rw")
 
         type_pi: a string;
             Type of prediction interval (currently "gaussian",
-            "bootstrap" (independent), "blockbootstrap" (circular), 
+            "bootstrap" (independent), "blockbootstrap" (circular),
             "movingblockbootstrap")
 
         block_length: an integer
             length of block for multivariate block bootstrap (`type_pi == blockbootstrap`
-            or `type_pi == movingblockbootstrap`)            
-            
+            or `type_pi == movingblockbootstrap`)
+
         B: an integer;
             Number of replications
 
@@ -36,7 +38,7 @@ class BasicForecaster():
             - "ms": milliseconds
 
         seed: an integer;
-            reproducibility seed 
+            reproducibility seed
 
     Attributes:
 
@@ -53,13 +55,13 @@ class BasicForecaster():
             a list of output dates (associated to forecast)
 
         mean_: a numpy array
-            contains series mean forecast as a numpy array 
+            contains series mean forecast as a numpy array
 
         lower_: a numpy array
-            contains series lower bound forecast as a numpy array   
+            contains series lower bound forecast as a numpy array
 
-        upper_: a numpy array 
-            contains series upper bound forecast as a numpy array   
+        upper_: a numpy array
+            contains series upper bound forecast as a numpy array
 
         result_dfs_: a tuple of data frames;
             each element of the tuple contains 3 columns,
@@ -99,26 +101,23 @@ class BasicForecaster():
         method="mean",
         type_pi="gaussian",
         block_length=5,
-        B=100,        
+        B=100,
         date_formatting="original",
         seed=123,
     ):
 
-        if not config.R_IS_INSTALLED:
-            raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
-        
-        if not config.RPY2_IS_INSTALLED:
-            raise ImportError(config.RPY2_ERROR_MESSAGE + config.USAGE_MESSAGE)                
+        super().__init__(
+            h=h,
+            level=level,
+            seed=seed,
+        )
 
-        self.h = h
-        self.level = level
         self.method = method
         self.type_pi = type_pi
         self.block_length = block_length
         self.B = B
         self.date_formatting = date_formatting
-        self.input_df = None 
-        self.seed = seed
+        self.input_df = None
 
         self.fcast_ = None
         self.averages_ = None
@@ -128,7 +127,7 @@ class BasicForecaster():
         self.lower_ = None
         self.upper_ = None
         self.result_dfs_ = None
-        self.sims_ = None        
+        self.sims_ = None
 
     def forecast(self, df):
         """Forecasting method from `BasicForecaster` class
@@ -140,8 +139,10 @@ class BasicForecaster():
 
         """
 
-        self.input_df = df
-        n_series = len(df.columns)        
+        self.input_df = df                
+        self.series_names = df.columns
+        n_series = len(self.series_names)
+        self.n_series = n_series
 
         # obtain dates 'forecast' -----
 
@@ -153,8 +154,10 @@ class BasicForecaster():
 
         y = mv.compute_y_mts(self.input_df, frequency)
 
-        if self.type_pi in ("blockbootstrap", "movingblockbootstrap"):            
-            assert self.block_length is not None, "For `type_pi in ('blockbootstrap', 'movingblockbootstrap')`, `block_length` must be not None"
+        if self.type_pi in ("blockbootstrap", "movingblockbootstrap"):
+            assert (
+                self.block_length is not None
+            ), "For `type_pi in ('blockbootstrap', 'movingblockbootstrap')`, `block_length` must be not None"
 
         self.fcast_ = config.AHEAD_PACKAGE.basicf(
             y,
@@ -181,17 +184,20 @@ class BasicForecaster():
             fcast=self.fcast_,
         )
 
-        self.mean_ = np.asarray(self.fcast_.rx2['mean'])
-        self.lower_= np.asarray(self.fcast_.rx2['lower'])
-        self.upper_= np.asarray(self.fcast_.rx2['upper'])
+        self.mean_ = np.asarray(self.fcast_.rx2["mean"])
+        self.lower_ = np.asarray(self.fcast_.rx2["lower"])
+        self.upper_ = np.asarray(self.fcast_.rx2["upper"])
 
         self.result_dfs_ = tuple(
             umv.compute_result_df(self.averages_[i], self.ranges_[i])
             for i in range(n_series)
         )
 
-        if self.type_pi in ("bootstrap", "blockbootstrap", 
-                            "movingblockbootstrap"):
+        if self.type_pi in (
+            "bootstrap",
+            "blockbootstrap",
+            "movingblockbootstrap",
+        ):
             self.sims_ = tuple(
                 np.asarray(self.fcast_.rx2["sims"][i]) for i in range(self.B)
             )
