@@ -236,10 +236,11 @@ class Base(object):
             x_all = [i for i in range(n_points_all)]
             x_test = [i for i in range(n_points_train, n_points_all)]
 
-        if type_axis == "dates":  # use dates                           
+        if type_axis == "dates":  # use dates    
+            x_train = [date.strftime('%Y-%m-%d') for date in self.input_dates]                       
             x_test = [date.strftime('%Y-%m-%d') for date in self.output_dates_]
             x_all = np.concatenate(
-                (self.input_dates, x_test), axis=None
+                (x_train, x_test), axis=None
             )
 
         if type_plot == "pi":
