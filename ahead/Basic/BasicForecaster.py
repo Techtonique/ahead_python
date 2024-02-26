@@ -117,7 +117,7 @@ class BasicForecaster(Base):
         self.block_length = block_length
         self.B = B
         self.date_formatting = date_formatting
-        self.input_df = None
+        self.input_df = None        
 
         self.fcast_ = None
         self.averages_ = None
@@ -139,47 +139,28 @@ class BasicForecaster(Base):
 
         """
 
-        self.input_df = df                
-        self.series_names = df.columns
-        n_series = len(self.series_names)
-        self.n_series = n_series
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)
 
-        # obtain dates 'forecast' -----
-
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = mv.compute_y_mts(self.input_df, frequency)
+        # obtain time series object -----
+        self.format_input()
 
         if self.type_pi in ("blockbootstrap", "movingblockbootstrap"):
             assert (
                 self.block_length is not None
-            ), "For `type_pi in ('blockbootstrap', 'movingblockbootstrap')`, `block_length` must be not None"
+            ), "For `type_pi in ('blockbootstrap', 'movingblockbootstrap')`, `block_length` must be not None"        
 
-        self.fcast_ = config.AHEAD_PACKAGE.basicf(
-            y,
-            h=self.h,
-            level=self.level,
-            method=self.method,
-            type_pi=self.type_pi,
-            block_length=self.block_length,
-            B=self.B,
-            seed=self.seed,
-        )
+        self.get_forecast()
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
-            self.output_dates_,
+            _,
         ) = mv.format_multivariate_forecast(
-            n_series=n_series,
+            n_series=self.n_series,
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )
@@ -190,7 +171,7 @@ class BasicForecaster(Base):
 
         self.result_dfs_ = tuple(
             umv.compute_result_df(self.averages_[i], self.ranges_[i])
-            for i in range(n_series)
+            for i in range(self.n_series)
         )
 
         if self.type_pi in (

@@ -1,7 +1,11 @@
+import os 
 import numpy as np
 import pandas as pd
 from ahead import Ridge2Regressor
 from time import time
+
+
+print(f"\n ----- Running: {os.path.basename(__file__)}... ----- \n")
 
 # Forecasting horizon
 h = 5
@@ -14,7 +18,7 @@ dataset = {
  'series2' : [4, 5.5, 5.6, 6.3, 5.1],
  'series3' : [100, 100.5, 100.6, 100.2, 100.1]}
 df = pd.DataFrame(dataset).set_index('date')
-
+df.index = pd.DatetimeIndex(df.index)
 
 # univariate ts forecasting 
 print("Example 1 -----")

@@ -85,6 +85,7 @@ class DynamicRegressor(Base):
         self.type_pi = type_pi
         self.date_formatting = date_formatting
         self.input_df = None
+        self.type_input = "univariate"
 
         self.fcast_ = None
         self.averages_ = None
@@ -105,36 +106,22 @@ class DynamicRegressor(Base):
 
         """
 
-        self.input_df = df
-        self.n_series = 1
-        try: 
-            self.series_names = df.columns
-        except:
-            self.series_names = [df.name]
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)        
 
-        # obtain dates 'forecast' -----
+        # obtain time series object -----
+        self.format_input()
 
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)
-
-        self.fcast_ = config.AHEAD_PACKAGE.dynrmf(
-            y=y, h=self.h, level=self.level, type_pi=self.type_pi
-        )
+        self.get_forecast("dynrm")
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
-            self.output_dates_,
+            _,
         ) = uv.format_univariate_forecast(
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )

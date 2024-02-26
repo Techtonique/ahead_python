@@ -87,17 +87,18 @@ class EAT(Base):
         date_formatting="original",
     ):
 
+        super().__init__(h=h, level=level)
+
         if weights is None:
             weights = [1 / 3, 1 / 3, 1 / 3]
 
         assert len(weights) == 3, "must have 'len(weights) == 3'"
 
-        super().__init__(h=h, level=level)
-
         self.weights = weights
         self.type_pi = type_pi
         self.date_formatting = date_formatting
         self.input_df = None
+        self.type_input = "univariate" 
 
         self.fcast_ = None
         self.averages_ = None
@@ -118,40 +119,22 @@ class EAT(Base):
 
         """
 
-        self.input_df = df
-        self.n_series = 1
-        try: 
-            self.series_names = df.columns
-        except:
-            self.series_names = [df.name]
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)
 
-        # obtain dates 'forecast' -----
+        # obtain time series object -----
+        self.format_input()
 
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)
-
-        self.fcast_ = config.AHEAD_PACKAGE.eatf(
-            y=y,
-            h=self.h,
-            level=self.level,
-            type_pi=self.type_pi,
-            weights=config.FLOATVECTOR(self.weights),
-        )
+        self.get_forecast("eat")
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
-            self.output_dates_,
+            _,
         ) = uv.format_univariate_forecast(
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )

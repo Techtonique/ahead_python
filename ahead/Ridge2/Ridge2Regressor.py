@@ -193,6 +193,7 @@ class Ridge2Regressor(Base):
         self.date_formatting = date_formatting
         self.seed = seed
         self.input_df = None
+        self.type_input = "multivariate"
 
         self.fcast_ = None
         self.averages_ = None
@@ -218,111 +219,23 @@ class Ridge2Regressor(Base):
 
         """
 
-        self.input_df = df                        
-        self.series_names = df.columns
-        n_series = len(self.series_names)
-        self.n_series = n_series
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)
 
-        # obtain dates 'forecast' -----
+        # obtain time series object -----
+        self.format_input()
 
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = mv.compute_y_mts(self.input_df, frequency)
-
-        if xreg is None:
-
-            self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
-                y,
-                h=self.h,
-                level=self.level,
-                lags=self.lags,
-                nb_hidden=self.nb_hidden,
-                nodes_sim=self.nodes_sim,
-                activ=self.activation,
-                a=self.a,
-                lambda_1=self.lambda_1,
-                lambda_2=self.lambda_2,
-                dropout=self.dropout,
-                type_pi=self.type_pi,
-                margins=self.margins,
-                # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
-                block_length=self.block_length,
-                B=self.B,
-                type_aggregation=self.type_aggregation,
-                # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
-                centers=self.centers,
-                type_clustering=self.type_clustering,
-                cl=self.cl,
-                seed=self.seed,
-            )
-
-        else:  # xreg is not None:
-
-            try:
-                self.xreg_ = xreg.values
-            except:
-                self.xreg_ = config.DEEP_COPY(xreg)
-
-            is_matrix_xreg = len(self.xreg_.shape) > 1
-
-            numpy2ri.activate()
-
-            xreg_ = (
-                r.matrix(
-                    FloatVector(self.xreg_.flatten()),
-                    byrow=True,
-                    nrow=self.xreg_.shape[0],
-                    ncol=self.xreg_.shape[1],
-                )
-                if is_matrix_xreg
-                else r.matrix(
-                    FloatVector(self.xreg_.flatten()),
-                    byrow=True,
-                    nrow=self.xreg_.shape[0],
-                    ncol=1,
-                )
-            )
-
-            self.fcast_ = config.AHEAD_PACKAGE.ridge2f(
-                y,
-                xreg=xreg_,
-                h=self.h,
-                level=self.level,
-                lags=self.lags,
-                nb_hidden=self.nb_hidden,
-                nodes_sim=self.nodes_sim,
-                activ=self.activation,
-                a=self.a,
-                lambda_1=self.lambda_1,
-                lambda_2=self.lambda_2,
-                dropout=self.dropout,
-                type_pi=self.type_pi,
-                margins=self.margins,
-                # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
-                block_length=self.block_length,
-                B=self.B,
-                type_aggregation=self.type_aggregation,
-                # can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)
-                centers=self.centers,
-                type_clustering=self.type_clustering,
-                cl=self.cl,
-                seed=self.seed,
-            )
+        self.get_forecast("ridge2")
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
-            self.output_dates_,
+            _,
         ) = mv.format_multivariate_forecast(
-            n_series=n_series,
+            n_series=self.n_series,
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )
@@ -333,7 +246,7 @@ class Ridge2Regressor(Base):
 
         self.result_dfs_ = tuple(
             umv.compute_result_df(self.averages_[i], self.ranges_[i])
-            for i in range(n_series)
+            for i in range(self.n_series)
         )
 
         if self.type_pi in (

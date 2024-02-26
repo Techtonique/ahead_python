@@ -1,8 +1,10 @@
+import os 
 import numpy as np
 import pandas as pd
 from ahead import EAT
 from time import time
 
+print(f"\n ----- Running: {os.path.basename(__file__)}... ----- \n")
 
 # Forecasting horizon
 h = 5
@@ -14,12 +16,13 @@ dataset = {
     'value' : [34, 30, 35.6, 33.3, 38.1],    
 }
 df = pd.DataFrame(dataset).set_index('date')
+df.index = pd.DatetimeIndex(df.index)
 print(df)
 
 
 # univariate ts forecasting 
 print("Example 1 -----")
-e1 = EAT(h = h, weights = [0.3, 0.4, 0.3], date_formatting = "ms")
+e1 = EAT(h = h, weights = [0.3, 0.4, 0.3], type_pi="T", date_formatting = "ms")
 
 start = time()
 e1.forecast(df)

@@ -121,38 +121,23 @@ class VAR(Base):
 
         """
 
-        self.input_df = df                        
-        self.series_names = df.columns
-        n_series = len(self.series_names)
-        self.n_series = n_series
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)
 
-        # obtain dates 'forecast' -----
+        # obtain time series object -----
+        self.format_input()
 
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = mv.compute_y_mts(self.input_df, frequency)
-        self.fcast_ = config.AHEAD_PACKAGE.varf(
-            y,
-            h=self.h,
-            level=self.level,
-            lags=self.lags,
-            type_VAR=self.type_VAR,
-        )
+        self.get_forecast("var")
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
-            self.output_dates_,
+            _,
         ) = mv.format_multivariate_forecast(
-            n_series=n_series,
+            n_series=self.n_series,
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )
@@ -163,7 +148,7 @@ class VAR(Base):
 
         self.result_dfs_ = tuple(
             umv.compute_result_df(self.averages_[i], self.ranges_[i])
-            for i in range(n_series)
+            for i in range(self.n_series)
         )
 
         return self

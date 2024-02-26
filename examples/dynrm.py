@@ -1,8 +1,10 @@
+import os 
 import numpy as np
 import pandas as pd
 from ahead import DynamicRegressor, EAT
 from time import time
 
+print(f"\n ----- Running: {os.path.basename(__file__)}... ----- \n")
 
 # Forecasting horizon
 h = 5
@@ -14,6 +16,7 @@ dataset = {
     'value' : [34, 30, 35.6, 33.3, 38.1],    
 }
 df = pd.DataFrame(dataset).set_index('date')
+df.index = pd.DatetimeIndex(df.index)
 print(df)
 
 

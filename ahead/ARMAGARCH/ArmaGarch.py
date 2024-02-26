@@ -110,37 +110,22 @@ class ArmaGarch(object):
 
         """
 
-        self.input_df = df
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)        
 
-        # obtain dates 'forecast' -----
+        # obtain time series object -----
+        self.format_input()
 
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)
-
-        self.fcast_ = config.AHEAD_PACKAGE.armagarchf(
-            y=y,
-            h=self.h,
-            level=self.level,
-            B=self.B,
-            cl=self.cl,
-            dist=self.dist,
-            seed=self.seed,
-        )
+        self.get_forecast("armagarch")
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
             self.output_dates_,
         ) = uv.format_univariate_forecast(
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )
