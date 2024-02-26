@@ -27,13 +27,13 @@ The Python implementation contains only the [automatic version](https://thierrym
 - From Pypi, stable version:
 
 ```bash
-pip install ahead
+pip install ahead --verbose
 ```
 
 - From Github, for the development version: 
 
 ```bash
-pip install git+https://github.com/Techtonique/ahead_python.git
+pip install git+https://github.com/Techtonique/ahead_python.git --verbose
 ```
 
 ## Quickstart 

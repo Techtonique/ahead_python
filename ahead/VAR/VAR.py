@@ -1,10 +1,12 @@
 import numpy as np
-from .. import config
 
+from ..Base import Base
 from ..utils import multivariate as mv
 from ..utils import unimultivariate as umv
+from .. import config
 
-class VAR(object):
+
+class VAR(Base):
     """Vector AutoRegressive model
 
     Parameters:
@@ -44,11 +46,11 @@ class VAR(object):
         mean_: a numpy array
             contains series mean forecast as a numpy array
 
-        lower_: a numpy array 
-            contains series lower bound forecast as a numpy array   
+        lower_: a numpy array
+            contains series lower bound forecast as a numpy array
 
-        upper_: a numpy array 
-            contains series upper bound forecast as a numpy array   
+        upper_: a numpy array
+            contains series upper bound forecast as a numpy array
 
         result_dfs_: a tuple of data frames;
             each element of the tuple contains 3 columns,
@@ -89,8 +91,11 @@ class VAR(object):
             "none",
         ), "must have: type_VAR in ('const', 'trend', 'both', 'none')"
 
-        self.h = h
-        self.level = level
+        super().__init__(
+            h=h,
+            level=level,
+        )
+
         self.lags = lags
         self.type_VAR = type_VAR
         self.date_formatting = date_formatting
@@ -115,47 +120,34 @@ class VAR(object):
 
         """
 
-        self.input_df = df
-        n_series = len(df.columns)
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)
 
-        # obtain dates 'forecast' -----
+        # obtain time series object -----
+        self.format_input()
 
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = mv.compute_y_mts(self.input_df, frequency)
-        self.fcast_ = config.AHEAD_PACKAGE.varf(
-            y,
-            h=self.h,
-            level=self.level,
-            lags=self.lags,
-            type_VAR=self.type_VAR,
-        )
+        self.get_forecast("var")
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
-            self.output_dates_,
+            _,
         ) = mv.format_multivariate_forecast(
-            n_series=n_series,
+            n_series=self.n_series,
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )
 
-        self.mean_ = np.asarray(self.fcast_.rx2['mean'])
-        self.lower_= np.asarray(self.fcast_.rx2['lower'])
-        self.upper_= np.asarray(self.fcast_.rx2['upper'])
+        self.mean_ = np.asarray(self.fcast_.rx2["mean"])
+        self.lower_ = np.asarray(self.fcast_.rx2["lower"])
+        self.upper_ = np.asarray(self.fcast_.rx2["upper"])
 
         self.result_dfs_ = tuple(
             umv.compute_result_df(self.averages_[i], self.ranges_[i])
-            for i in range(n_series)
+            for i in range(self.n_series)
         )
 
         return self

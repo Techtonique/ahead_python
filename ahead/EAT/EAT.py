@@ -1,10 +1,12 @@
 import numpy as np
-from .. import config
 
+from ..Base import Base
 from ..utils import univariate as uv
 from ..utils import unimultivariate as umv
+from .. import config
 
-class EAT():
+
+class EAT(Base):
     """Combinations of ETS (exponential smoothing), auto.arima and Theta models
 
     Parameters:
@@ -40,15 +42,15 @@ class EAT():
 
         output_dates_: a list;
             a list of output dates (associated to forecast)
-        
+
         mean_: a numpy array
-            contains series mean forecast as a numpy array 
+            contains series mean forecast as a numpy array
 
-        lower_: a numpy array 
-            contains series lower bound forecast as a numpy array   
+        lower_: a numpy array
+            contains series lower bound forecast as a numpy array
 
-        upper_: a numpy array 
-            contains series upper bound forecast as a numpy array   
+        upper_: a numpy array
+            contains series upper bound forecast as a numpy array
 
         result_df_: a data frame;
             contains 3 columns, mean forecast, lower + upper
@@ -84,31 +86,27 @@ class EAT():
         type_pi="E",
         date_formatting="original",
     ):
-        if not config.R_IS_INSTALLED:
-            raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
-        
-        if not config.RPY2_IS_INSTALLED:
-            raise ImportError(config.RPY2_ERROR_MESSAGE + config.USAGE_MESSAGE)
-        
+
+        super().__init__(h=h, level=level)
+
         if weights is None:
-            weights=[1 / 3, 1 / 3, 1 / 3]
+            weights = [1 / 3, 1 / 3, 1 / 3]
 
         assert len(weights) == 3, "must have 'len(weights) == 3'"
 
-        self.h = h
-        self.level = level
         self.weights = weights
         self.type_pi = type_pi
         self.date_formatting = date_formatting
         self.input_df = None
+        self.type_input = "univariate" 
 
         self.fcast_ = None
         self.averages_ = None
         self.ranges_ = None
         self.output_dates_ = []
         self.mean_ = []
-        self.lower_= []
-        self.upper_= []
+        self.lower_ = []
+        self.upper_ = []
         self.result_df_ = None
 
     def forecast(self, df):
@@ -121,42 +119,29 @@ class EAT():
 
         """
 
-        self.input_df = df
+        # get input dates, output dates, number of series, series names, etc. 
+        self.init_forecasting_params(df)
 
-        # obtain dates 'forecast' -----
+        # obtain time series object -----
+        self.format_input()
 
-        output_dates, frequency = umv.compute_output_dates(
-            self.input_df, self.h
-        )
-
-        # obtain time series forecast -----
-
-        y = uv.compute_y_ts(df=self.input_df, df_frequency=frequency)                
-
-        self.fcast_ = config.AHEAD_PACKAGE.eatf(
-            y=y,
-            h=self.h,
-            level=self.level,
-            type_pi=self.type_pi,
-            weights=config.FLOATVECTOR(self.weights),
-        )
+        self.get_forecast("eat")
 
         # result -----
-
         (
             self.averages_,
             self.ranges_,
-            self.output_dates_,
+            _,
         ) = uv.format_univariate_forecast(
             date_formatting=self.date_formatting,
-            output_dates=output_dates,
+            output_dates=self.output_dates_,
             horizon=self.h,
             fcast=self.fcast_,
         )
 
-        self.mean_ = np.asarray(self.fcast_.rx2['mean'])
-        self.lower_= np.asarray(self.fcast_.rx2['lower'])
-        self.upper_= np.asarray(self.fcast_.rx2['upper'])
+        self.mean_ = np.asarray(self.fcast_.rx2["mean"])
+        self.lower_ = np.asarray(self.fcast_.rx2["lower"])
+        self.upper_ = np.asarray(self.fcast_.rx2["upper"])
 
         self.result_df_ = umv.compute_result_df(self.averages_, self.ranges_)
 
