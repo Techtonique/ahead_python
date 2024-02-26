@@ -1,5 +1,4 @@
 import numpy as np
-from .. import config
 
 from ..Base import Base
 from ..utils import multivariate as mv

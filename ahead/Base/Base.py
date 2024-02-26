@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from rpy2.robjects import numpy2ri, r
+from rpy2.robjects.vectors import FloatVector
+
 from subprocess import Popen, PIPE
 from .. import config
 from ..utils.multivariate import compute_y_mts
@@ -56,7 +59,7 @@ class Base(object):
         self.type_input = "multivariate" if len(df.shape) > 0 else "univariate"
         self.output_dates_, self.frequency = compute_output_dates(
             df, self.h
-        )
+        )        
 
     def getsims(self, input_tuple, ix):
         n_sims = len(input_tuple)
@@ -219,11 +222,12 @@ class Base(object):
             assert isinstance(series, int) and (
                 0 <= series < self.n_series
             ), f"check series index (< {self.n_series})"
-            series_idx = series
+            series_idx = series        
 
         y_all = list(self.input_df.iloc[:, series_idx]) + list(
             self.result_dfs_[series_idx]["mean"].values
         )        
+        
         y_test = list(self.result_dfs_[series_idx]["mean"].values)
         n_points_all = len(y_all)
         n_points_train = self.input_df.shape[0]
@@ -232,11 +236,11 @@ class Base(object):
             x_all = [i for i in range(n_points_all)]
             x_test = [i for i in range(n_points_train, n_points_all)]
 
-        if type_axis == "dates":  # use dates
+        if type_axis == "dates":  # use dates               
+            x_test = [date.strftime('%Y-%m-%d') for date in self.output_dates_]
             x_all = np.concatenate(
-                (self.input_df.index.values, self.output_dates_), axis=None
+                (self.input_df.index.values, x_test), axis=None
             )
-            x_test = self.output_dates_
 
         if type_plot == "pi":
             fig, ax = plt.subplots()
