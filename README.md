@@ -2,7 +2,7 @@ ahead
 ===============================
 
 
-![PyPI](https://img.shields.io/pypi/v/ahead) [![PyPI - License](https://img.shields.io/pypi/l/ahead)](https://github.com/Techtonique/ahead_python/blob/main/LICENSE) [![PyPI Downloads](https://pepy.tech/badge/ahead)](https://pepy.tech/project/ahead) 
+![PyPI](https://img.shields.io/pypi/v/ahead) [![PyPI - License](https://img.shields.io/pypi/l/ahead)](https://github.com/Techtonique/ahead_python/blob/main/LICENSE) [![PyPI Downloads](https://pepy.tech/badge/ahead)](https://pepy.tech/project/ahead) [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/ahead_python.svg)](https://anaconda.org/conda-forge/ahead_python)
 [![HitCount](https://hits.dwyl.com/Techtonique/ahead_python.svg?style=flat-square)](http://hits.dwyl.com/Techtonique/ahead_python)
 [![CodeFactor](https://www.codefactor.io/repository/github/techtonique/ahead_python/badge)](https://www.codefactor.io/repository/github/techtonique/ahead_python)
 [![Documentation](https://img.shields.io/badge/documentation-is_here-green)](https://techtonique.github.io/ahead_python/)
