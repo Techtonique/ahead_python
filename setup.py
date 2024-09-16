@@ -83,7 +83,7 @@ def install_packages():
         # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('VineCopula', dependencies=TRUE)"])
         # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('tseries', dependencies=TRUE)"])
         # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('forecast', dependencies=TRUE)"])        
-        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('ahead', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
+        subprocess.run(["Rscript", "-e", "utils::install.packages('ahead', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
     except: 	
         # subprocess.run(["mkdir", "-p", "r-ahead"])		 
         # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(remotes, lib='r-ahead', dependencies=TRUE)"])
@@ -99,7 +99,7 @@ def install_packages():
         # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('VineCopula', lib='r-ahead', dependencies=TRUE)"])
         # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('tseries', lib='r-ahead', dependencies=TRUE)"])
         # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('forecast', lib='r-ahead', dependencies=TRUE)"])
-        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('ahead', repos='https://techtonique.r-universe.dev', lib='r-ahead', dependencies=TRUE)"])
+        subprocess.run(["Rscript", "-e", "utils::install.packages('ahead', repos='https://techtonique.r-universe.dev', lib='r-ahead', dependencies=TRUE)"])
 
 
 # Check if R is installed; if not, install it
@@ -117,7 +117,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = "0.12.1"
+__version__ = "0.13.0"
 
 here = path.abspath(path.dirname(__file__))
 

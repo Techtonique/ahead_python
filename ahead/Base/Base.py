@@ -6,6 +6,7 @@ from rpy2.robjects.vectors import FloatVector
 
 from subprocess import Popen, PIPE
 from .. import config
+from ..utils.univariate import compute_y_ts
 from ..utils.multivariate import compute_y_mts
 from ..utils.unimultivariate import compute_input_dates, compute_output_dates
 
@@ -48,8 +49,12 @@ class Base(object):
             raise ImportError("R is not installed! \n" + config.USAGE_MESSAGE)
     
     def format_input(self):
-        self.input_ts_ = compute_y_mts(self.input_df, 
-                             self.frequency)
+        if self.input_df.shape[1] > 0: 
+            self.input_ts_ = compute_y_mts(self.input_df, 
+                                self.frequency)
+        else: 
+            self.input_ts_ = compute_y_ts(self.input_df, 
+                                self.frequency)
 
     def init_forecasting_params(self, df):
         self.input_df = df                
@@ -73,7 +78,7 @@ class Base(object):
 
         if self.method == "armagarch":
             self.fcast_ = config.AHEAD_PACKAGE.armagarchf(
-            y=y,
+            y=self.input_ts_,
             h=self.h,
             level=self.level,
             B=self.B,
@@ -194,7 +199,6 @@ class Base(object):
             level=self.level,
             lags=self.lags,
             type_VAR=self.type_VAR)
-
 
     def plot(self, series, type_axis="dates", type_plot="pi"):
         """Plot time series forecast

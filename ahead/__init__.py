@@ -8,6 +8,7 @@ from .ARMAGARCH import ArmaGarch
 from .Basic import BasicForecaster
 from .DynamicRegressor import DynamicRegressor
 from .EAT import EAT
+from .FitForecast import FitForecaster
 from .Ridge2 import Ridge2Regressor
 from .VAR import VAR
 
@@ -17,6 +18,7 @@ __all__ = [
     "BasicForecaster",
     "DynamicRegressor",
     "EAT",
+    "FitForecaster",
     "Ridge2Regressor",
     "VAR",
 ]
