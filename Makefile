@@ -55,8 +55,8 @@ coverage: ## check code coverage quickly with the default Python
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate docs		
-	pip install black pdoc 
-	black ahead/* --line-length=80	
+	#pip install black pdoc 
+	#black ahead/* --line-length=80	
 	pdoc -t docs ahead/* --output-dir ahead-docs
 	find . -name '__pycache__' -exec rm -fr {} +
 
