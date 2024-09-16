@@ -53,7 +53,10 @@ def compute_output_dates(df, horizon):
 
 
 def compute_result_df(averages, ranges):
-    pred_mean = pd.Series(dict(averages)).to_frame("mean")
+    try:
+        pred_mean = pd.Series(dict(averages)).to_frame("mean")
+    except Exception:
+        pred_mean = pd.Series(averages).to_frame("mean")
     pred_ci = pd.DataFrame(
         ranges, columns=["date", "lower", "upper"]
     ).set_index("date")

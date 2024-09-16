@@ -3,6 +3,7 @@ import numpy as np
 from ..Base import Base
 from ..utils import univariate as uv
 from ..utils import unimultivariate as umv
+from ..utils import multivariate as mv
 from .. import config
 from rpy2.robjects import NULL as rNULL
 
@@ -89,7 +90,7 @@ class FitForecaster(Base):
         if self.h is not None:
             h = self.h
         else: 
-            self.h = np.floor(df.shape[0]*self.pct_calibration)
+            self.h = df.shape[0] - int(np.floor(df.shape[0]*self.pct_train))
 
         # get input dates, output dates, number of series, series names, etc. 
         self.init_forecasting_params(df)        
@@ -112,35 +113,40 @@ class FitForecaster(Base):
         type_calibration = self.type_calibration,
         )
 
-        #print(self.fcast_)
+        # result -----
+        if df.shape[1] > 1:
+            (
+                self.averages_,
+                self.ranges_,
+                _,
+            ) = mv.format_multivariate_forecast(
+                n_series=self.n_series,
+                date_formatting=self.date_formatting,
+                output_dates=self.output_dates_,
+                horizon=self.h,
+                fcast=self.fcast_,
+            )
+        else:
+            (
+                self.averages_,
+                self.ranges_,
+                _,
+            ) = uv.format_univariate_forecast(
+                date_formatting=self.date_formatting,
+                output_dates=self.output_dates_,
+                horizon=self.h,
+                fcast=self.fcast_,
+            )
 
-        #print(dir(self.fcast_))
+        self.mean_ = np.asarray(self.fcast_.rx2["mean"])
+        self.lower_ = np.asarray(self.fcast_.rx2["lower"])
+        self.upper_ = np.asarray(self.fcast_.rx2["upper"])
 
-        #print(self.fcast_.names)
-
-        #print(self.fcast_.slots)
-
-        # Extract the keys from self.fcast_
-        for idx, key in enumerate(self.fcast_.names):
-            try:
-                # Access the R list element by name using rx2
-                item = self.fcast_.rx2[key]                
-                # Check if the item is not NULL
-                if item != rNULL:
-                    try: 
-                        # Convert the R object to a NumPy array
-                        if df.shape[1] > 1:
-                            item_array = np.asarray(item)                    
-                        else: 
-                            item_array = np.asarray(item).ravel()                    
-                    except: 
-                        item_array = item                    
-                    # Dynamically set the attribute in the Python object
-                    setattr(self, f"{key}_", item_array)            
-            except Exception as e:
-                print(f"Error processing idx {idx}: {e}")
-                continue
+        self.result_dfs_ = umv.compute_result_df(self.averages_, self.ranges_)            
         
-        return self 
+        if "sims" in list(self.fcast_.names):
+            self.sims_ = tuple(
+                np.asarray(self.fcast_.rx2["sims"][i]) for i in range(self.B)
+            )
 
-
+        return self

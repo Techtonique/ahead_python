@@ -24,6 +24,4 @@ start = time()
 print(d1.fit_forecast(df))
 print(f"Elapsed: {time()-start} \n")
 
-print(f"after: {d1.mean_}")
-print(f"after: {d1.lower_}")
-print(f"after: {d1.upper_}")
+print(f"after: {d1.result_dfs_}")
