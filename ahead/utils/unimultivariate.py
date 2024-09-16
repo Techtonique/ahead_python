@@ -5,7 +5,7 @@ from difflib import SequenceMatcher
 
 # compute input dates from data frame's index
 def compute_input_dates(df):
-    
+
     input_dates = df.index.values
 
     frequency = pd.infer_freq(pd.DatetimeIndex(input_dates))
@@ -17,7 +17,7 @@ def compute_input_dates(df):
     df_input_dates = pd.DataFrame({"date": input_dates})
 
     input_dates = pd.to_datetime(df_input_dates["date"]).dt.date
-    
+
     return input_dates
 
 
@@ -47,7 +47,7 @@ def compute_output_dates(df, horizon):
 
     df_output_dates = pd.DataFrame({"date": output_dates})
 
-    output_dates = pd.to_datetime(df_output_dates["date"]).dt.date    
+    output_dates = pd.to_datetime(df_output_dates["date"]).dt.date
 
     return output_dates, frequency
 

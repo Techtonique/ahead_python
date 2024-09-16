@@ -105,8 +105,8 @@ class ArmaGarch(object):
 
         """
 
-        # get input dates, output dates, number of series, series names, etc. 
-        self.init_forecasting_params(df)        
+        # get input dates, output dates, number of series, series names, etc.
+        self.init_forecasting_params(df)
 
         # obtain time series object -----
         self.format_input()

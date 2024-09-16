@@ -219,7 +219,7 @@ class Ridge2Regressor(Base):
 
         """
 
-        # get input dates, output dates, number of series, series names, etc. 
+        # get input dates, output dates, number of series, series names, etc.
         self.init_forecasting_params(df)
 
         # obtain time series object -----

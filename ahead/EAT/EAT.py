@@ -98,7 +98,7 @@ class EAT(Base):
         self.type_pi = type_pi
         self.date_formatting = date_formatting
         self.input_df = None
-        self.type_input = "univariate" 
+        self.type_input = "univariate"
 
         self.fcast_ = None
         self.averages_ = None
@@ -119,7 +119,7 @@ class EAT(Base):
 
         """
 
-        # get input dates, output dates, number of series, series names, etc. 
+        # get input dates, output dates, number of series, series names, etc.
         self.init_forecasting_params(df)
 
         # obtain time series object -----

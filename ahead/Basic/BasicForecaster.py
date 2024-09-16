@@ -117,7 +117,7 @@ class BasicForecaster(Base):
         self.block_length = block_length
         self.B = B
         self.date_formatting = date_formatting
-        self.input_df = None        
+        self.input_df = None
 
         self.fcast_ = None
         self.averages_ = None
@@ -139,7 +139,7 @@ class BasicForecaster(Base):
 
         """
 
-        # get input dates, output dates, number of series, series names, etc. 
+        # get input dates, output dates, number of series, series names, etc.
         self.init_forecasting_params(df)
 
         # obtain time series object -----
@@ -148,7 +148,7 @@ class BasicForecaster(Base):
         if self.type_pi in ("blockbootstrap", "movingblockbootstrap"):
             assert (
                 self.block_length is not None
-            ), "For `type_pi in ('blockbootstrap', 'movingblockbootstrap')`, `block_length` must be not None"        
+            ), "For `type_pi in ('blockbootstrap', 'movingblockbootstrap')`, `block_length` must be not None"
 
         self.get_forecast()
 
