@@ -1,7 +1,7 @@
 import pickle
 import rpy2
 
-from rpy2.robjects import r, default_converter
+from rpy2.robjects import r
 
 try:
     import rpy2.robjects.packages as rpackages

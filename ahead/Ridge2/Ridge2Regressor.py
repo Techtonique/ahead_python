@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import rpy2.robjects.conversion as cv
 from rpy2.robjects import (
-    default_converter,
     FloatVector,
     ListVector,
     numpy2ri,
