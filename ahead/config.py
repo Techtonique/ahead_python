@@ -1,12 +1,13 @@
 import pickle
 import rpy2
 
+from rpy2.robjects import r, default_converter
+
 try:
     import rpy2.robjects.packages as rpackages
     from rpy2.robjects.packages import importr
     from rpy2.robjects.vectors import FloatVector, StrVector
-    from rpy2 import rinterface, robjects
-    from rpy2.robjects import r, default_converter
+    from rpy2 import rinterface, robjects    
     from rpy2.rinterface import RRuntimeWarning
     from rpy2.rinterface_lib import callbacks
     from rpy2.rinterface_lib.embedded import RRuntimeError
