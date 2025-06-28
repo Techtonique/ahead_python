@@ -19,11 +19,22 @@ jobs:
       - name: Install system build dependencies
         run: |
           apt-get update
-          apt-get install -y python3-pip python3-dev build-essential libbz2-dev liblzma-dev libpcre2-dev
+          apt-get install -y python3-pip python3-dev build-essential libbz2-dev liblzma-dev libpcre2-dev libicu-dev libtiff5
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install wheel setuptools twine rpy2
 
       - name: Install R ahead package
         run: |
           Rscript -e "options(repos = c(techtonique = 'https://r-packages.techtonique.net', CRAN = 'https://cloud.r-project.org')); utils::install.packages('ahead', dependencies=TRUE)"
+
+      - name: Debug R install
+        run: |
+          Rscript -e 'sessionInfo()'
+          ls -l /usr/local/lib/R/library/
+          ls -l /usr/local/lib/R/library/methods/libs/
 
       - name: Build distribution
         run: python3 setup.py sdist bdist_wheel
