@@ -42,8 +42,7 @@ jobs:
       - name: Run examples 
         run: pip3 install . && find examples -maxdepth 2 -name "*.py" -exec python3 {} \;
 
-      - name: Publish to PyPI                
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_AHEAD }}
-          repository-url: https://upload.pypi.org/legacy/
+      - name: Publish to PyPI
+        run: |
+          python3 -m pip install --upgrade twine
+          twine upload --repository-url https://upload.pypi.org/legacy/ -u __token__ -p ${{ secrets.PYPI_AHEAD }} dist/*
