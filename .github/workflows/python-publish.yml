@@ -16,17 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install pip and Python dependencies
-        run: |
-          apt-get update
-          apt-get install -y python3-pip
-          python3 -m pip install --upgrade pip
-          pip3 install wheel setuptools twine rpy2
-
       - name: Install system build dependencies
         run: |
           apt-get update
-          apt-get install -y python3-pip python3-dev build-essential libbz2-dev liblzma-dev libpcre2-dev libicu-dev libtiff5
+          apt-get install -y python3-pip python3-dev build-essential libbz2-dev liblzma-dev libpcre2-dev
 
       - name: Install R ahead package
         run: |
