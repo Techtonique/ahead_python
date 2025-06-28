@@ -11,16 +11,12 @@ h = 5
 
 
 # Data frame containing the time series 
-dataset = {
-    'date' : ['2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01'],
-    'value' : [34, 30, 35.6, 33.3, 38.1],    
-}
-df = pd.DataFrame(dataset).set_index('date')
+df = pd.read_csv("https://raw.githubusercontent.com/Techtonique/datasets/refs/heads/main/time_series/univariate/AirPassengers.csv").set_index('date')
 df.index = pd.DatetimeIndex(df.index)
 print(df)
 
 
-# univariate ts forecasting 
+# # univariate ts forecasting 
 print("Example 1 -----")
 e1 = EAT(h = h, weights = [0.3, 0.4, 0.3], type_pi="T", date_formatting = "ms")
 
@@ -37,19 +33,19 @@ print(e1.fcast_.rx2['mean'])
 print(e1.fcast_.rx2['lower'])
 print(e1.fcast_.rx2['upper'])
 
-print("Example 2 -----")
-e2 = EAT(h = h, type_pi="T", date_formatting = "original")
-start = time()
-e2.forecast(df)
-print(f"Elapsed: {time()-start} \n")
-print("averages: \n")
-print(e2.averages_)
-print("\n")
-print("ranges: \n")
-print(e2.ranges_)
-print("\n")
-print(e2.result_df_)
-print("\n")
-print(e2.mean_)
-print(e2.lower_)
-print(e2.upper_)
+# print("Example 2 -----")
+# e2 = EAT(h = h, type_pi="T", date_formatting = "original")
+# start = time()
+# e2.forecast(df)
+# print(f"Elapsed: {time()-start} \n")
+# print("averages: \n")
+# print(e2.averages_)
+# print("\n")
+# print("ranges: \n")
+# print(e2.ranges_)
+# print("\n")
+# print(e2.result_df_)
+# print("\n")
+# print(e2.mean_)
+# print(e2.lower_)
+# print(e2.upper_)

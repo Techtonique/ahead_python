@@ -28,6 +28,14 @@ class Base(object):
         self.input_dates = None
         self.method = None
         self.weights = None
+        self.type_pi = None 
+        self.type_conformalize = None
+        self.type_sim_conformalize = None
+        self.type_aggregation = None
+        self.type_clustering = None
+        self.lags = None
+        self.lags_ = None  # used for VAR
+        self.seed = None 
 
         self.input_ts_ = None  # input time series
         self.mean_ = None
@@ -201,6 +209,36 @@ class Base(object):
                 lags=self.lags,
                 type_VAR=self.type_VAR,
             )
+        
+        if self.method.lower() == "mlarch":
+            valid_type_pi = ("surrogate", "bootstrap", "kde")
+            type_pi = self.type_pi if self.type_pi in valid_type_pi else "surrogate"
+            valid_type_sim = ("surrogate", "block-bootstrap", "bootstrap", "kde", "fitdistr")
+            type_sim_conformalize = (
+                self.type_sim_conformalize if self.type_sim_conformalize in valid_type_sim else "surrogate"
+            )
+
+            mlarch_args = dict(
+                y=self.input_ts_,
+                h=self.h,
+                mean_model=getattr(self, "mean_model", None),
+                model_residuals=getattr(self, "model_residuals", None),
+                fit_func=getattr(self, "fit_func", None),
+                predict_func=getattr(self, "predict_func", None),
+                type_pi=type_pi,
+                type_sim_conformalize=type_sim_conformalize,
+                ml_method=getattr(self, "ml_method", None),
+                level=self.level,
+                B=self.B,
+                ml=True,
+                stat_model=getattr(self, "stat_model", None),
+                seed=self.seed,
+            )
+            # Remove keys with value None
+            mlarch_args = {k: v for k, v in mlarch_args.items() if v is not None}
+
+            self.fcast_ = config.AHEAD_PACKAGE.mlarchf(**mlarch_args)
+
 
     def plot(self, series, type_axis="dates", type_plot="pi"):
         """Plot time series forecast

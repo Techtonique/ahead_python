@@ -22,7 +22,7 @@ This Python class is based on R package 'ahead' (https://techtonique.github.io/a
 You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/project/rpy2/).
 
 Then, install R package 'ahead' (if necessary): 
->> R -e 'install.packages("ahead", repos = https://techtonique.r-universe.dev)'    
+>> R -e 'install.packages("ahead", repos = https://r-packages.techtonique.net)'    
 """
 
 r["options"](warn=-1)
@@ -52,7 +52,7 @@ base = importr("base")
 if len(packages_to_install) > 0:
     base.options(
         repos=base.c(
-            techtonique="https://techtonique.r-universe.dev",
+            techtonique="https://r-packages.techtonique.net",
             CRAN="https://cloud.r-project.org",
         )
     )

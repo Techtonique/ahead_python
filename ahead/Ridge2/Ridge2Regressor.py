@@ -54,7 +54,8 @@ class Ridge2Regressor(Base):
 
         type_pi: a string;
             Type of prediction interval (currently "gaussian",
-            "bootstrap", (circular) "blockbootstrap", "movingblockbootstrap", or "rvinecopula")
+            "bootstrap", (circular) "blockbootstrap", "movingblockbootstrap", "rvinecopula", 
+            "conformal-split", "conformal-bootstrap", "conformal-block-bootstrap")
 
         block_length: an integer
             length of block for multivariate block bootstrap (`type_pi == blockbootstrap` or

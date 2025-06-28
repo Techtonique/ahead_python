@@ -1,4 +1,3 @@
-
 .PHONY: clean clean-test clean-pyc clean-build docs help
 .DEFAULT_GOAL := help
 
@@ -22,10 +21,10 @@ for line in sys.stdin:
 endef
 export PRINT_HELP_PYSCRIPT
 
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
+BROWSER := python3 -c "$$BROWSER_PYSCRIPT"
 
 help:
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+	@python3 -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
@@ -48,21 +47,21 @@ clean-test: ## remove test and coverage artifacts
 lint: ## check style with flake8
 	flake8 ahead tests
 
-coverage: ## check code coverage quickly with the default Python
-	coverage run --source ahead setup.py test
-	coverage report -m
-	coverage html
-	$(BROWSER) htmlcov/index.html
+coverage: ## check code coverage quickly with the default Python	
+	coverage report --omit="venv/*,ahead/tests/*" --show-missing
 
-docs: ## generate docs		
+docs: install ## generate docs		
 	#pip install black pdoc 
 	#black ahead/* --line-length=80	
-	pdoc -t docs ahead/* --output-dir ahead-docs
+	#find ahead/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
+	R_HOME=$(shell R RHOME) pdoc -t docs ahead/* --output-dir ahead-docs
 	find . -name '__pycache__' -exec rm -fr {} +
+	cp -rf ahead-docs/* ../../Pro_Website/Techtonique.github.io/ahead
 
-servedocs: ## compile the docs watching for change	 	
-	pip install black pdoc 
-	black ahead/* --line-length=80	
+servedocs: install ## compile the docs watching for change	 	
+	#pip install black pdoc 
+	#black ahead/* --line-length=80	
+	#find ahead/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
 	pdoc -t docs ahead/* 
 	find . -name '__pycache__' -exec rm -fr {} +
 
@@ -76,12 +75,28 @@ dist: clean ## builds source and wheel package
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	python3 -m pip install . --verbose
+	pip install -e .
 
-build-site: docs ## put docs website in a directory
-	cd docs&&mkdocs build
-	cp -rf docs/site/* ../../Pro_Website/Techtonique.github.io/ahead_python
-	cd ..
+build-site: docs ## export mkdocs website to a folder		
+	cp -rf ahead-docs/* ../../Pro_Website/Techtonique.github.io/ahead
+	find . -name '__pycache__' -exec rm -fr {} +
+
+run-custom: ## run all custom examples with one command
+	find examples -maxdepth 2 -name "*custom*.py" -exec  python3 {} \;
 
 run-examples: ## run all examples with one command
 	find examples -maxdepth 2 -name "*.py" -exec  python3 {} \;
+
+run-mts: ## run all mts examples with one command
+	find examples -maxdepth 2 -name "*mts*.py" -exec  python3 {} \;
+
+run-lazy: ## run all lazy examples with one command
+	find examples -maxdepth 2 -name "lazy*.py" -exec  python3 {} \;
+
+run-conformal: ## run all lazy examples with one command
+	find examples -maxdepth 2 -name "*conformal*.py" -exec  python3 {} \;
+
+run-tests: install ## run all the tests with one command
+	pip3 install coverage nose2
+	python3 -m coverage run -m unittest discover -s ahead/tests -p "*.py"	
+

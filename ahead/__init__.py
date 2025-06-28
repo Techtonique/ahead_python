@@ -11,6 +11,7 @@ from .EAT import EAT
 from .FitForecast import FitForecaster
 from .Ridge2 import Ridge2Regressor
 from .VAR import VAR
+from .MLARCH import MLARCH
 
 
 __all__ = [
@@ -21,4 +22,5 @@ __all__ = [
     "FitForecaster",
     "Ridge2Regressor",
     "VAR",
+    "MLARCH"
 ]

@@ -69,37 +69,14 @@ def install_r():
         print("Unsupported platform. Unable to install R.")
 
 def install_packages():
-    try:	
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(remotes, dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('curl', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('e1071', dependencies=TRUE)"])				
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('ranger', dependencies=TRUE)"])				
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('fGarch', dependencies=TRUE)"])	
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('foreach', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('curl', dependencies=TRUE)"])							
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('randtoolbox', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('Rcpp', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('snow', dependencies=TRUE)"])						
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('VineCopula', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('tseries', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('forecast', dependencies=TRUE)"])        
-        subprocess.run(["Rscript", "-e", "utils::install.packages('ahead', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
-    except: 	
-        # subprocess.run(["mkdir", "-p", "r-ahead"])		 
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(remotes, lib='r-ahead', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('curl', lib='r-ahead', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('e1071', lib='r-ahead', dependencies=TRUE)"])				
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('ranger', lib='r-ahead', dependencies=TRUE)"])				
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('fGarch', lib='r-ahead', dependencies=TRUE)"])	
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('foreach', lib='r-ahead', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('curl', lib='r-ahead', dependencies=TRUE)"])							
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('randtoolbox', lib='r-ahead', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('Rcpp', lib='r-ahead', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('snow', lib='r-ahead', dependencies=TRUE)"])						
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('VineCopula', lib='r-ahead', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('tseries', lib='r-ahead', dependencies=TRUE)"])
-        # subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('forecast', lib='r-ahead', dependencies=TRUE)"])
-        subprocess.run(["Rscript", "-e", "utils::install.packages('ahead', repos='https://techtonique.r-universe.dev', lib='r-ahead', dependencies=TRUE)"])
+    try:
+        subprocess.run(["Rscript", "-e", "try(uninstall.packages('ahead'), silent=TRUE)"])	
+        subprocess.run(["Rscript", "-e", "options(repos = c(techtonique = 'https://r-packages.techtonique.net', CRAN = 'https://cloud.r-project.org'))"])
+        subprocess.run(["Rscript", "-e", "utils::install.packages('ahead', dependencies=TRUE)"])
+    except: 
+        subprocess.run(["Rscript", "-e", "try(uninstall.packages('ahead'), silent=TRUE)"])		
+        subprocess.run(["Rscript", "-e", "options(repos = c(techtonique = 'https://r-packages.techtonique.net', CRAN = 'https://cloud.r-project.org'))"])
+        subprocess.run(["Rscript", "-e", "utils::install.packages('ahead', lib='r-ahead', dependencies=TRUE)"])
 
 
 # Check if R is installed; if not, install it
@@ -117,7 +94,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = "0.13.0"
+__version__ = "0.21.4"
 
 here = path.abspath(path.dirname(__file__))
 

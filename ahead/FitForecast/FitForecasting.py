@@ -11,7 +11,7 @@ from rpy2.robjects import NULL as rNULL
 class FitForecaster(Base):
     """Fit and forecast time series with uncertainty quantification
 
-    See https://techtonique.r-universe.dev/ahead/doc/manual.html#fitforecast
+    See https://r-packages.techtonique.net/ahead/doc/manual.html#fitforecast
 
     Examples:
 
