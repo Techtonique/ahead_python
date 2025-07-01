@@ -146,252 +146,252 @@
 
     </div>
     <a class="headerlink" href="#Ridge2Regressor"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Ridge2Regressor-19"><a href="#Ridge2Regressor-19"><span class="linenos"> 19</span></a><span class="k">class</span> <span class="nc">Ridge2Regressor</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
-</span><span id="Ridge2Regressor-20"><a href="#Ridge2Regressor-20"><span class="linenos"> 20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Random Vector functional link network model with 2 regularization parameters</span>
-</span><span id="Ridge2Regressor-21"><a href="#Ridge2Regressor-21"><span class="linenos"> 21</span></a>
-</span><span id="Ridge2Regressor-22"><a href="#Ridge2Regressor-22"><span class="linenos"> 22</span></a><span class="sd">    Parameters:</span>
-</span><span id="Ridge2Regressor-23"><a href="#Ridge2Regressor-23"><span class="linenos"> 23</span></a>
-</span><span id="Ridge2Regressor-24"><a href="#Ridge2Regressor-24"><span class="linenos"> 24</span></a><span class="sd">        h: an integer;</span>
-</span><span id="Ridge2Regressor-25"><a href="#Ridge2Regressor-25"><span class="linenos"> 25</span></a><span class="sd">            forecasting horizon</span>
-</span><span id="Ridge2Regressor-26"><a href="#Ridge2Regressor-26"><span class="linenos"> 26</span></a>
-</span><span id="Ridge2Regressor-27"><a href="#Ridge2Regressor-27"><span class="linenos"> 27</span></a><span class="sd">        level: an integer;</span>
-</span><span id="Ridge2Regressor-28"><a href="#Ridge2Regressor-28"><span class="linenos"> 28</span></a><span class="sd">            Confidence level for prediction intervals</span>
-</span><span id="Ridge2Regressor-29"><a href="#Ridge2Regressor-29"><span class="linenos"> 29</span></a>
-</span><span id="Ridge2Regressor-30"><a href="#Ridge2Regressor-30"><span class="linenos"> 30</span></a><span class="sd">        lags: an integer;</span>
-</span><span id="Ridge2Regressor-31"><a href="#Ridge2Regressor-31"><span class="linenos"> 31</span></a><span class="sd">            Number of lags</span>
-</span><span id="Ridge2Regressor-32"><a href="#Ridge2Regressor-32"><span class="linenos"> 32</span></a>
-</span><span id="Ridge2Regressor-33"><a href="#Ridge2Regressor-33"><span class="linenos"> 33</span></a><span class="sd">        nb_hidden: an integer;</span>
-</span><span id="Ridge2Regressor-34"><a href="#Ridge2Regressor-34"><span class="linenos"> 34</span></a><span class="sd">            Number of nodes in hidden layer</span>
-</span><span id="Ridge2Regressor-35"><a href="#Ridge2Regressor-35"><span class="linenos"> 35</span></a>
-</span><span id="Ridge2Regressor-36"><a href="#Ridge2Regressor-36"><span class="linenos"> 36</span></a><span class="sd">        nodes_sim: an integer;</span>
-</span><span id="Ridge2Regressor-37"><a href="#Ridge2Regressor-37"><span class="linenos"> 37</span></a><span class="sd">            Type of simulation for nodes in the hidden layer</span>
-</span><span id="Ridge2Regressor-38"><a href="#Ridge2Regressor-38"><span class="linenos"> 38</span></a><span class="sd">            (&quot;sobol&quot;, &quot;halton&quot;, &quot;unif&quot;)</span>
-</span><span id="Ridge2Regressor-39"><a href="#Ridge2Regressor-39"><span class="linenos"> 39</span></a>
-</span><span id="Ridge2Regressor-40"><a href="#Ridge2Regressor-40"><span class="linenos"> 40</span></a><span class="sd">        activation: a string;</span>
-</span><span id="Ridge2Regressor-41"><a href="#Ridge2Regressor-41"><span class="linenos"> 41</span></a><span class="sd">            Activation function (&quot;relu&quot;, &quot;sigmoid&quot;, &quot;tanh&quot;,</span>
-</span><span id="Ridge2Regressor-42"><a href="#Ridge2Regressor-42"><span class="linenos"> 42</span></a><span class="sd">            &quot;leakyrelu&quot;, &quot;elu&quot;, &quot;linear&quot;)</span>
-</span><span id="Ridge2Regressor-43"><a href="#Ridge2Regressor-43"><span class="linenos"> 43</span></a>
-</span><span id="Ridge2Regressor-44"><a href="#Ridge2Regressor-44"><span class="linenos"> 44</span></a><span class="sd">        a: a float;</span>
-</span><span id="Ridge2Regressor-45"><a href="#Ridge2Regressor-45"><span class="linenos"> 45</span></a><span class="sd">            hyperparameter for activation function &quot;leakyrelu&quot;, &quot;elu&quot;</span>
-</span><span id="Ridge2Regressor-46"><a href="#Ridge2Regressor-46"><span class="linenos"> 46</span></a>
-</span><span id="Ridge2Regressor-47"><a href="#Ridge2Regressor-47"><span class="linenos"> 47</span></a><span class="sd">        lambda_1: a float;</span>
-</span><span id="Ridge2Regressor-48"><a href="#Ridge2Regressor-48"><span class="linenos"> 48</span></a><span class="sd">            Regularization parameter for original predictors</span>
-</span><span id="Ridge2Regressor-49"><a href="#Ridge2Regressor-49"><span class="linenos"> 49</span></a>
-</span><span id="Ridge2Regressor-50"><a href="#Ridge2Regressor-50"><span class="linenos"> 50</span></a><span class="sd">        lambda_2: a float;</span>
-</span><span id="Ridge2Regressor-51"><a href="#Ridge2Regressor-51"><span class="linenos"> 51</span></a><span class="sd">            Regularization parameter for transformed predictors</span>
-</span><span id="Ridge2Regressor-52"><a href="#Ridge2Regressor-52"><span class="linenos"> 52</span></a>
-</span><span id="Ridge2Regressor-53"><a href="#Ridge2Regressor-53"><span class="linenos"> 53</span></a><span class="sd">        dropout: a float;</span>
-</span><span id="Ridge2Regressor-54"><a href="#Ridge2Regressor-54"><span class="linenos"> 54</span></a><span class="sd">            dropout regularization parameter (dropping nodes in hidden layer)</span>
-</span><span id="Ridge2Regressor-55"><a href="#Ridge2Regressor-55"><span class="linenos"> 55</span></a>
-</span><span id="Ridge2Regressor-56"><a href="#Ridge2Regressor-56"><span class="linenos"> 56</span></a><span class="sd">        type_pi: a string;</span>
-</span><span id="Ridge2Regressor-57"><a href="#Ridge2Regressor-57"><span class="linenos"> 57</span></a><span class="sd">            Type of prediction interval (currently &quot;gaussian&quot;,</span>
-</span><span id="Ridge2Regressor-58"><a href="#Ridge2Regressor-58"><span class="linenos"> 58</span></a><span class="sd">            &quot;bootstrap&quot;, (circular) &quot;blockbootstrap&quot;, &quot;movingblockbootstrap&quot;, &quot;rvinecopula&quot;, </span>
-</span><span id="Ridge2Regressor-59"><a href="#Ridge2Regressor-59"><span class="linenos"> 59</span></a><span class="sd">            &quot;conformal-split&quot;, &quot;conformal-bootstrap&quot;, &quot;conformal-block-bootstrap&quot;)</span>
-</span><span id="Ridge2Regressor-60"><a href="#Ridge2Regressor-60"><span class="linenos"> 60</span></a>
-</span><span id="Ridge2Regressor-61"><a href="#Ridge2Regressor-61"><span class="linenos"> 61</span></a><span class="sd">        block_length: an integer</span>
-</span><span id="Ridge2Regressor-62"><a href="#Ridge2Regressor-62"><span class="linenos"> 62</span></a><span class="sd">            length of block for multivariate block bootstrap (`type_pi == blockbootstrap` or</span>
-</span><span id="Ridge2Regressor-63"><a href="#Ridge2Regressor-63"><span class="linenos"> 63</span></a><span class="sd">            `type_pi == movingblockbootstrap`)</span>
-</span><span id="Ridge2Regressor-64"><a href="#Ridge2Regressor-64"><span class="linenos"> 64</span></a>
-</span><span id="Ridge2Regressor-65"><a href="#Ridge2Regressor-65"><span class="linenos"> 65</span></a><span class="sd">        margins: a string;</span>
-</span><span id="Ridge2Regressor-66"><a href="#Ridge2Regressor-66"><span class="linenos"> 66</span></a><span class="sd">            distribution of residuals&#39; marginals for `type_pi == rvinecopula`: &quot;empirical&quot; (default),</span>
-</span><span id="Ridge2Regressor-67"><a href="#Ridge2Regressor-67"><span class="linenos"> 67</span></a><span class="sd">            &quot;gaussian&quot;</span>
-</span><span id="Ridge2Regressor-68"><a href="#Ridge2Regressor-68"><span class="linenos"> 68</span></a>
-</span><span id="Ridge2Regressor-69"><a href="#Ridge2Regressor-69"><span class="linenos"> 69</span></a><span class="sd">        B: an integer;</span>
-</span><span id="Ridge2Regressor-70"><a href="#Ridge2Regressor-70"><span class="linenos"> 70</span></a><span class="sd">            Number of bootstrap replications for `type_pi == bootstrap`, &quot;blockbootstrap&quot;,</span>
-</span><span id="Ridge2Regressor-71"><a href="#Ridge2Regressor-71"><span class="linenos"> 71</span></a><span class="sd">            &quot;movingblockbootstrap&quot;, or &quot;rvinecopula&quot;</span>
-</span><span id="Ridge2Regressor-72"><a href="#Ridge2Regressor-72"><span class="linenos"> 72</span></a>
-</span><span id="Ridge2Regressor-73"><a href="#Ridge2Regressor-73"><span class="linenos"> 73</span></a><span class="sd">        type_aggregation: a string;</span>
-</span><span id="Ridge2Regressor-74"><a href="#Ridge2Regressor-74"><span class="linenos"> 74</span></a><span class="sd">            Type of aggregation, ONLY for bootstrapping; either &quot;mean&quot; or &quot;median&quot;</span>
-</span><span id="Ridge2Regressor-75"><a href="#Ridge2Regressor-75"><span class="linenos"> 75</span></a>
-</span><span id="Ridge2Regressor-76"><a href="#Ridge2Regressor-76"><span class="linenos"> 76</span></a><span class="sd">        centers: an integer;</span>
-</span><span id="Ridge2Regressor-77"><a href="#Ridge2Regressor-77"><span class="linenos"> 77</span></a><span class="sd">            Number of clusters for \code{type_clustering}</span>
-</span><span id="Ridge2Regressor-78"><a href="#Ridge2Regressor-78"><span class="linenos"> 78</span></a>
-</span><span id="Ridge2Regressor-79"><a href="#Ridge2Regressor-79"><span class="linenos"> 79</span></a><span class="sd">        type_clustering: a string;</span>
-</span><span id="Ridge2Regressor-80"><a href="#Ridge2Regressor-80"><span class="linenos"> 80</span></a><span class="sd">            &quot;kmeans&quot; (K-Means clustering) or &quot;hclust&quot; (Hierarchical clustering)</span>
-</span><span id="Ridge2Regressor-81"><a href="#Ridge2Regressor-81"><span class="linenos"> 81</span></a>
-</span><span id="Ridge2Regressor-82"><a href="#Ridge2Regressor-82"><span class="linenos"> 82</span></a><span class="sd">        cl: an integer;</span>
-</span><span id="Ridge2Regressor-83"><a href="#Ridge2Regressor-83"><span class="linenos"> 83</span></a><span class="sd">            The number of clusters for parallel execution (done in R), for `type_pi == bootstrap`</span>
-</span><span id="Ridge2Regressor-84"><a href="#Ridge2Regressor-84"><span class="linenos"> 84</span></a>
-</span><span id="Ridge2Regressor-85"><a href="#Ridge2Regressor-85"><span class="linenos"> 85</span></a><span class="sd">        date_formatting: a string;</span>
-</span><span id="Ridge2Regressor-86"><a href="#Ridge2Regressor-86"><span class="linenos"> 86</span></a><span class="sd">            Currently:</span>
-</span><span id="Ridge2Regressor-87"><a href="#Ridge2Regressor-87"><span class="linenos"> 87</span></a><span class="sd">            - &quot;original&quot;: yyyy-mm-dd</span>
-</span><span id="Ridge2Regressor-88"><a href="#Ridge2Regressor-88"><span class="linenos"> 88</span></a><span class="sd">            - &quot;ms&quot;: milliseconds</span>
-</span><span id="Ridge2Regressor-89"><a href="#Ridge2Regressor-89"><span class="linenos"> 89</span></a>
-</span><span id="Ridge2Regressor-90"><a href="#Ridge2Regressor-90"><span class="linenos"> 90</span></a><span class="sd">        seed: an integer;</span>
-</span><span id="Ridge2Regressor-91"><a href="#Ridge2Regressor-91"><span class="linenos"> 91</span></a><span class="sd">            reproducibility seed for type_pi == &#39;bootstrap&#39;</span>
-</span><span id="Ridge2Regressor-92"><a href="#Ridge2Regressor-92"><span class="linenos"> 92</span></a>
-</span><span id="Ridge2Regressor-93"><a href="#Ridge2Regressor-93"><span class="linenos"> 93</span></a><span class="sd">    Attributes:</span>
-</span><span id="Ridge2Regressor-94"><a href="#Ridge2Regressor-94"><span class="linenos"> 94</span></a>
-</span><span id="Ridge2Regressor-95"><a href="#Ridge2Regressor-95"><span class="linenos"> 95</span></a><span class="sd">        fcast_: an object;</span>
-</span><span id="Ridge2Regressor-96"><a href="#Ridge2Regressor-96"><span class="linenos"> 96</span></a><span class="sd">            raw result from fitting R&#39;s `ahead::ridge2f` through `rpy2`</span>
-</span><span id="Ridge2Regressor-97"><a href="#Ridge2Regressor-97"><span class="linenos"> 97</span></a>
-</span><span id="Ridge2Regressor-98"><a href="#Ridge2Regressor-98"><span class="linenos"> 98</span></a><span class="sd">        averages_: a list of lists;</span>
-</span><span id="Ridge2Regressor-99"><a href="#Ridge2Regressor-99"><span class="linenos"> 99</span></a><span class="sd">            mean forecast in a list for each series</span>
-</span><span id="Ridge2Regressor-100"><a href="#Ridge2Regressor-100"><span class="linenos">100</span></a>
-</span><span id="Ridge2Regressor-101"><a href="#Ridge2Regressor-101"><span class="linenos">101</span></a><span class="sd">        ranges_: a list of lists;</span>
-</span><span id="Ridge2Regressor-102"><a href="#Ridge2Regressor-102"><span class="linenos">102</span></a><span class="sd">            lower and upper prediction intervals in a list for each series</span>
-</span><span id="Ridge2Regressor-103"><a href="#Ridge2Regressor-103"><span class="linenos">103</span></a>
-</span><span id="Ridge2Regressor-104"><a href="#Ridge2Regressor-104"><span class="linenos">104</span></a><span class="sd">        output_dates_: a list;</span>
-</span><span id="Ridge2Regressor-105"><a href="#Ridge2Regressor-105"><span class="linenos">105</span></a><span class="sd">            a list of output dates (associated to forecast)</span>
-</span><span id="Ridge2Regressor-106"><a href="#Ridge2Regressor-106"><span class="linenos">106</span></a>
-</span><span id="Ridge2Regressor-107"><a href="#Ridge2Regressor-107"><span class="linenos">107</span></a><span class="sd">        mean_: a numpy array</span>
-</span><span id="Ridge2Regressor-108"><a href="#Ridge2Regressor-108"><span class="linenos">108</span></a><span class="sd">            contains series mean forecast as a numpy array</span>
-</span><span id="Ridge2Regressor-109"><a href="#Ridge2Regressor-109"><span class="linenos">109</span></a>
-</span><span id="Ridge2Regressor-110"><a href="#Ridge2Regressor-110"><span class="linenos">110</span></a><span class="sd">        lower_: a numpy array</span>
-</span><span id="Ridge2Regressor-111"><a href="#Ridge2Regressor-111"><span class="linenos">111</span></a><span class="sd">            contains series lower bound forecast as a numpy array</span>
-</span><span id="Ridge2Regressor-112"><a href="#Ridge2Regressor-112"><span class="linenos">112</span></a>
-</span><span id="Ridge2Regressor-113"><a href="#Ridge2Regressor-113"><span class="linenos">113</span></a><span class="sd">        upper_: a numpy array</span>
-</span><span id="Ridge2Regressor-114"><a href="#Ridge2Regressor-114"><span class="linenos">114</span></a><span class="sd">            contains series upper bound forecast as a numpy array</span>
-</span><span id="Ridge2Regressor-115"><a href="#Ridge2Regressor-115"><span class="linenos">115</span></a>
-</span><span id="Ridge2Regressor-116"><a href="#Ridge2Regressor-116"><span class="linenos">116</span></a><span class="sd">        result_dfs_: a tuple of data frames;</span>
-</span><span id="Ridge2Regressor-117"><a href="#Ridge2Regressor-117"><span class="linenos">117</span></a><span class="sd">            each element of the tuple contains 3 columns,</span>
-</span><span id="Ridge2Regressor-118"><a href="#Ridge2Regressor-118"><span class="linenos">118</span></a><span class="sd">            mean forecast, lower + upper prediction intervals,</span>
-</span><span id="Ridge2Regressor-119"><a href="#Ridge2Regressor-119"><span class="linenos">119</span></a><span class="sd">            and a date index</span>
-</span><span id="Ridge2Regressor-120"><a href="#Ridge2Regressor-120"><span class="linenos">120</span></a>
-</span><span id="Ridge2Regressor-121"><a href="#Ridge2Regressor-121"><span class="linenos">121</span></a><span class="sd">        sims_: currently a tuple of numpy arrays</span>
-</span><span id="Ridge2Regressor-122"><a href="#Ridge2Regressor-122"><span class="linenos">122</span></a><span class="sd">            for `type_pi == bootstrap`, simulations for each series</span>
-</span><span id="Ridge2Regressor-123"><a href="#Ridge2Regressor-123"><span class="linenos">123</span></a>
-</span><span id="Ridge2Regressor-124"><a href="#Ridge2Regressor-124"><span class="linenos">124</span></a><span class="sd">    Examples:</span>
-</span><span id="Ridge2Regressor-125"><a href="#Ridge2Regressor-125"><span class="linenos">125</span></a>
-</span><span id="Ridge2Regressor-126"><a href="#Ridge2Regressor-126"><span class="linenos">126</span></a><span class="sd">    ```python</span>
-</span><span id="Ridge2Regressor-127"><a href="#Ridge2Regressor-127"><span class="linenos">127</span></a><span class="sd">    import pandas as pd</span>
-</span><span id="Ridge2Regressor-128"><a href="#Ridge2Regressor-128"><span class="linenos">128</span></a><span class="sd">    from ahead import Ridge2Regressor</span>
-</span><span id="Ridge2Regressor-129"><a href="#Ridge2Regressor-129"><span class="linenos">129</span></a>
-</span><span id="Ridge2Regressor-130"><a href="#Ridge2Regressor-130"><span class="linenos">130</span></a><span class="sd">    # Data frame containing the time series</span>
-</span><span id="Ridge2Regressor-131"><a href="#Ridge2Regressor-131"><span class="linenos">131</span></a><span class="sd">    dataset = {</span>
-</span><span id="Ridge2Regressor-132"><a href="#Ridge2Regressor-132"><span class="linenos">132</span></a><span class="sd">    &#39;date&#39; : [&#39;2001-01-01&#39;, &#39;2002-01-01&#39;, &#39;2003-01-01&#39;, &#39;2004-01-01&#39;, &#39;2005-01-01&#39;],</span>
-</span><span id="Ridge2Regressor-133"><a href="#Ridge2Regressor-133"><span class="linenos">133</span></a><span class="sd">    &#39;series1&#39; : [34, 30, 35.6, 33.3, 38.1],</span>
-</span><span id="Ridge2Regressor-134"><a href="#Ridge2Regressor-134"><span class="linenos">134</span></a><span class="sd">    &#39;series2&#39; : [4, 5.5, 5.6, 6.3, 5.1],</span>
-</span><span id="Ridge2Regressor-135"><a href="#Ridge2Regressor-135"><span class="linenos">135</span></a><span class="sd">    &#39;series3&#39; : [100, 100.5, 100.6, 100.2, 100.1]}</span>
-</span><span id="Ridge2Regressor-136"><a href="#Ridge2Regressor-136"><span class="linenos">136</span></a><span class="sd">    df = pd.DataFrame(dataset).set_index(&#39;date&#39;)</span>
-</span><span id="Ridge2Regressor-137"><a href="#Ridge2Regressor-137"><span class="linenos">137</span></a><span class="sd">    print(df)</span>
-</span><span id="Ridge2Regressor-138"><a href="#Ridge2Regressor-138"><span class="linenos">138</span></a>
-</span><span id="Ridge2Regressor-139"><a href="#Ridge2Regressor-139"><span class="linenos">139</span></a><span class="sd">    # multivariate time series forecasting</span>
-</span><span id="Ridge2Regressor-140"><a href="#Ridge2Regressor-140"><span class="linenos">140</span></a><span class="sd">    r1 = Ridge2Regressor(h = 5)</span>
-</span><span id="Ridge2Regressor-141"><a href="#Ridge2Regressor-141"><span class="linenos">141</span></a><span class="sd">    r1.forecast(df)</span>
-</span><span id="Ridge2Regressor-142"><a href="#Ridge2Regressor-142"><span class="linenos">142</span></a><span class="sd">    print(r1.result_dfs_)</span>
-</span><span id="Ridge2Regressor-143"><a href="#Ridge2Regressor-143"><span class="linenos">143</span></a><span class="sd">    ```</span>
-</span><span id="Ridge2Regressor-144"><a href="#Ridge2Regressor-144"><span class="linenos">144</span></a>
-</span><span id="Ridge2Regressor-145"><a href="#Ridge2Regressor-145"><span class="linenos">145</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Ridge2Regressor-146"><a href="#Ridge2Regressor-146"><span class="linenos">146</span></a>
-</span><span id="Ridge2Regressor-147"><a href="#Ridge2Regressor-147"><span class="linenos">147</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Ridge2Regressor-148"><a href="#Ridge2Regressor-148"><span class="linenos">148</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-149"><a href="#Ridge2Regressor-149"><span class="linenos">149</span></a>        <span class="n">h</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-150"><a href="#Ridge2Regressor-150"><span class="linenos">150</span></a>        <span class="n">level</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-151"><a href="#Ridge2Regressor-151"><span class="linenos">151</span></a>        <span class="n">lags</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-152"><a href="#Ridge2Regressor-152"><span class="linenos">152</span></a>        <span class="n">nb_hidden</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-153"><a href="#Ridge2Regressor-153"><span class="linenos">153</span></a>        <span class="n">nodes_sim</span><span class="o">=</span><span class="s2">&quot;sobol&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-154"><a href="#Ridge2Regressor-154"><span class="linenos">154</span></a>        <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-155"><a href="#Ridge2Regressor-155"><span class="linenos">155</span></a>        <span class="n">a</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-156"><a href="#Ridge2Regressor-156"><span class="linenos">156</span></a>        <span class="n">lambda_1</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-157"><a href="#Ridge2Regressor-157"><span class="linenos">157</span></a>        <span class="n">lambda_2</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-158"><a href="#Ridge2Regressor-158"><span class="linenos">158</span></a>        <span class="n">dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-159"><a href="#Ridge2Regressor-159"><span class="linenos">159</span></a>        <span class="n">type_pi</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-160"><a href="#Ridge2Regressor-160"><span class="linenos">160</span></a>        <span class="c1"># can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)</span>
-</span><span id="Ridge2Regressor-161"><a href="#Ridge2Regressor-161"><span class="linenos">161</span></a>        <span class="n">block_length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-162"><a href="#Ridge2Regressor-162"><span class="linenos">162</span></a>        <span class="n">margins</span><span class="o">=</span><span class="s2">&quot;empirical&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-163"><a href="#Ridge2Regressor-163"><span class="linenos">163</span></a>        <span class="n">B</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-164"><a href="#Ridge2Regressor-164"><span class="linenos">164</span></a>        <span class="n">type_aggregation</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-165"><a href="#Ridge2Regressor-165"><span class="linenos">165</span></a>        <span class="n">centers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-166"><a href="#Ridge2Regressor-166"><span class="linenos">166</span></a>        <span class="n">type_clustering</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-167"><a href="#Ridge2Regressor-167"><span class="linenos">167</span></a>        <span class="n">cl</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-168"><a href="#Ridge2Regressor-168"><span class="linenos">168</span></a>        <span class="n">date_formatting</span><span class="o">=</span><span class="s2">&quot;original&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-169"><a href="#Ridge2Regressor-169"><span class="linenos">169</span></a>        <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-170"><a href="#Ridge2Regressor-170"><span class="linenos">170</span></a>    <span class="p">):</span>
-</span><span id="Ridge2Regressor-171"><a href="#Ridge2Regressor-171"><span class="linenos">171</span></a>
-</span><span id="Ridge2Regressor-172"><a href="#Ridge2Regressor-172"><span class="linenos">172</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Ridge2Regressor-173"><a href="#Ridge2Regressor-173"><span class="linenos">173</span></a>            <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-174"><a href="#Ridge2Regressor-174"><span class="linenos">174</span></a>            <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-175"><a href="#Ridge2Regressor-175"><span class="linenos">175</span></a>            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-176"><a href="#Ridge2Regressor-176"><span class="linenos">176</span></a>        <span class="p">)</span>
-</span><span id="Ridge2Regressor-177"><a href="#Ridge2Regressor-177"><span class="linenos">177</span></a>
-</span><span id="Ridge2Regressor-178"><a href="#Ridge2Regressor-178"><span class="linenos">178</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">lags</span>
-</span><span id="Ridge2Regressor-179"><a href="#Ridge2Regressor-179"><span class="linenos">179</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">nb_hidden</span> <span class="o">=</span> <span class="n">nb_hidden</span>
-</span><span id="Ridge2Regressor-180"><a href="#Ridge2Regressor-180"><span class="linenos">180</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">nodes_sim</span> <span class="o">=</span> <span class="n">nodes_sim</span>
-</span><span id="Ridge2Regressor-181"><a href="#Ridge2Regressor-181"><span class="linenos">181</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
-</span><span id="Ridge2Regressor-182"><a href="#Ridge2Regressor-182"><span class="linenos">182</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
-</span><span id="Ridge2Regressor-183"><a href="#Ridge2Regressor-183"><span class="linenos">183</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lambda_1</span> <span class="o">=</span> <span class="n">lambda_1</span>
-</span><span id="Ridge2Regressor-184"><a href="#Ridge2Regressor-184"><span class="linenos">184</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lambda_2</span> <span class="o">=</span> <span class="n">lambda_2</span>
-</span><span id="Ridge2Regressor-185"><a href="#Ridge2Regressor-185"><span class="linenos">185</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">dropout</span>
-</span><span id="Ridge2Regressor-186"><a href="#Ridge2Regressor-186"><span class="linenos">186</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_pi</span> <span class="o">=</span> <span class="n">type_pi</span>
-</span><span id="Ridge2Regressor-187"><a href="#Ridge2Regressor-187"><span class="linenos">187</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">=</span> <span class="n">block_length</span>
-</span><span id="Ridge2Regressor-188"><a href="#Ridge2Regressor-188"><span class="linenos">188</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">margins</span> <span class="o">=</span> <span class="n">margins</span>
-</span><span id="Ridge2Regressor-189"><a href="#Ridge2Regressor-189"><span class="linenos">189</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">B</span>
-</span><span id="Ridge2Regressor-190"><a href="#Ridge2Regressor-190"><span class="linenos">190</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_aggregation</span> <span class="o">=</span> <span class="n">type_aggregation</span>
-</span><span id="Ridge2Regressor-191"><a href="#Ridge2Regressor-191"><span class="linenos">191</span></a>        <span class="c1"># can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)</span>
-</span><span id="Ridge2Regressor-192"><a href="#Ridge2Regressor-192"><span class="linenos">192</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">centers</span> <span class="o">=</span> <span class="n">centers</span>
-</span><span id="Ridge2Regressor-193"><a href="#Ridge2Regressor-193"><span class="linenos">193</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_clustering</span> <span class="o">=</span> <span class="n">type_clustering</span>
-</span><span id="Ridge2Regressor-194"><a href="#Ridge2Regressor-194"><span class="linenos">194</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">cl</span> <span class="o">=</span> <span class="n">cl</span>
-</span><span id="Ridge2Regressor-195"><a href="#Ridge2Regressor-195"><span class="linenos">195</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">date_formatting</span> <span class="o">=</span> <span class="n">date_formatting</span>
-</span><span id="Ridge2Regressor-196"><a href="#Ridge2Regressor-196"><span class="linenos">196</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
-</span><span id="Ridge2Regressor-197"><a href="#Ridge2Regressor-197"><span class="linenos">197</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">input_df</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-198"><a href="#Ridge2Regressor-198"><span class="linenos">198</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_input</span> <span class="o">=</span> <span class="s2">&quot;multivariate&quot;</span>
-</span><span id="Ridge2Regressor-199"><a href="#Ridge2Regressor-199"><span class="linenos">199</span></a>
-</span><span id="Ridge2Regressor-200"><a href="#Ridge2Regressor-200"><span class="linenos">200</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-201"><a href="#Ridge2Regressor-201"><span class="linenos">201</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">averages_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-202"><a href="#Ridge2Regressor-202"><span class="linenos">202</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">ranges_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-203"><a href="#Ridge2Regressor-203"><span class="linenos">203</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">output_dates_</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="Ridge2Regressor-204"><a href="#Ridge2Regressor-204"><span class="linenos">204</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-205"><a href="#Ridge2Regressor-205"><span class="linenos">205</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-206"><a href="#Ridge2Regressor-206"><span class="linenos">206</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-207"><a href="#Ridge2Regressor-207"><span class="linenos">207</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">result_dfs_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-208"><a href="#Ridge2Regressor-208"><span class="linenos">208</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sims_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-209"><a href="#Ridge2Regressor-209"><span class="linenos">209</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">xreg_</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Ridge2Regressor-210"><a href="#Ridge2Regressor-210"><span class="linenos">210</span></a>
-</span><span id="Ridge2Regressor-211"><a href="#Ridge2Regressor-211"><span class="linenos">211</span></a>    <span class="k">def</span> <span class="nf">forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-</span><span id="Ridge2Regressor-212"><a href="#Ridge2Regressor-212"><span class="linenos">212</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Forecasting method from `Ridge2Regressor` class</span>
-</span><span id="Ridge2Regressor-213"><a href="#Ridge2Regressor-213"><span class="linenos">213</span></a>
-</span><span id="Ridge2Regressor-214"><a href="#Ridge2Regressor-214"><span class="linenos">214</span></a><span class="sd">        Parameters:</span>
-</span><span id="Ridge2Regressor-215"><a href="#Ridge2Regressor-215"><span class="linenos">215</span></a>
-</span><span id="Ridge2Regressor-216"><a href="#Ridge2Regressor-216"><span class="linenos">216</span></a><span class="sd">            df: a data frame;</span>
-</span><span id="Ridge2Regressor-217"><a href="#Ridge2Regressor-217"><span class="linenos">217</span></a><span class="sd">                a data frame containing the input time series (see example)</span>
-</span><span id="Ridge2Regressor-218"><a href="#Ridge2Regressor-218"><span class="linenos">218</span></a>
-</span><span id="Ridge2Regressor-219"><a href="#Ridge2Regressor-219"><span class="linenos">219</span></a><span class="sd">            xreg: a numpy array or a data frame;</span>
-</span><span id="Ridge2Regressor-220"><a href="#Ridge2Regressor-220"><span class="linenos">220</span></a><span class="sd">                external regressors</span>
-</span><span id="Ridge2Regressor-221"><a href="#Ridge2Regressor-221"><span class="linenos">221</span></a>
-</span><span id="Ridge2Regressor-222"><a href="#Ridge2Regressor-222"><span class="linenos">222</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Ridge2Regressor-223"><a href="#Ridge2Regressor-223"><span class="linenos">223</span></a>
-</span><span id="Ridge2Regressor-224"><a href="#Ridge2Regressor-224"><span class="linenos">224</span></a>        <span class="c1"># get input dates, output dates, number of series, series names, etc.</span>
-</span><span id="Ridge2Regressor-225"><a href="#Ridge2Regressor-225"><span class="linenos">225</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">init_forecasting_params</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-</span><span id="Ridge2Regressor-226"><a href="#Ridge2Regressor-226"><span class="linenos">226</span></a>
-</span><span id="Ridge2Regressor-227"><a href="#Ridge2Regressor-227"><span class="linenos">227</span></a>        <span class="c1"># obtain time series object -----</span>
-</span><span id="Ridge2Regressor-228"><a href="#Ridge2Regressor-228"><span class="linenos">228</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">format_input</span><span class="p">()</span>
-</span><span id="Ridge2Regressor-229"><a href="#Ridge2Regressor-229"><span class="linenos">229</span></a>
-</span><span id="Ridge2Regressor-230"><a href="#Ridge2Regressor-230"><span class="linenos">230</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">get_forecast</span><span class="p">(</span><span class="s2">&quot;ridge2&quot;</span><span class="p">)</span>
-</span><span id="Ridge2Regressor-231"><a href="#Ridge2Regressor-231"><span class="linenos">231</span></a>
-</span><span id="Ridge2Regressor-232"><a href="#Ridge2Regressor-232"><span class="linenos">232</span></a>        <span class="c1"># result -----</span>
-</span><span id="Ridge2Regressor-233"><a href="#Ridge2Regressor-233"><span class="linenos">233</span></a>        <span class="p">(</span>
-</span><span id="Ridge2Regressor-234"><a href="#Ridge2Regressor-234"><span class="linenos">234</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">averages_</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-235"><a href="#Ridge2Regressor-235"><span class="linenos">235</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">ranges_</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-236"><a href="#Ridge2Regressor-236"><span class="linenos">236</span></a>            <span class="n">_</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-237"><a href="#Ridge2Regressor-237"><span class="linenos">237</span></a>        <span class="p">)</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">format_multivariate_forecast</span><span class="p">(</span>
-</span><span id="Ridge2Regressor-238"><a href="#Ridge2Regressor-238"><span class="linenos">238</span></a>            <span class="n">n_series</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_series</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-239"><a href="#Ridge2Regressor-239"><span class="linenos">239</span></a>            <span class="n">date_formatting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">date_formatting</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-240"><a href="#Ridge2Regressor-240"><span class="linenos">240</span></a>            <span class="n">output_dates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dates_</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-241"><a href="#Ridge2Regressor-241"><span class="linenos">241</span></a>            <span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-242"><a href="#Ridge2Regressor-242"><span class="linenos">242</span></a>            <span class="n">fcast</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-243"><a href="#Ridge2Regressor-243"><span class="linenos">243</span></a>        <span class="p">)</span>
-</span><span id="Ridge2Regressor-244"><a href="#Ridge2Regressor-244"><span class="linenos">244</span></a>
-</span><span id="Ridge2Regressor-245"><a href="#Ridge2Regressor-245"><span class="linenos">245</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">])</span>
-</span><span id="Ridge2Regressor-246"><a href="#Ridge2Regressor-246"><span class="linenos">246</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">])</span>
-</span><span id="Ridge2Regressor-247"><a href="#Ridge2Regressor-247"><span class="linenos">247</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">])</span>
-</span><span id="Ridge2Regressor-248"><a href="#Ridge2Regressor-248"><span class="linenos">248</span></a>
-</span><span id="Ridge2Regressor-249"><a href="#Ridge2Regressor-249"><span class="linenos">249</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">result_dfs_</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="Ridge2Regressor-250"><a href="#Ridge2Regressor-250"><span class="linenos">250</span></a>            <span class="n">umv</span><span class="o">.</span><span class="n">compute_result_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">averages_</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges_</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-</span><span id="Ridge2Regressor-251"><a href="#Ridge2Regressor-251"><span class="linenos">251</span></a>            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_series</span><span class="p">)</span>
-</span><span id="Ridge2Regressor-252"><a href="#Ridge2Regressor-252"><span class="linenos">252</span></a>        <span class="p">)</span>
-</span><span id="Ridge2Regressor-253"><a href="#Ridge2Regressor-253"><span class="linenos">253</span></a>
-</span><span id="Ridge2Regressor-254"><a href="#Ridge2Regressor-254"><span class="linenos">254</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_pi</span> <span class="ow">in</span> <span class="p">(</span>
-</span><span id="Ridge2Regressor-255"><a href="#Ridge2Regressor-255"><span class="linenos">255</span></a>            <span class="s2">&quot;bootstrap&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-256"><a href="#Ridge2Regressor-256"><span class="linenos">256</span></a>            <span class="s2">&quot;blockbootstrap&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-257"><a href="#Ridge2Regressor-257"><span class="linenos">257</span></a>            <span class="s2">&quot;movingblockbootstrap&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-258"><a href="#Ridge2Regressor-258"><span class="linenos">258</span></a>            <span class="s2">&quot;rvinecopula&quot;</span><span class="p">,</span>
-</span><span id="Ridge2Regressor-259"><a href="#Ridge2Regressor-259"><span class="linenos">259</span></a>        <span class="p">):</span>
-</span><span id="Ridge2Regressor-260"><a href="#Ridge2Regressor-260"><span class="linenos">260</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">sims_</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="Ridge2Regressor-261"><a href="#Ridge2Regressor-261"><span class="linenos">261</span></a>                <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;sims&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">)</span>
-</span><span id="Ridge2Regressor-262"><a href="#Ridge2Regressor-262"><span class="linenos">262</span></a>            <span class="p">)</span>
-</span><span id="Ridge2Regressor-263"><a href="#Ridge2Regressor-263"><span class="linenos">263</span></a>
-</span><span id="Ridge2Regressor-264"><a href="#Ridge2Regressor-264"><span class="linenos">264</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Ridge2Regressor-18"><a href="#Ridge2Regressor-18"><span class="linenos"> 18</span></a><span class="k">class</span> <span class="nc">Ridge2Regressor</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</span><span id="Ridge2Regressor-19"><a href="#Ridge2Regressor-19"><span class="linenos"> 19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Random Vector functional link network model with 2 regularization parameters</span>
+</span><span id="Ridge2Regressor-20"><a href="#Ridge2Regressor-20"><span class="linenos"> 20</span></a>
+</span><span id="Ridge2Regressor-21"><a href="#Ridge2Regressor-21"><span class="linenos"> 21</span></a><span class="sd">    Parameters:</span>
+</span><span id="Ridge2Regressor-22"><a href="#Ridge2Regressor-22"><span class="linenos"> 22</span></a>
+</span><span id="Ridge2Regressor-23"><a href="#Ridge2Regressor-23"><span class="linenos"> 23</span></a><span class="sd">        h: an integer;</span>
+</span><span id="Ridge2Regressor-24"><a href="#Ridge2Regressor-24"><span class="linenos"> 24</span></a><span class="sd">            forecasting horizon</span>
+</span><span id="Ridge2Regressor-25"><a href="#Ridge2Regressor-25"><span class="linenos"> 25</span></a>
+</span><span id="Ridge2Regressor-26"><a href="#Ridge2Regressor-26"><span class="linenos"> 26</span></a><span class="sd">        level: an integer;</span>
+</span><span id="Ridge2Regressor-27"><a href="#Ridge2Regressor-27"><span class="linenos"> 27</span></a><span class="sd">            Confidence level for prediction intervals</span>
+</span><span id="Ridge2Regressor-28"><a href="#Ridge2Regressor-28"><span class="linenos"> 28</span></a>
+</span><span id="Ridge2Regressor-29"><a href="#Ridge2Regressor-29"><span class="linenos"> 29</span></a><span class="sd">        lags: an integer;</span>
+</span><span id="Ridge2Regressor-30"><a href="#Ridge2Regressor-30"><span class="linenos"> 30</span></a><span class="sd">            Number of lags</span>
+</span><span id="Ridge2Regressor-31"><a href="#Ridge2Regressor-31"><span class="linenos"> 31</span></a>
+</span><span id="Ridge2Regressor-32"><a href="#Ridge2Regressor-32"><span class="linenos"> 32</span></a><span class="sd">        nb_hidden: an integer;</span>
+</span><span id="Ridge2Regressor-33"><a href="#Ridge2Regressor-33"><span class="linenos"> 33</span></a><span class="sd">            Number of nodes in hidden layer</span>
+</span><span id="Ridge2Regressor-34"><a href="#Ridge2Regressor-34"><span class="linenos"> 34</span></a>
+</span><span id="Ridge2Regressor-35"><a href="#Ridge2Regressor-35"><span class="linenos"> 35</span></a><span class="sd">        nodes_sim: an integer;</span>
+</span><span id="Ridge2Regressor-36"><a href="#Ridge2Regressor-36"><span class="linenos"> 36</span></a><span class="sd">            Type of simulation for nodes in the hidden layer</span>
+</span><span id="Ridge2Regressor-37"><a href="#Ridge2Regressor-37"><span class="linenos"> 37</span></a><span class="sd">            (&quot;sobol&quot;, &quot;halton&quot;, &quot;unif&quot;)</span>
+</span><span id="Ridge2Regressor-38"><a href="#Ridge2Regressor-38"><span class="linenos"> 38</span></a>
+</span><span id="Ridge2Regressor-39"><a href="#Ridge2Regressor-39"><span class="linenos"> 39</span></a><span class="sd">        activation: a string;</span>
+</span><span id="Ridge2Regressor-40"><a href="#Ridge2Regressor-40"><span class="linenos"> 40</span></a><span class="sd">            Activation function (&quot;relu&quot;, &quot;sigmoid&quot;, &quot;tanh&quot;,</span>
+</span><span id="Ridge2Regressor-41"><a href="#Ridge2Regressor-41"><span class="linenos"> 41</span></a><span class="sd">            &quot;leakyrelu&quot;, &quot;elu&quot;, &quot;linear&quot;)</span>
+</span><span id="Ridge2Regressor-42"><a href="#Ridge2Regressor-42"><span class="linenos"> 42</span></a>
+</span><span id="Ridge2Regressor-43"><a href="#Ridge2Regressor-43"><span class="linenos"> 43</span></a><span class="sd">        a: a float;</span>
+</span><span id="Ridge2Regressor-44"><a href="#Ridge2Regressor-44"><span class="linenos"> 44</span></a><span class="sd">            hyperparameter for activation function &quot;leakyrelu&quot;, &quot;elu&quot;</span>
+</span><span id="Ridge2Regressor-45"><a href="#Ridge2Regressor-45"><span class="linenos"> 45</span></a>
+</span><span id="Ridge2Regressor-46"><a href="#Ridge2Regressor-46"><span class="linenos"> 46</span></a><span class="sd">        lambda_1: a float;</span>
+</span><span id="Ridge2Regressor-47"><a href="#Ridge2Regressor-47"><span class="linenos"> 47</span></a><span class="sd">            Regularization parameter for original predictors</span>
+</span><span id="Ridge2Regressor-48"><a href="#Ridge2Regressor-48"><span class="linenos"> 48</span></a>
+</span><span id="Ridge2Regressor-49"><a href="#Ridge2Regressor-49"><span class="linenos"> 49</span></a><span class="sd">        lambda_2: a float;</span>
+</span><span id="Ridge2Regressor-50"><a href="#Ridge2Regressor-50"><span class="linenos"> 50</span></a><span class="sd">            Regularization parameter for transformed predictors</span>
+</span><span id="Ridge2Regressor-51"><a href="#Ridge2Regressor-51"><span class="linenos"> 51</span></a>
+</span><span id="Ridge2Regressor-52"><a href="#Ridge2Regressor-52"><span class="linenos"> 52</span></a><span class="sd">        dropout: a float;</span>
+</span><span id="Ridge2Regressor-53"><a href="#Ridge2Regressor-53"><span class="linenos"> 53</span></a><span class="sd">            dropout regularization parameter (dropping nodes in hidden layer)</span>
+</span><span id="Ridge2Regressor-54"><a href="#Ridge2Regressor-54"><span class="linenos"> 54</span></a>
+</span><span id="Ridge2Regressor-55"><a href="#Ridge2Regressor-55"><span class="linenos"> 55</span></a><span class="sd">        type_pi: a string;</span>
+</span><span id="Ridge2Regressor-56"><a href="#Ridge2Regressor-56"><span class="linenos"> 56</span></a><span class="sd">            Type of prediction interval (currently &quot;gaussian&quot;,</span>
+</span><span id="Ridge2Regressor-57"><a href="#Ridge2Regressor-57"><span class="linenos"> 57</span></a><span class="sd">            &quot;bootstrap&quot;, (circular) &quot;blockbootstrap&quot;, &quot;movingblockbootstrap&quot;, &quot;rvinecopula&quot;, </span>
+</span><span id="Ridge2Regressor-58"><a href="#Ridge2Regressor-58"><span class="linenos"> 58</span></a><span class="sd">            &quot;conformal-split&quot;, &quot;conformal-bootstrap&quot;, &quot;conformal-block-bootstrap&quot;)</span>
+</span><span id="Ridge2Regressor-59"><a href="#Ridge2Regressor-59"><span class="linenos"> 59</span></a>
+</span><span id="Ridge2Regressor-60"><a href="#Ridge2Regressor-60"><span class="linenos"> 60</span></a><span class="sd">        block_length: an integer</span>
+</span><span id="Ridge2Regressor-61"><a href="#Ridge2Regressor-61"><span class="linenos"> 61</span></a><span class="sd">            length of block for multivariate block bootstrap (`type_pi == blockbootstrap` or</span>
+</span><span id="Ridge2Regressor-62"><a href="#Ridge2Regressor-62"><span class="linenos"> 62</span></a><span class="sd">            `type_pi == movingblockbootstrap`)</span>
+</span><span id="Ridge2Regressor-63"><a href="#Ridge2Regressor-63"><span class="linenos"> 63</span></a>
+</span><span id="Ridge2Regressor-64"><a href="#Ridge2Regressor-64"><span class="linenos"> 64</span></a><span class="sd">        margins: a string;</span>
+</span><span id="Ridge2Regressor-65"><a href="#Ridge2Regressor-65"><span class="linenos"> 65</span></a><span class="sd">            distribution of residuals&#39; marginals for `type_pi == rvinecopula`: &quot;empirical&quot; (default),</span>
+</span><span id="Ridge2Regressor-66"><a href="#Ridge2Regressor-66"><span class="linenos"> 66</span></a><span class="sd">            &quot;gaussian&quot;</span>
+</span><span id="Ridge2Regressor-67"><a href="#Ridge2Regressor-67"><span class="linenos"> 67</span></a>
+</span><span id="Ridge2Regressor-68"><a href="#Ridge2Regressor-68"><span class="linenos"> 68</span></a><span class="sd">        B: an integer;</span>
+</span><span id="Ridge2Regressor-69"><a href="#Ridge2Regressor-69"><span class="linenos"> 69</span></a><span class="sd">            Number of bootstrap replications for `type_pi == bootstrap`, &quot;blockbootstrap&quot;,</span>
+</span><span id="Ridge2Regressor-70"><a href="#Ridge2Regressor-70"><span class="linenos"> 70</span></a><span class="sd">            &quot;movingblockbootstrap&quot;, or &quot;rvinecopula&quot;</span>
+</span><span id="Ridge2Regressor-71"><a href="#Ridge2Regressor-71"><span class="linenos"> 71</span></a>
+</span><span id="Ridge2Regressor-72"><a href="#Ridge2Regressor-72"><span class="linenos"> 72</span></a><span class="sd">        type_aggregation: a string;</span>
+</span><span id="Ridge2Regressor-73"><a href="#Ridge2Regressor-73"><span class="linenos"> 73</span></a><span class="sd">            Type of aggregation, ONLY for bootstrapping; either &quot;mean&quot; or &quot;median&quot;</span>
+</span><span id="Ridge2Regressor-74"><a href="#Ridge2Regressor-74"><span class="linenos"> 74</span></a>
+</span><span id="Ridge2Regressor-75"><a href="#Ridge2Regressor-75"><span class="linenos"> 75</span></a><span class="sd">        centers: an integer;</span>
+</span><span id="Ridge2Regressor-76"><a href="#Ridge2Regressor-76"><span class="linenos"> 76</span></a><span class="sd">            Number of clusters for \code{type_clustering}</span>
+</span><span id="Ridge2Regressor-77"><a href="#Ridge2Regressor-77"><span class="linenos"> 77</span></a>
+</span><span id="Ridge2Regressor-78"><a href="#Ridge2Regressor-78"><span class="linenos"> 78</span></a><span class="sd">        type_clustering: a string;</span>
+</span><span id="Ridge2Regressor-79"><a href="#Ridge2Regressor-79"><span class="linenos"> 79</span></a><span class="sd">            &quot;kmeans&quot; (K-Means clustering) or &quot;hclust&quot; (Hierarchical clustering)</span>
+</span><span id="Ridge2Regressor-80"><a href="#Ridge2Regressor-80"><span class="linenos"> 80</span></a>
+</span><span id="Ridge2Regressor-81"><a href="#Ridge2Regressor-81"><span class="linenos"> 81</span></a><span class="sd">        cl: an integer;</span>
+</span><span id="Ridge2Regressor-82"><a href="#Ridge2Regressor-82"><span class="linenos"> 82</span></a><span class="sd">            The number of clusters for parallel execution (done in R), for `type_pi == bootstrap`</span>
+</span><span id="Ridge2Regressor-83"><a href="#Ridge2Regressor-83"><span class="linenos"> 83</span></a>
+</span><span id="Ridge2Regressor-84"><a href="#Ridge2Regressor-84"><span class="linenos"> 84</span></a><span class="sd">        date_formatting: a string;</span>
+</span><span id="Ridge2Regressor-85"><a href="#Ridge2Regressor-85"><span class="linenos"> 85</span></a><span class="sd">            Currently:</span>
+</span><span id="Ridge2Regressor-86"><a href="#Ridge2Regressor-86"><span class="linenos"> 86</span></a><span class="sd">            - &quot;original&quot;: yyyy-mm-dd</span>
+</span><span id="Ridge2Regressor-87"><a href="#Ridge2Regressor-87"><span class="linenos"> 87</span></a><span class="sd">            - &quot;ms&quot;: milliseconds</span>
+</span><span id="Ridge2Regressor-88"><a href="#Ridge2Regressor-88"><span class="linenos"> 88</span></a>
+</span><span id="Ridge2Regressor-89"><a href="#Ridge2Regressor-89"><span class="linenos"> 89</span></a><span class="sd">        seed: an integer;</span>
+</span><span id="Ridge2Regressor-90"><a href="#Ridge2Regressor-90"><span class="linenos"> 90</span></a><span class="sd">            reproducibility seed for type_pi == &#39;bootstrap&#39;</span>
+</span><span id="Ridge2Regressor-91"><a href="#Ridge2Regressor-91"><span class="linenos"> 91</span></a>
+</span><span id="Ridge2Regressor-92"><a href="#Ridge2Regressor-92"><span class="linenos"> 92</span></a><span class="sd">    Attributes:</span>
+</span><span id="Ridge2Regressor-93"><a href="#Ridge2Regressor-93"><span class="linenos"> 93</span></a>
+</span><span id="Ridge2Regressor-94"><a href="#Ridge2Regressor-94"><span class="linenos"> 94</span></a><span class="sd">        fcast_: an object;</span>
+</span><span id="Ridge2Regressor-95"><a href="#Ridge2Regressor-95"><span class="linenos"> 95</span></a><span class="sd">            raw result from fitting R&#39;s `ahead::ridge2f` through `rpy2`</span>
+</span><span id="Ridge2Regressor-96"><a href="#Ridge2Regressor-96"><span class="linenos"> 96</span></a>
+</span><span id="Ridge2Regressor-97"><a href="#Ridge2Regressor-97"><span class="linenos"> 97</span></a><span class="sd">        averages_: a list of lists;</span>
+</span><span id="Ridge2Regressor-98"><a href="#Ridge2Regressor-98"><span class="linenos"> 98</span></a><span class="sd">            mean forecast in a list for each series</span>
+</span><span id="Ridge2Regressor-99"><a href="#Ridge2Regressor-99"><span class="linenos"> 99</span></a>
+</span><span id="Ridge2Regressor-100"><a href="#Ridge2Regressor-100"><span class="linenos">100</span></a><span class="sd">        ranges_: a list of lists;</span>
+</span><span id="Ridge2Regressor-101"><a href="#Ridge2Regressor-101"><span class="linenos">101</span></a><span class="sd">            lower and upper prediction intervals in a list for each series</span>
+</span><span id="Ridge2Regressor-102"><a href="#Ridge2Regressor-102"><span class="linenos">102</span></a>
+</span><span id="Ridge2Regressor-103"><a href="#Ridge2Regressor-103"><span class="linenos">103</span></a><span class="sd">        output_dates_: a list;</span>
+</span><span id="Ridge2Regressor-104"><a href="#Ridge2Regressor-104"><span class="linenos">104</span></a><span class="sd">            a list of output dates (associated to forecast)</span>
+</span><span id="Ridge2Regressor-105"><a href="#Ridge2Regressor-105"><span class="linenos">105</span></a>
+</span><span id="Ridge2Regressor-106"><a href="#Ridge2Regressor-106"><span class="linenos">106</span></a><span class="sd">        mean_: a numpy array</span>
+</span><span id="Ridge2Regressor-107"><a href="#Ridge2Regressor-107"><span class="linenos">107</span></a><span class="sd">            contains series mean forecast as a numpy array</span>
+</span><span id="Ridge2Regressor-108"><a href="#Ridge2Regressor-108"><span class="linenos">108</span></a>
+</span><span id="Ridge2Regressor-109"><a href="#Ridge2Regressor-109"><span class="linenos">109</span></a><span class="sd">        lower_: a numpy array</span>
+</span><span id="Ridge2Regressor-110"><a href="#Ridge2Regressor-110"><span class="linenos">110</span></a><span class="sd">            contains series lower bound forecast as a numpy array</span>
+</span><span id="Ridge2Regressor-111"><a href="#Ridge2Regressor-111"><span class="linenos">111</span></a>
+</span><span id="Ridge2Regressor-112"><a href="#Ridge2Regressor-112"><span class="linenos">112</span></a><span class="sd">        upper_: a numpy array</span>
+</span><span id="Ridge2Regressor-113"><a href="#Ridge2Regressor-113"><span class="linenos">113</span></a><span class="sd">            contains series upper bound forecast as a numpy array</span>
+</span><span id="Ridge2Regressor-114"><a href="#Ridge2Regressor-114"><span class="linenos">114</span></a>
+</span><span id="Ridge2Regressor-115"><a href="#Ridge2Regressor-115"><span class="linenos">115</span></a><span class="sd">        result_dfs_: a tuple of data frames;</span>
+</span><span id="Ridge2Regressor-116"><a href="#Ridge2Regressor-116"><span class="linenos">116</span></a><span class="sd">            each element of the tuple contains 3 columns,</span>
+</span><span id="Ridge2Regressor-117"><a href="#Ridge2Regressor-117"><span class="linenos">117</span></a><span class="sd">            mean forecast, lower + upper prediction intervals,</span>
+</span><span id="Ridge2Regressor-118"><a href="#Ridge2Regressor-118"><span class="linenos">118</span></a><span class="sd">            and a date index</span>
+</span><span id="Ridge2Regressor-119"><a href="#Ridge2Regressor-119"><span class="linenos">119</span></a>
+</span><span id="Ridge2Regressor-120"><a href="#Ridge2Regressor-120"><span class="linenos">120</span></a><span class="sd">        sims_: currently a tuple of numpy arrays</span>
+</span><span id="Ridge2Regressor-121"><a href="#Ridge2Regressor-121"><span class="linenos">121</span></a><span class="sd">            for `type_pi == bootstrap`, simulations for each series</span>
+</span><span id="Ridge2Regressor-122"><a href="#Ridge2Regressor-122"><span class="linenos">122</span></a>
+</span><span id="Ridge2Regressor-123"><a href="#Ridge2Regressor-123"><span class="linenos">123</span></a><span class="sd">    Examples:</span>
+</span><span id="Ridge2Regressor-124"><a href="#Ridge2Regressor-124"><span class="linenos">124</span></a>
+</span><span id="Ridge2Regressor-125"><a href="#Ridge2Regressor-125"><span class="linenos">125</span></a><span class="sd">    ```python</span>
+</span><span id="Ridge2Regressor-126"><a href="#Ridge2Regressor-126"><span class="linenos">126</span></a><span class="sd">    import pandas as pd</span>
+</span><span id="Ridge2Regressor-127"><a href="#Ridge2Regressor-127"><span class="linenos">127</span></a><span class="sd">    from ahead import Ridge2Regressor</span>
+</span><span id="Ridge2Regressor-128"><a href="#Ridge2Regressor-128"><span class="linenos">128</span></a>
+</span><span id="Ridge2Regressor-129"><a href="#Ridge2Regressor-129"><span class="linenos">129</span></a><span class="sd">    # Data frame containing the time series</span>
+</span><span id="Ridge2Regressor-130"><a href="#Ridge2Regressor-130"><span class="linenos">130</span></a><span class="sd">    dataset = {</span>
+</span><span id="Ridge2Regressor-131"><a href="#Ridge2Regressor-131"><span class="linenos">131</span></a><span class="sd">    &#39;date&#39; : [&#39;2001-01-01&#39;, &#39;2002-01-01&#39;, &#39;2003-01-01&#39;, &#39;2004-01-01&#39;, &#39;2005-01-01&#39;],</span>
+</span><span id="Ridge2Regressor-132"><a href="#Ridge2Regressor-132"><span class="linenos">132</span></a><span class="sd">    &#39;series1&#39; : [34, 30, 35.6, 33.3, 38.1],</span>
+</span><span id="Ridge2Regressor-133"><a href="#Ridge2Regressor-133"><span class="linenos">133</span></a><span class="sd">    &#39;series2&#39; : [4, 5.5, 5.6, 6.3, 5.1],</span>
+</span><span id="Ridge2Regressor-134"><a href="#Ridge2Regressor-134"><span class="linenos">134</span></a><span class="sd">    &#39;series3&#39; : [100, 100.5, 100.6, 100.2, 100.1]}</span>
+</span><span id="Ridge2Regressor-135"><a href="#Ridge2Regressor-135"><span class="linenos">135</span></a><span class="sd">    df = pd.DataFrame(dataset).set_index(&#39;date&#39;)</span>
+</span><span id="Ridge2Regressor-136"><a href="#Ridge2Regressor-136"><span class="linenos">136</span></a><span class="sd">    print(df)</span>
+</span><span id="Ridge2Regressor-137"><a href="#Ridge2Regressor-137"><span class="linenos">137</span></a>
+</span><span id="Ridge2Regressor-138"><a href="#Ridge2Regressor-138"><span class="linenos">138</span></a><span class="sd">    # multivariate time series forecasting</span>
+</span><span id="Ridge2Regressor-139"><a href="#Ridge2Regressor-139"><span class="linenos">139</span></a><span class="sd">    r1 = Ridge2Regressor(h = 5)</span>
+</span><span id="Ridge2Regressor-140"><a href="#Ridge2Regressor-140"><span class="linenos">140</span></a><span class="sd">    r1.forecast(df)</span>
+</span><span id="Ridge2Regressor-141"><a href="#Ridge2Regressor-141"><span class="linenos">141</span></a><span class="sd">    print(r1.result_dfs_)</span>
+</span><span id="Ridge2Regressor-142"><a href="#Ridge2Regressor-142"><span class="linenos">142</span></a><span class="sd">    ```</span>
+</span><span id="Ridge2Regressor-143"><a href="#Ridge2Regressor-143"><span class="linenos">143</span></a>
+</span><span id="Ridge2Regressor-144"><a href="#Ridge2Regressor-144"><span class="linenos">144</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Ridge2Regressor-145"><a href="#Ridge2Regressor-145"><span class="linenos">145</span></a>
+</span><span id="Ridge2Regressor-146"><a href="#Ridge2Regressor-146"><span class="linenos">146</span></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Ridge2Regressor-147"><a href="#Ridge2Regressor-147"><span class="linenos">147</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-148"><a href="#Ridge2Regressor-148"><span class="linenos">148</span></a>        <span class="n">h</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-149"><a href="#Ridge2Regressor-149"><span class="linenos">149</span></a>        <span class="n">level</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-150"><a href="#Ridge2Regressor-150"><span class="linenos">150</span></a>        <span class="n">lags</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-151"><a href="#Ridge2Regressor-151"><span class="linenos">151</span></a>        <span class="n">nb_hidden</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-152"><a href="#Ridge2Regressor-152"><span class="linenos">152</span></a>        <span class="n">nodes_sim</span><span class="o">=</span><span class="s2">&quot;sobol&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-153"><a href="#Ridge2Regressor-153"><span class="linenos">153</span></a>        <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;relu&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-154"><a href="#Ridge2Regressor-154"><span class="linenos">154</span></a>        <span class="n">a</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-155"><a href="#Ridge2Regressor-155"><span class="linenos">155</span></a>        <span class="n">lambda_1</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-156"><a href="#Ridge2Regressor-156"><span class="linenos">156</span></a>        <span class="n">lambda_2</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-157"><a href="#Ridge2Regressor-157"><span class="linenos">157</span></a>        <span class="n">dropout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-158"><a href="#Ridge2Regressor-158"><span class="linenos">158</span></a>        <span class="n">type_pi</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-159"><a href="#Ridge2Regressor-159"><span class="linenos">159</span></a>        <span class="c1"># can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)</span>
+</span><span id="Ridge2Regressor-160"><a href="#Ridge2Regressor-160"><span class="linenos">160</span></a>        <span class="n">block_length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-161"><a href="#Ridge2Regressor-161"><span class="linenos">161</span></a>        <span class="n">margins</span><span class="o">=</span><span class="s2">&quot;empirical&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-162"><a href="#Ridge2Regressor-162"><span class="linenos">162</span></a>        <span class="n">B</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-163"><a href="#Ridge2Regressor-163"><span class="linenos">163</span></a>        <span class="n">type_aggregation</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-164"><a href="#Ridge2Regressor-164"><span class="linenos">164</span></a>        <span class="n">centers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-165"><a href="#Ridge2Regressor-165"><span class="linenos">165</span></a>        <span class="n">type_clustering</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-166"><a href="#Ridge2Regressor-166"><span class="linenos">166</span></a>        <span class="n">cl</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-167"><a href="#Ridge2Regressor-167"><span class="linenos">167</span></a>        <span class="n">date_formatting</span><span class="o">=</span><span class="s2">&quot;original&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-168"><a href="#Ridge2Regressor-168"><span class="linenos">168</span></a>        <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-169"><a href="#Ridge2Regressor-169"><span class="linenos">169</span></a>    <span class="p">):</span>
+</span><span id="Ridge2Regressor-170"><a href="#Ridge2Regressor-170"><span class="linenos">170</span></a>
+</span><span id="Ridge2Regressor-171"><a href="#Ridge2Regressor-171"><span class="linenos">171</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="Ridge2Regressor-172"><a href="#Ridge2Regressor-172"><span class="linenos">172</span></a>            <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-173"><a href="#Ridge2Regressor-173"><span class="linenos">173</span></a>            <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-174"><a href="#Ridge2Regressor-174"><span class="linenos">174</span></a>            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-175"><a href="#Ridge2Regressor-175"><span class="linenos">175</span></a>        <span class="p">)</span>
+</span><span id="Ridge2Regressor-176"><a href="#Ridge2Regressor-176"><span class="linenos">176</span></a>
+</span><span id="Ridge2Regressor-177"><a href="#Ridge2Regressor-177"><span class="linenos">177</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">lags</span>
+</span><span id="Ridge2Regressor-178"><a href="#Ridge2Regressor-178"><span class="linenos">178</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">nb_hidden</span> <span class="o">=</span> <span class="n">nb_hidden</span>
+</span><span id="Ridge2Regressor-179"><a href="#Ridge2Regressor-179"><span class="linenos">179</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">nodes_sim</span> <span class="o">=</span> <span class="n">nodes_sim</span>
+</span><span id="Ridge2Regressor-180"><a href="#Ridge2Regressor-180"><span class="linenos">180</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">activation</span>
+</span><span id="Ridge2Regressor-181"><a href="#Ridge2Regressor-181"><span class="linenos">181</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+</span><span id="Ridge2Regressor-182"><a href="#Ridge2Regressor-182"><span class="linenos">182</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lambda_1</span> <span class="o">=</span> <span class="n">lambda_1</span>
+</span><span id="Ridge2Regressor-183"><a href="#Ridge2Regressor-183"><span class="linenos">183</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lambda_2</span> <span class="o">=</span> <span class="n">lambda_2</span>
+</span><span id="Ridge2Regressor-184"><a href="#Ridge2Regressor-184"><span class="linenos">184</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">dropout</span>
+</span><span id="Ridge2Regressor-185"><a href="#Ridge2Regressor-185"><span class="linenos">185</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_pi</span> <span class="o">=</span> <span class="n">type_pi</span>
+</span><span id="Ridge2Regressor-186"><a href="#Ridge2Regressor-186"><span class="linenos">186</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">=</span> <span class="n">block_length</span>
+</span><span id="Ridge2Regressor-187"><a href="#Ridge2Regressor-187"><span class="linenos">187</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">margins</span> <span class="o">=</span> <span class="n">margins</span>
+</span><span id="Ridge2Regressor-188"><a href="#Ridge2Regressor-188"><span class="linenos">188</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">B</span>
+</span><span id="Ridge2Regressor-189"><a href="#Ridge2Regressor-189"><span class="linenos">189</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_aggregation</span> <span class="o">=</span> <span class="n">type_aggregation</span>
+</span><span id="Ridge2Regressor-190"><a href="#Ridge2Regressor-190"><span class="linenos">190</span></a>        <span class="c1"># can be NULL, but in R (use 0 in R instead of NULL for v0.7.0)</span>
+</span><span id="Ridge2Regressor-191"><a href="#Ridge2Regressor-191"><span class="linenos">191</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">centers</span> <span class="o">=</span> <span class="n">centers</span>
+</span><span id="Ridge2Regressor-192"><a href="#Ridge2Regressor-192"><span class="linenos">192</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_clustering</span> <span class="o">=</span> <span class="n">type_clustering</span>
+</span><span id="Ridge2Regressor-193"><a href="#Ridge2Regressor-193"><span class="linenos">193</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">cl</span> <span class="o">=</span> <span class="n">cl</span>
+</span><span id="Ridge2Regressor-194"><a href="#Ridge2Regressor-194"><span class="linenos">194</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">date_formatting</span> <span class="o">=</span> <span class="n">date_formatting</span>
+</span><span id="Ridge2Regressor-195"><a href="#Ridge2Regressor-195"><span class="linenos">195</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
+</span><span id="Ridge2Regressor-196"><a href="#Ridge2Regressor-196"><span class="linenos">196</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">input_df</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-197"><a href="#Ridge2Regressor-197"><span class="linenos">197</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">type_input</span> <span class="o">=</span> <span class="s2">&quot;multivariate&quot;</span>
+</span><span id="Ridge2Regressor-198"><a href="#Ridge2Regressor-198"><span class="linenos">198</span></a>
+</span><span id="Ridge2Regressor-199"><a href="#Ridge2Regressor-199"><span class="linenos">199</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-200"><a href="#Ridge2Regressor-200"><span class="linenos">200</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">averages_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-201"><a href="#Ridge2Regressor-201"><span class="linenos">201</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">ranges_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-202"><a href="#Ridge2Regressor-202"><span class="linenos">202</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">output_dates_</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="Ridge2Regressor-203"><a href="#Ridge2Regressor-203"><span class="linenos">203</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-204"><a href="#Ridge2Regressor-204"><span class="linenos">204</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-205"><a href="#Ridge2Regressor-205"><span class="linenos">205</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-206"><a href="#Ridge2Regressor-206"><span class="linenos">206</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">result_dfs_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-207"><a href="#Ridge2Regressor-207"><span class="linenos">207</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sims_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-208"><a href="#Ridge2Regressor-208"><span class="linenos">208</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">xreg_</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Ridge2Regressor-209"><a href="#Ridge2Regressor-209"><span class="linenos">209</span></a>
+</span><span id="Ridge2Regressor-210"><a href="#Ridge2Regressor-210"><span class="linenos">210</span></a>    <span class="k">def</span> <span class="nf">forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">xreg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span id="Ridge2Regressor-211"><a href="#Ridge2Regressor-211"><span class="linenos">211</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Forecasting method from `Ridge2Regressor` class</span>
+</span><span id="Ridge2Regressor-212"><a href="#Ridge2Regressor-212"><span class="linenos">212</span></a>
+</span><span id="Ridge2Regressor-213"><a href="#Ridge2Regressor-213"><span class="linenos">213</span></a><span class="sd">        Parameters:</span>
+</span><span id="Ridge2Regressor-214"><a href="#Ridge2Regressor-214"><span class="linenos">214</span></a>
+</span><span id="Ridge2Regressor-215"><a href="#Ridge2Regressor-215"><span class="linenos">215</span></a><span class="sd">            df: a data frame;</span>
+</span><span id="Ridge2Regressor-216"><a href="#Ridge2Regressor-216"><span class="linenos">216</span></a><span class="sd">                a data frame containing the input time series (see example)</span>
+</span><span id="Ridge2Regressor-217"><a href="#Ridge2Regressor-217"><span class="linenos">217</span></a>
+</span><span id="Ridge2Regressor-218"><a href="#Ridge2Regressor-218"><span class="linenos">218</span></a><span class="sd">            xreg: a numpy array or a data frame;</span>
+</span><span id="Ridge2Regressor-219"><a href="#Ridge2Regressor-219"><span class="linenos">219</span></a><span class="sd">                external regressors</span>
+</span><span id="Ridge2Regressor-220"><a href="#Ridge2Regressor-220"><span class="linenos">220</span></a>
+</span><span id="Ridge2Regressor-221"><a href="#Ridge2Regressor-221"><span class="linenos">221</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Ridge2Regressor-222"><a href="#Ridge2Regressor-222"><span class="linenos">222</span></a>
+</span><span id="Ridge2Regressor-223"><a href="#Ridge2Regressor-223"><span class="linenos">223</span></a>        <span class="c1"># get input dates, output dates, number of series, series names, etc.</span>
+</span><span id="Ridge2Regressor-224"><a href="#Ridge2Regressor-224"><span class="linenos">224</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">init_forecasting_params</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</span><span id="Ridge2Regressor-225"><a href="#Ridge2Regressor-225"><span class="linenos">225</span></a>
+</span><span id="Ridge2Regressor-226"><a href="#Ridge2Regressor-226"><span class="linenos">226</span></a>        <span class="c1"># obtain time series object -----</span>
+</span><span id="Ridge2Regressor-227"><a href="#Ridge2Regressor-227"><span class="linenos">227</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">format_input</span><span class="p">()</span>
+</span><span id="Ridge2Regressor-228"><a href="#Ridge2Regressor-228"><span class="linenos">228</span></a>
+</span><span id="Ridge2Regressor-229"><a href="#Ridge2Regressor-229"><span class="linenos">229</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">get_forecast</span><span class="p">(</span><span class="s2">&quot;ridge2&quot;</span><span class="p">)</span>
+</span><span id="Ridge2Regressor-230"><a href="#Ridge2Regressor-230"><span class="linenos">230</span></a>
+</span><span id="Ridge2Regressor-231"><a href="#Ridge2Regressor-231"><span class="linenos">231</span></a>        <span class="c1"># result -----</span>
+</span><span id="Ridge2Regressor-232"><a href="#Ridge2Regressor-232"><span class="linenos">232</span></a>        <span class="p">(</span>
+</span><span id="Ridge2Regressor-233"><a href="#Ridge2Regressor-233"><span class="linenos">233</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">averages_</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-234"><a href="#Ridge2Regressor-234"><span class="linenos">234</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">ranges_</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-235"><a href="#Ridge2Regressor-235"><span class="linenos">235</span></a>            <span class="n">_</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-236"><a href="#Ridge2Regressor-236"><span class="linenos">236</span></a>        <span class="p">)</span> <span class="o">=</span> <span class="n">mv</span><span class="o">.</span><span class="n">format_multivariate_forecast</span><span class="p">(</span>
+</span><span id="Ridge2Regressor-237"><a href="#Ridge2Regressor-237"><span class="linenos">237</span></a>            <span class="n">n_series</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_series</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-238"><a href="#Ridge2Regressor-238"><span class="linenos">238</span></a>            <span class="n">date_formatting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">date_formatting</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-239"><a href="#Ridge2Regressor-239"><span class="linenos">239</span></a>            <span class="n">output_dates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dates_</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-240"><a href="#Ridge2Regressor-240"><span class="linenos">240</span></a>            <span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-241"><a href="#Ridge2Regressor-241"><span class="linenos">241</span></a>            <span class="n">fcast</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-242"><a href="#Ridge2Regressor-242"><span class="linenos">242</span></a>        <span class="p">)</span>
+</span><span id="Ridge2Regressor-243"><a href="#Ridge2Regressor-243"><span class="linenos">243</span></a>
+</span><span id="Ridge2Regressor-244"><a href="#Ridge2Regressor-244"><span class="linenos">244</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">mean_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">])</span>
+</span><span id="Ridge2Regressor-245"><a href="#Ridge2Regressor-245"><span class="linenos">245</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lower_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">])</span>
+</span><span id="Ridge2Regressor-246"><a href="#Ridge2Regressor-246"><span class="linenos">246</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">upper_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">])</span>
+</span><span id="Ridge2Regressor-247"><a href="#Ridge2Regressor-247"><span class="linenos">247</span></a>
+</span><span id="Ridge2Regressor-248"><a href="#Ridge2Regressor-248"><span class="linenos">248</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">result_dfs_</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="Ridge2Regressor-249"><a href="#Ridge2Regressor-249"><span class="linenos">249</span></a>            <span class="n">umv</span><span class="o">.</span><span class="n">compute_result_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">averages_</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges_</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span><span id="Ridge2Regressor-250"><a href="#Ridge2Regressor-250"><span class="linenos">250</span></a>            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_series</span><span class="p">)</span>
+</span><span id="Ridge2Regressor-251"><a href="#Ridge2Regressor-251"><span class="linenos">251</span></a>        <span class="p">)</span>
+</span><span id="Ridge2Regressor-252"><a href="#Ridge2Regressor-252"><span class="linenos">252</span></a>
+</span><span id="Ridge2Regressor-253"><a href="#Ridge2Regressor-253"><span class="linenos">253</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type_pi</span> <span class="ow">in</span> <span class="p">(</span>
+</span><span id="Ridge2Regressor-254"><a href="#Ridge2Regressor-254"><span class="linenos">254</span></a>            <span class="s2">&quot;bootstrap&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-255"><a href="#Ridge2Regressor-255"><span class="linenos">255</span></a>            <span class="s2">&quot;blockbootstrap&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-256"><a href="#Ridge2Regressor-256"><span class="linenos">256</span></a>            <span class="s2">&quot;movingblockbootstrap&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-257"><a href="#Ridge2Regressor-257"><span class="linenos">257</span></a>            <span class="s2">&quot;rvinecopula&quot;</span><span class="p">,</span>
+</span><span id="Ridge2Regressor-258"><a href="#Ridge2Regressor-258"><span class="linenos">258</span></a>        <span class="p">):</span>
+</span><span id="Ridge2Regressor-259"><a href="#Ridge2Regressor-259"><span class="linenos">259</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">sims_</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="Ridge2Regressor-260"><a href="#Ridge2Regressor-260"><span class="linenos">260</span></a>                <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fcast_</span><span class="o">.</span><span class="n">rx2</span><span class="p">[</span><span class="s2">&quot;sims&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">)</span>
+</span><span id="Ridge2Regressor-261"><a href="#Ridge2Regressor-261"><span class="linenos">261</span></a>            <span class="p">)</span>
+</span><span id="Ridge2Regressor-262"><a href="#Ridge2Regressor-262"><span class="linenos">262</span></a>
+</span><span id="Ridge2Regressor-263"><a href="#Ridge2Regressor-263"><span class="linenos">263</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 

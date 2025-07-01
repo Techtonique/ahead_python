@@ -56,7 +56,7 @@ docs: install ## generate docs
 	#find ahead/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
 	R_HOME=$(shell R RHOME) pdoc -t docs ahead/* --output-dir ahead-docs
 	find . -name '__pycache__' -exec rm -fr {} +
-	cp -rf ahead-docs/* ../../Pro_Website/Techtonique.github.io/ahead
+	#cp -rf ahead-docs/* ../../Pro_Website/Techtonique.github.io/ahead_python
 
 servedocs: install ## compile the docs watching for change	 	
 	#pip install black pdoc 
@@ -78,7 +78,7 @@ install: clean ## install the package to the active Python's site-packages
 	pip install -e .
 
 build-site: docs ## export mkdocs website to a folder		
-	cp -rf ahead-docs/* ../../Pro_Website/Techtonique.github.io/ahead
+	cp -rf ahead-docs/* ../../Pro_Website/Techtonique.github.io/ahead_python
 	find . -name '__pycache__' -exec rm -fr {} +
 
 run-custom: ## run all custom examples with one command
