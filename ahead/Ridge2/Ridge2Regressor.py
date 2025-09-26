@@ -10,6 +10,7 @@ from rpy2.robjects import (
 
 from ..Base import Base
 from ..utils import multivariate as mv
+from ..utils import univariate as uv
 from ..utils import unimultivariate as umv
 from .. import config
 
@@ -146,7 +147,7 @@ class Ridge2Regressor(Base):
         self,
         h=5,
         level=95,
-        lags=1,
+        lags=15,
         nb_hidden=5,
         nodes_sim="sobol",
         activation="relu",
@@ -228,26 +229,42 @@ class Ridge2Regressor(Base):
         self.get_forecast("ridge2")
 
         # result -----
-        (
-            self.averages_,
-            self.ranges_,
-            _,
-        ) = mv.format_multivariate_forecast(
-            n_series=self.n_series,
-            date_formatting=self.date_formatting,
-            output_dates=self.output_dates_,
-            horizon=self.h,
-            fcast=self.fcast_,
-        )
+        try: 
+            (
+                self.averages_,
+                self.ranges_,
+                _,
+            ) = mv.format_multivariate_forecast(
+                n_series=self.n_series,
+                date_formatting=self.date_formatting,
+                output_dates=self.output_dates_,
+                horizon=self.h,
+                fcast=self.fcast_,
+            )
+        except Exception:
+            # result -----
+            (
+                self.averages_,
+                self.ranges_,
+                _,
+            ) = uv.format_univariate_forecast(
+                date_formatting=self.date_formatting,
+                output_dates=self.output_dates_,
+                horizon=self.h,
+                fcast=self.fcast_,
+            )
 
         self.mean_ = np.asarray(self.fcast_.rx2["mean"])
         self.lower_ = np.asarray(self.fcast_.rx2["lower"])
         self.upper_ = np.asarray(self.fcast_.rx2["upper"])
 
-        self.result_dfs_ = tuple(
-            umv.compute_result_df(self.averages_[i], self.ranges_[i])
-            for i in range(self.n_series)
-        )
+        try: 
+            self.result_dfs_ = tuple(
+                umv.compute_result_df(self.averages_[i], self.ranges_[i])
+                for i in range(self.n_series)
+            )
+        except Exception: 
+            self.result_df_ = umv.compute_result_df(self.averages_, self.ranges_)
 
         if self.type_pi in (
             "bootstrap",

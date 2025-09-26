@@ -240,13 +240,13 @@ class Base(object):
             self.fcast_ = config.AHEAD_PACKAGE.mlarchf(**mlarch_args)
 
 
-    def plot(self, series, type_axis="dates", type_plot="pi"):
+    def plot(self, series=None, type_axis="dates", type_plot="pi"):
         """Plot time series forecast
 
         Parameters:
 
-        series: {integer} or {string}
-            series index or name
+        series: {integer} or {string} or {None}
+            series index or name. Optional when univariate; defaults to the only series.
         """
         assert all(
             [
@@ -257,7 +257,15 @@ class Base(object):
             ]
         ), "model forecasting must be obtained first (with `forecast` method)"
 
-        if isinstance(series, str):
+        # Auto-select the only series in univariate case if not provided
+        if (self.n_series == 1) and (series is None):
+            series_idx = 0
+            try:
+                series = self.series_names[0]
+            except Exception:
+                series = 0
+
+        elif isinstance(series, str):
             assert (
                 series in self.series_names
             ), f"series {series} doesn't exist in the input dataset"
@@ -268,11 +276,19 @@ class Base(object):
             ), f"check series index (< {self.n_series})"
             series_idx = series
 
-        y_all = list(self.input_df.iloc[:, series_idx]) + list(
-            self.result_dfs_[series_idx]["mean"].values
-        )
-
-        y_test = list(self.result_dfs_[series_idx]["mean"].values)
+        # Build y vectors depending on storage (multivariate uses result_dfs_, univariate uses mean_/lower_/upper_)
+        if self.result_dfs_ is not None:
+            y_test_arr = self.result_dfs_[series_idx]["mean"].values
+            y_all = list(self.input_df.iloc[:, series_idx]) + list(y_test_arr)
+            y_test = list(y_test_arr)
+            lower_arr = self.result_dfs_[series_idx]["lower"].values
+            upper_arr = self.result_dfs_[series_idx]["upper"].values
+        else:
+            y_test_arr = np.asarray(self.mean_).reshape(-1)
+            lower_arr = np.asarray(self.lower_).reshape(-1)
+            upper_arr = np.asarray(self.upper_).reshape(-1)
+            y_all = list(self.input_df.iloc[:, series_idx]) + list(y_test_arr)
+            y_test = list(y_test_arr)
         n_points_all = len(y_all)
         n_points_train = self.input_df.shape[0]
 
@@ -291,8 +307,8 @@ class Base(object):
             ax.plot(x_test, y_test, "-", color="orange")
             ax.fill_between(
                 x_test,
-                self.result_dfs_[series_idx]["lower"].values,
-                self.result_dfs_[series_idx]["upper"].values,
+                lower_arr,
+                upper_arr,
                 alpha=0.2,
                 color="orange",
             )
