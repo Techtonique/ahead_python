@@ -33,7 +33,7 @@ d1.plot()
 print("Example 2 -----")
 
 d3 = Ridge2Regressor(h = h, date_formatting = "original", 
-type_pi="bootstrap", B=5)
+type_pi="bootstrap", B=100)
 
 start = time()
 d3.forecast(df)
@@ -70,7 +70,7 @@ d1.plot()
 print("Example 2 -----")
 
 d3 = Ridge2Regressor(h = h, date_formatting = "original", 
-type_pi="bootstrap", B=5)
+type_pi="blockbootstrap", B=100)
 
 start = time()
 d3.forecast(df)
