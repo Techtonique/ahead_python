@@ -42,7 +42,7 @@ class DevelopCommand(develop):
         develop.run(self)
 
 
-__version__ = "0.38.4"
+__version__ = "0.38.5"
 
 with open("requirements.txt", encoding="utf-8") as f:
     all_reqs = f.read().split("\n")
