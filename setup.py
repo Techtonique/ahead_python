@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from setuptools.command.install import install
+from setuptools.command.build_py import build_py
 from setuptools.command.develop import develop
 import subprocess
 import shutil
@@ -30,10 +30,10 @@ def install_r_ahead():
         )
 
 
-class InstallCommand(install):
+class BuildPyCommand(build_py):
     def run(self):
         install_r_ahead()
-        install.run(self)
+        build_py.run(self)
 
 
 class DevelopCommand(develop):
@@ -42,7 +42,7 @@ class DevelopCommand(develop):
         develop.run(self)
 
 
-__version__ = "0.38.2"
+__version__ = "0.38.3"
 
 with open("requirements.txt", encoding="utf-8") as f:
     all_reqs = f.read().split("\n")
@@ -65,5 +65,5 @@ setup(
     author_email="thierry.moudiki@gmail.com",
     install_requires=install_requires,
     python_requires=">=3.8",
-    cmdclass={"install": InstallCommand, "develop": DevelopCommand},
+    cmdclass={"build_py": BuildPyCommand, "develop": DevelopCommand},
 )
