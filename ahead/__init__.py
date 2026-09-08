@@ -2,19 +2,10 @@
 
 __author__ = """T. Moudiki"""
 __email__ = "thierry.moudiki@gmail.com"
-__version__ = "0.38.4"
+__version__ = "0.38.5"
 
 import shutil, sys
 import subprocess
-
-from .ARMAGARCH import ArmaGarch
-from .Basic import BasicForecaster
-from .DynamicRegressor import DynamicRegressor
-from .EAT import EAT
-from .FitForecast import FitForecaster
-from .Ridge2 import Ridge2Regressor
-from .VAR import VAR
-from .MLARCH import MLARCH
 
 if shutil.which("Rscript") is None:
     sys.exit(
@@ -43,6 +34,15 @@ def _ensure_r_ahead_installed():
         )
 
 _ensure_r_ahead_installed()
+
+from .ARMAGARCH import ArmaGarch
+from .Basic import BasicForecaster
+from .DynamicRegressor import DynamicRegressor
+from .EAT import EAT
+from .FitForecast import FitForecaster
+from .Ridge2 import Ridge2Regressor
+from .VAR import VAR
+from .MLARCH import MLARCH
 
 __all__ = [
     "ArmaGarch",
