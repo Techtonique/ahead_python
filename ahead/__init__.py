@@ -1,17 +1,23 @@
 """Top-level package for ahead."""
-
 __author__ = """T. Moudiki"""
 __email__ = "thierry.moudiki@gmail.com"
-__version__ = "0.38.5"
+__version__ = "0.38.6"
 
-import shutil, sys
+import shutil
 import subprocess
+import sys
 
-if shutil.which("Rscript") is None:
-    sys.exit(
-        "R is required by 'ahead' but wasn't found. "
-        "Install it from https://cran.r-project.org and re-install this package."
-    )
+_R_CHECK_SCRIPT = (
+    "options(repos=c(techtonique='https://r-packages.techtonique.net', "
+    "CRAN='https://cloud.r-project.org')); "
+    "if (!requireNamespace('ahead', quietly=TRUE)) { "
+    "  install.packages('ahead', dependencies=TRUE); "
+    "  if (!requireNamespace('ahead', quietly=TRUE)) { "
+    "    stop('R package ahead failed to install') "
+    "  } "
+    "}"
+)
+
 
 def _ensure_r_ahead_installed():
     if shutil.which("Rscript") is None:
@@ -19,19 +25,22 @@ def _ensure_r_ahead_installed():
             "R is required by the 'ahead' Python package but wasn't found.\n"
             "Install R from https://cran.r-project.org, then re-import ahead."
         )
-    check_script = (
-        "options(repos=c(techtonique='https://r-packages.techtonique.net', "
-        "CRAN='https://cloud.r-project.org')); "
-        "if (!requireNamespace('ahead', quietly=TRUE)) "
-        "install.packages('ahead', dependencies=TRUE)"
+
+    result = subprocess.run(
+        ["Rscript", "-e", _R_CHECK_SCRIPT],
+        capture_output=True,
+        text=True,
     )
-    result = subprocess.run(["Rscript", "-e", check_script])
+
     if result.returncode != 0:
         sys.exit(
             "Failed to install the R 'ahead' package automatically.\n"
-            "Run this manually in R:\n"
-            f"  {check_script}"
+            f"--- R stdout ---\n{result.stdout}\n"
+            f"--- R stderr ---\n{result.stderr}\n"
+            "You can also try running this manually in R:\n"
+            f"  {_R_CHECK_SCRIPT}"
         )
+
 
 _ensure_r_ahead_installed()
 
@@ -52,5 +61,5 @@ __all__ = [
     "FitForecaster",
     "Ridge2Regressor",
     "VAR",
-    "MLARCH"
+    "MLARCH",
 ]
