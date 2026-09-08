@@ -1,7 +1,7 @@
 """Top-level package for ahead."""
 __author__ = """T. Moudiki"""
 __email__ = "thierry.moudiki@gmail.com"
-__version__ = "0.38.6"
+__version__ = "0.38.7"
 
 import shutil
 import subprocess
@@ -11,13 +11,19 @@ _R_CHECK_SCRIPT = (
     "options(repos=c(techtonique='https://r-packages.techtonique.net', "
     "CRAN='https://cloud.r-project.org')); "
     "if (!requireNamespace('ahead', quietly=TRUE)) { "
-    "  install.packages('ahead', dependencies=TRUE); "
+    "  tryCatch("
+    "    install.packages('ahead', dependencies=TRUE), "
+    "    error = function(e) message('techtonique repo failed: ', conditionMessage(e))"
+    "  ); "
     "  if (!requireNamespace('ahead', quietly=TRUE)) { "
-    "    stop('R package ahead failed to install') "
+    "    if (!requireNamespace('remotes', quietly=TRUE)) install.packages('remotes'); "
+    "    remotes::install_github('Techtonique/ahead'); "
+    "  } "
+    "  if (!requireNamespace('ahead', quietly=TRUE)) { "
+    "    stop('R package ahead failed to install from all sources') "
     "  } "
     "}"
 )
-
 
 def _ensure_r_ahead_installed():
     if shutil.which("Rscript") is None:
