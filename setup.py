@@ -94,7 +94,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = "0.22.0"
+__version__ = "0.38.1"
 
 here = path.abspath(path.dirname(__file__))
 
